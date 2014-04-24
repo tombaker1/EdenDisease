@@ -1,33 +1,9 @@
-/*!
- * jQuery lightweight plugin boilerplate
- * Original author: @ajpiano
- * Further changes, comments: @addyosmani
- * Licensed under the MIT license
- */
 
-
-// the semi-colon before the function invocation is a safety 
-// net against concatenated scripts and/or other plugins 
-// that are not closed properly.
 ;(function ( $, window, document, undefined ) {
     
-    // undefined is used here as the undefined global 
-    // variable in ECMAScript 3 and is mutable (i.e. it can 
-    // be changed by someone else). undefined isn't really 
-    // being passed in so we can ensure that its value is 
-    // truly undefined. In ES5, undefined can no longer be 
-    // modified.
-    
-    // window and document are passed through as local 
-    // variables rather than as globals, because this (slightly) 
-    // quickens the resolution process and can be more 
-    // efficiently minified (especially when both are 
-    // regularly referenced in your plugin).
-
     // Create the defaults once
     var pluginName = 'xformer',
         defaults = {
-            propertyName: "value"
         };
     
     // create the form list item  
@@ -48,14 +24,7 @@
         REQ_WAIT_TIME = 4000;
 
     // The actual plugin constructor
-    function Plugin( element, options ) {
-        this.element = element;
-
-        // jQuery has an extend method that merges the 
-        // contents of two or more objects, storing the 
-        // result in the first object. The first object 
-        // is generally empty because we don't want to alter 
-        // the default options for future instances of the plugin
+    function Xformer( options ) {
         this.options = $.extend( {}, defaults, options) ;
         
         this._defaults = defaults;
@@ -64,27 +33,23 @@
         this.init();
     };
     
-    Plugin.prototype.init = function () {
-        // Place initialization logic here
-        // You already have access to the DOM element and
-        // the options via the instance, e.g. this.element 
-        // and this.options
+    Xformer.prototype.init = function () {
         reqState = new XMLHttpRequest();
     };
     
-    Plugin.prototype.getForm = function (i) {
+    Xformer.prototype.getForm = function (i) {
         return formList[i];
     }
     
-    Plugin.prototype.numForms = function (i) {
+    Xformer.prototype.numForms = function (i) {
         return formList.length;
     }
     
-    Plugin.prototype.getDoc = function () {
+    Xformer.prototype.getDoc = function () {
         return formList[i];
     }
     
-    Plugin.prototype.cbReadFormList = function (reply) {
+    Xformer.prototype.cbReadFormList = function (reply) {
         clearTimeout(reqTimer);
         if (reqState.readyState != 4) {
             alert("What?");
@@ -114,7 +79,7 @@
         
     };
     
-    Plugin.prototype.cbReadForm = function (reply) {
+    Xformer.prototype.cbReadForm = function (reply) {
         clearTimeout(reqTimer);
         //console.log("cbReadFormList done");
         if (reqState.readyState != 4) {
@@ -196,7 +161,7 @@
         alert("URL could not be found");
     };
 
-    Plugin.prototype.requestFormList = function (url, cb) {
+    Xformer.prototype.requestFormList = function (url, cb) {
         reqCompleteCB = cb;
         reqState.onload = this.cbReadFormList.bind(this);
         reqState.open("get", url, true);
@@ -204,7 +169,7 @@
         reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
     };
 
-    Plugin.prototype.requestForm = function (index, cb) {
+    Xformer.prototype.requestForm = function (index, cb) {
         reqCompleteCB = cb;
         var item = this.getForm(index);
         reqIndex = index;
@@ -214,9 +179,9 @@
         reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
     };
 
-    // A really lightweight plugin wrapper around the constructor,     
+    // bind the plugin to jQuery     
     $.xformer = function(options) {
-        return new Plugin( this, options );
+        return new Xformer( this, options );
     }
 
 })( jQuery, window, document );

@@ -1,6 +1,7 @@
 var app = {
     initialize: function() {
         this.bind();
+        //$(".page").each(function(){$(this).pageControl();});
     },
     bind: function() {
         document.addEventListener('deviceready', this.deviceready, false);
@@ -8,7 +9,8 @@ var app = {
     deviceready: function() {
         // note that this is an event handler so the scope is that of the event
         // so we need to call app.report(), and not this.report()
-        app.report('deviceready');
+        //app.report('deviceready');
+        console.log("deviceready");
     },
     report: function(id) { 
         console.log("report:" + id);

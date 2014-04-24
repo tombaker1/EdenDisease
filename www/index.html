@@ -3,20 +3,59 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name = "format-detection" content = "telephone=no"/>
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width;" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
         <!-- link rel="stylesheet" type="text/css" href="css/index.css" / -->
-        <title>Hello Cordova</title>
+        <title>MobileForms</title>
     </head>
     <body>
-        <!-- div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready">
-                <p class="status pending blink">Connecting to Device</p>
-                <p class="status complete blink hide">Device is Ready</p>
+        <!-- Application pages -->
+        <div id="page-home" class="page" data-role="page">
+            <div data-role="header" data-add-back-btn="true"><h1>MobileForms</h1></div>            <h1>MobileForms</h1>
+            <div data-role="content">
+                <ul id="menu" data-role="listview" data-inset="true">
+                    <li><a href="#page-new-form">New Form</a></li>
+                    <li><a href="#page-saved-forms">Saved Forms</a></li>
+                    <li><a href="#page-load-form">Load Forms</a></li>
+                    <li><a href="#page-settings">Settings</a></li>
+                </ul>
             </div>
-        </div -->
-        <h1>MobileForms</h1>
-        <script type="text/javascript" src="cordova.js"></script>
+            <div data-role="footer"><h4></h4></div>
+        </div>
+        
+        <div id="page-new-form" class="page" data-role="page">
+            <div data-role="header" data-add-back-btn="true"><h1>New Form</h1></div>
+            <div data-role="content"></div>
+            <div data-role="footer"><h4></h4></div>
+        </div>
+        
+        <div id="page-saved-forms" class="page" data-role="page">
+            <div data-role="header" data-add-back-btn="true"><h1>Saved Forms</h1></div>
+            <div data-role="content"></div>
+            <div data-role="footer"><h4></h4></div>
+        </div>
+        
+        <div id="page-load-form" class="page" data-role="page">
+            <div data-role="header" data-add-back-btn="true"><h1>Load Forms</h1></div>
+            <div data-role="content"></div>
+            <div data-role="footer"><h4></h4></div>
+        </div>
+        
+        <div id="page-settings" class="page" data-role="page">
+            <div data-role="header" data-add-back-btn="true"><h1>Settings</h1></div>
+            <div data-role="content"></div>
+            <div data-role="footer"><h4></h4></div>
+        </div>
+        
+        <!-- Module to load
+        -->
+        <!-- script type="text/javascript" src="cordova.js"></script -->
+        <script type="text/javascript" src="lib/jquery/jquery-2.1.0.min.js"></script>
+        <!-- script type="text/javascript" src="lib/underscore-min.js"></script -->
+        <!-- script type="text/javascript" src="lib/backbone-min.js"></script -->
+        <link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.2.min.css"></link>
+        <script type="text/javascript" src="lib/jquery/jquery.mobile-1.4.2.min.js"></script>
+        <script type="text/javascript" src="js/xformer.js"></script>
+        <script type="text/javascript" src="js/jqm-controller.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
