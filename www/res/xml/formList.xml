@@ -1,0 +1,7 @@
+<forms>
+<form url="http://demo.eden.sahanafoundation.org/eden/xforms/create/irs_ireport">Ireport</form>
+<form url="http://demo.eden.sahanafoundation.org/eden/xforms/create/rms_req">Req</form>
+<form url="http://demo.eden.sahanafoundation.org/eden/xforms/create/cr_shelter">Shelter</form>
+<form url="http://demo.eden.sahanafoundation.org/eden/xforms/create/pr_person">Person</form>
+<form url="http://demo.eden.sahanafoundation.org/eden/xforms/create/pr_image">Image</form>
+</forms>

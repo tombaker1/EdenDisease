@@ -24,7 +24,7 @@
         REQ_WAIT_TIME = 4000;
 
     // The actual plugin constructor
-    function Xformer( options ) {
+    function xformer( options ) {
         this.options = $.extend( {}, defaults, options) ;
         
         this._defaults = defaults;
@@ -33,23 +33,23 @@
         this.init();
     };
     
-    Xformer.prototype.init = function () {
+    xformer.prototype.init = function () {
         reqState = new XMLHttpRequest();
     };
     
-    Xformer.prototype.getForm = function (i) {
+    xformer.prototype.getForm = function (i) {
         return formList[i];
     }
     
-    Xformer.prototype.numForms = function (i) {
+    xformer.prototype.numForms = function (i) {
         return formList.length;
     }
     
-    Xformer.prototype.getDoc = function () {
+    xformer.prototype.getDoc = function () {
         return formList[i];
     }
     
-    Xformer.prototype.cbReadFormList = function (reply) {
+    xformer.prototype.cbReadFormList = function (reply) {
         clearTimeout(reqTimer);
         if (reqState.readyState != 4) {
             alert("What?");
@@ -79,7 +79,7 @@
         
     };
     
-    Xformer.prototype.cbReadForm = function (reply) {
+    xformer.prototype.cbReadForm = function (reply) {
         clearTimeout(reqTimer);
         //console.log("cbReadFormList done");
         if (reqState.readyState != 4) {
@@ -161,7 +161,7 @@
         alert("URL could not be found");
     };
 
-    Xformer.prototype.requestFormList = function (url, cb) {
+    xformer.prototype.requestFormList = function (url, cb) {
         reqCompleteCB = cb;
         reqState.onload = this.cbReadFormList.bind(this);
         reqState.open("get", url, true);
@@ -169,7 +169,7 @@
         reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
     };
 
-    Xformer.prototype.requestForm = function (index, cb) {
+    xformer.prototype.requestForm = function (index, cb) {
         reqCompleteCB = cb;
         var item = this.getForm(index);
         reqIndex = index;
@@ -181,7 +181,7 @@
 
     // bind the plugin to jQuery     
     $.xformer = function(options) {
-        return new Xformer( this, options );
+        return new xformer( this, options );
     }
 
 })( jQuery, window, document );

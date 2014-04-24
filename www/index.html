@@ -42,7 +42,17 @@
         
         <div id="page-settings" class="page" data-role="page">
             <div data-role="header" data-add-back-btn="true"><h1>Settings</h1></div>
-            <div data-role="content"></div>
+            <div data-role="content">
+                <div class="ui-field-contain">
+                    <fieldset name="form-source" data-role="controlgroup">
+                      <legend>Select form source</legend>
+                      <label><input type="radio" name="form-source" id="checkbox-1" class="custom" data-mini="true" checked="checked">
+                            Local</label>
+                      <label><input type="radio" name="form-source" id="checkbox-2" class="custom" data-mini="true">
+                            Remote</label>
+                    </fieldset>
+                </div>
+            </div>
             <div data-role="footer"><h4></h4></div>
         </div>
         
