@@ -33,6 +33,7 @@
         }
         else {
             url = config.defaults.url + config.defaults.formList;
+            console.log("init: request " + url)
         }
         options.xform.requestFormList(url,cbFormListComplete);
         
@@ -45,12 +46,24 @@
       var $list = $("#form-list-data");
       var listItems = "";
 
+      /*
+      var $msg = $("#content-messages");
+      var message = $msg.html();
+      message += "starting parsing";
+      $msg.html(message);
+      message += "<br>again";
+      $msg.html(message);
+      */
+
       //$list.html("");
       for (var i = 0; i < xformHandler.numForms(); i++) {
         var $form = xformHandler.getForm(i);
+        console.log("form name: ",$form.name);
+        //console.log("\turl: ",$form.url);
         var item = "<li><a id='new-item' href='#load-form?index=" + i + "'>" + $form.name + "</a></li>";
-        //$list.append(item);
+        //$list.append(item);m
         listItems += item;
+        //message += "<br>" + $form.name; $msg.html(message);
       }
       $list.html(listItems);
     
@@ -62,7 +75,8 @@
       
       //$.mobile.changePage( $page );
 
-      console.log("reqCompleteCB");
+    //message += "<br>reqCompleteCB";$msg.html(message);
+      console.log("cbFormListComplete");
     }
     
     // handle the jqm page change to make sure dynamic content is handled
