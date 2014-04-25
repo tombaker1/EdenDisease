@@ -9,6 +9,7 @@
     var defaults = {
         };
     var reqState = null;
+    var xformHandler = null;
 
 
     // The actual plugin constructor
@@ -17,15 +18,52 @@
         
         this._defaults = defaults;
         this._name = pluginName;
+        xformHandler = options.xform;
        
-        this.init();
+        this.init(options);
         $(document).bind( "pagebeforechange", pageChange );
     };
     
-    controller.prototype.init = function () {
+    controller.prototype.init = function ( options ) {
         reqState = new XMLHttpRequest();
+        var state = options["state"];
+        var url = "";
+        if (state.settings.source === 1) {
+            url = config.defaults.formPath + config.defaults.formList;
+        }
+        else {
+            url = config.defaults.url + config.defaults.formList;
+        }
+        options.xform.requestFormList(url,cbFormListComplete);
+        
     };
     
+    var cbFormListComplete = function() {
+      
+      // put the list of forms into the page
+      var $page = $( "#page-load-form" );
+      var $list = $("#form-list-data");
+      var listItems = "";
+
+      //$list.html("");
+      for (var i = 0; i < xformHandler.numForms(); i++) {
+        var $form = xformHandler.getForm(i);
+        var item = "<li><a id='new-item' href='#load-form?index=" + i + "'>" + $form.name + "</a></li>";
+        //$list.append(item);
+        listItems += item;
+      }
+      $list.html(listItems);
+    
+      // Enhance the listview we just injected.
+      //$list.listview();
+      //$page.page();
+      $page.enhanceWithin();
+      
+      
+      //$.mobile.changePage( $page );
+
+      console.log("reqCompleteCB");
+    }
     
     // handle the jqm page change to make sure dynamic content is handled
     var pageChange = function( e, data) {
@@ -61,9 +99,9 @@
     
     }
     
-// bind the plugin to jQuery     
+    // bind the plugin to jQuery     
     $.jqmController = function(options) {
-        return new controller( this, options );
+        return new controller( options );
     }
 
 })( jQuery, window, document );

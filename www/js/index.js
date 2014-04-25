@@ -1,12 +1,22 @@
 var app = {
     xformHandler: null,
     uiController: null,
+    state: {
+        settings: {
+                source: 1
+            }  
+    },
     
     initialize: function() {
         this.bind();
         //$(".page").each(function(){$(this).pageControl();});
-        xformHandler = $.xformer();
-        uiController = $.jqmController();
+        this.getState();
+        this.xformHandler = $.xformer();
+        uiController = $.jqmController({state: this.state, xform:this.xformHandler});
+    },
+    
+    getState: function() {
+        // ToDo - read from local storage
     },
     
     bind: function() {
@@ -18,7 +28,7 @@ var app = {
         // so we need to call app.report(), and not this.report()
         //app.report('deviceready');
         console.log("deviceready");
-    },
+    }/*,
     
     report: function(id) { 
         console.log("report:" + id);
@@ -26,5 +36,5 @@ var app = {
         document.querySelector('#' + id + ' .pending').className += ' hide';
         var completeElem = document.querySelector('#' + id + ' .complete');
         completeElem.className = completeElem.className.split('hide').join('');
-    }
+    }*/
 };
