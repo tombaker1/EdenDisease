@@ -55,38 +55,17 @@
       var $list = $("#form-list-data");
       var listItems = "";
 
-      /*
-      var $msg = $("#content-messages");
-      var message = $msg.html();
-      message += "starting parsing";
-      $msg.html(message);
-      message += "<br>again";
-      $msg.html(message);
-      */
-
-      //$list.html("");
       for (var i = 0; i < xformHandler.numForms(); i++) {
         var $form = xformHandler.getForm(i);
-        console.log("form name: ",$form.name);
-        //console.log("\turl: ",$form.url);
-        //var item = "<li><a id='new-item' href='#load-form?index=" + i + "'>" + $form.name + "</a></li>";
+        //console.log("form name: ",$form.name);
         var item = "<label><input type='checkbox' name='checkbox-" + i + "'>" + $form.name + "</label>";
-        //$list.append(item);m
         listItems += item;
-        //message += "<br>" + $form.name; $msg.html(message);
-      }
+       }
       $list.html(listItems);
     
       // Enhance the listview we just injected.
-      //$list.listview();
-      //$page.page();
       $page.enhanceWithin();
-      
-      
-      //$.mobile.changePage( $page );
-
-    //message += "<br>reqCompleteCB";$msg.html(message);
-      console.log("cbFormListComplete");
+      //console.log("cbFormListComplete");
     }
     
     // handle the jqm page change to make sure dynamic content is handled
