@@ -64,7 +64,8 @@
       $list.html(listItems);
     
       // Enhance the listview we just injected.
-      $page.enhanceWithin();
+      //$page.enhanceWithin();
+      $list.enhanceWithin();
       //console.log("cbFormListComplete");
     }
     
