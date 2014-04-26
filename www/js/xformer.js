@@ -74,7 +74,7 @@
             var url = $item.attr("url");
             formList.push(new formItem(name,url));
         console.log("name: " + name);
-        //console.log("url:" + url);
+        console.log("url:" + url);
         //console.log($item);
       //message += "<br>  " + i + "   name: " + name; $msg.html(message);
             

@@ -27,6 +27,11 @@
     controller.prototype.init = function ( options ) {
         reqState = new XMLHttpRequest();
         var state = options["state"];
+        
+        // Set events
+        $("#load-form-list").click(this.onLoadFormList.bind(this));
+        
+        // Load the form list
         var url = "";
         if (state.settings.source === 1) {
             url = config.defaults.formPath + config.defaults.formList;
@@ -39,6 +44,10 @@
         
     };
     
+    controller.prototype.onLoadFormList = function ( event ) {
+        console.log("onLoadFormList");
+    };
+
     var cbFormListComplete = function() {
       
       // put the list of forms into the page
@@ -60,7 +69,8 @@
         var $form = xformHandler.getForm(i);
         console.log("form name: ",$form.name);
         //console.log("\turl: ",$form.url);
-        var item = "<li><a id='new-item' href='#load-form?index=" + i + "'>" + $form.name + "</a></li>";
+        //var item = "<li><a id='new-item' href='#load-form?index=" + i + "'>" + $form.name + "</a></li>";
+        var item = "<label><input type='checkbox' name='checkbox-" + i + "'>" + $form.name + "</label>";
         //$list.append(item);m
         listItems += item;
         //message += "<br>" + $form.name; $msg.html(message);
