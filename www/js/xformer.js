@@ -50,11 +50,6 @@
     }
     
     xformer.prototype.cbReadFormList = function (reply) {
-      //var $msg = $("#content-messages");
-      //var message = $msg.html();
-      //message += "cbReadFormList"; $msg.html(message);
-      
-
         clearTimeout(reqTimer);
         if (reqState.readyState != 4) {
             alert("What?");
@@ -75,17 +70,10 @@
             formList.push(new formItem(name,url));
         console.log("name: " + name);
         console.log("url:" + url);
-        //console.log($item);
-      //message += "<br>  " + i + "   name: " + name; $msg.html(message);
-            
-            //console.log(formList[i].name);
-            //$("#formList").append(name + "<br>");
         }
         
         // return and show the form
         reqCompleteCB();
-        //console.log("cbReadFormList done");
-     // message += "<br>cbReadFormList done"; $msg.html(message);
         
     };
     
@@ -154,10 +142,7 @@
         fields["strings"] = strings;
                 
         // parse the body
-        //var body = $("h:body"); xmlDoc
         fields['xml'] = $xml;
-        //formList[reqIndex].rawText = true;
-        //formList[reqIndex].loaded = true;
         formList[reqIndex].model = modelPrototype;
         formList[reqIndex].loaded = true;
         formList[reqIndex].form = fields;

@@ -34,18 +34,8 @@
 
         $("#load-form-list").click(this.onLoadFormList.bind(this));
         $("#debug-button").click(this.onDebug.bind(this));
-        /*        
-        // Load the form list
-        var url = "";
-        if (state.settings.source === 1) {
-            url = config.defaults.formPath + config.defaults.formList;
-        }
-        else {
-            url = config.defaults.url + config.defaults.formList;
-            console.log("init: request " + url)
-        }
-        options.xform.requestFormList(url,cbFormListComplete);
-        */
+        
+        // Load the saved data or initialize data
         this.loadFormList();
         
     };
