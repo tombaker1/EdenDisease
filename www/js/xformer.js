@@ -6,7 +6,8 @@
         defaults = {
         };
     
-    // create the form list item  
+    // create the form list item
+    /*
     function formItem(name,url) {
         this.url = url,
         this.name = name,
@@ -15,6 +16,20 @@
         this.model = null;
     }
     var formList = [];
+    */
+    var formType = Backbone.Model.extend({
+        defaults: {
+            url: "",
+            name: "",
+            loaded: false,
+            form: null,
+            data: null
+        },
+        initialize: function() {
+            console.log("new formType name:" + this.get("name"));
+        }
+    });
+    var formList = new Backbone.Collection;
     
     // create the query state
     var reqState = null,
@@ -38,7 +53,7 @@
     };
     
     xformer.prototype.getForm = function (i) {
-        return formList[i];
+        return formList.at(i); //[i];
     }
     
     xformer.prototype.numForms = function (i) {
@@ -46,7 +61,7 @@
     }
     
     xformer.prototype.getDoc = function () {
-        return formList[i];
+        return formList.at(i); //[i];
     }
     
     xformer.prototype.cbReadFormList = function (reply) {
@@ -67,9 +82,9 @@
             var $item = $(forms[i]);
             var name = $item[0].textContent; //.html();
             var url = $item.attr("url");
-            formList.push(new formItem(name,url));
-        console.log("name: " + name);
-        console.log("url:" + url);
+            //formList.push(new formItem(name,url));
+            //var model = new formType({"name":name, "url":url});
+            formList.add(new formType({"name":name, "url":url}));
         }
         
         // return and show the form
@@ -143,10 +158,13 @@
                 
         // parse the body
         fields['xml'] = $xml;
-        formList[reqIndex].model = modelPrototype;
-        formList[reqIndex].loaded = true;
-        formList[reqIndex].form = fields;
-        
+        //formList[reqIndex].model = modelPrototype;
+        //formList[reqIndex].loaded = true;
+        //formList[reqIndex].form = fields;
+        var model = formLIst.at(reqIndex);
+        formList.at(reqIndex).set("data",modelPrototype);
+        model.set("loaded",true);
+        model.set("form",fields);
         // notify the controller that the load is complete
         reqCompleteCB(reqIndex);
     }; 

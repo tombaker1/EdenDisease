@@ -72,7 +72,7 @@
       for (var i = 0; i < xformHandler.numForms(); i++) {
         var $form = xformHandler.getForm(i);
         //console.log("form name: ",$form.name);
-        var item = "<label><input type='checkbox' name='checkbox-" + i + "'>" + $form.name + "</label>";
+        var item = "<label><input type='checkbox' name='checkbox-" + i + "'>" + $form.get("name") + "</label>";
         listItems += item;
        }
       $list.html(listItems);
