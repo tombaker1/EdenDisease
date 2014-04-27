@@ -10,6 +10,8 @@
         };
     var reqState = null;
     var xformHandler = null;
+    var state;
+    
 
 
     // The actual plugin constructor
@@ -26,11 +28,13 @@
     
     controller.prototype.init = function ( options ) {
         reqState = new XMLHttpRequest();
-        var state = options["state"];
+        state = options["state"];
         
         // Set events
+
         $("#load-form-list").click(this.onLoadFormList.bind(this));
-        
+        $("#debug-button").click(this.onDebug.bind(this));
+        /*        
         // Load the form list
         var url = "";
         if (state.settings.source === 1) {
@@ -41,7 +45,27 @@
             console.log("init: request " + url)
         }
         options.xform.requestFormList(url,cbFormListComplete);
+        */
+        //this.loadFormList();
         
+    };
+    
+    controller.prototype.loadFormList = function (  ) {
+        // Load the form list
+        var url = "";
+        if (state.settings.source === 1) {
+            url = config.defaults.formPath + config.defaults.formList;
+        }
+        else {
+            url = config.defaults.url + config.defaults.formList;
+            console.log("init: request " + url)
+        }
+        xformHandler.requestFormList(url,cbFormListComplete);
+    };
+    
+    controller.prototype.onDebug = function ( event ) {
+        console.log("onDebug");
+        this.loadFormList();
     };
     
     controller.prototype.onLoadFormList = function ( event ) {

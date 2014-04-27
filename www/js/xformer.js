@@ -70,7 +70,7 @@
         forms = $xml.find( "form" );
         for (var i = 0; i < forms.length; i++) {
             var $item = $(forms[i]);
-            var name = $item.html();
+            var name = $item[0].textContent; //.html();
             var url = $item.attr("url");
             formList.push(new formItem(name,url));
         console.log("name: " + name);

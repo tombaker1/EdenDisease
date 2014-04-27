@@ -1,21 +1,21 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.sahanafoundation.mobileforms" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.sahanafoundation.mobileforms" version="0.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>MobileForms</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>
-    <author email="callback-dev@incubator.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="tombaker1@gmail.com" href="http://eden.sahanafoundation.org">
+        Tom Baker
     </author>
-    <icon height="512" src="res/icon/cordova_512.png" width="512" />
-    <icon cdv:platform="android" height="96" src="res/icon/cordova_android_96.png" width="96" />
+    <icon height="72" src="res/icon/sahana_icon_72x72.png" width="72" />
+    <icon cdv:platform="android" height="72" src="res/icon/sahana_icon_72x72.png" width="72" />
     <!-- icon cdv:platform="blackberry" height="80" src="res/icon/cordova_bb_80.png" width="80" / -->
-    <icon cdv:platform="ios" height="144" src="res/icon/cordova_ios_144.png" width="144" />
+    <!-- icon cdv:platform="ios" height="144" src="res/icon/cordova_ios_144.png" width="144" / -->
     <!-- cdv:splash cdv:platform="android" height="480" src="res/screen/android_hdpi_landscape.png" width="800"  / -->
     <!-- cdv:splash cdv:platform="android" height="800" src="res/screen/android_hdpi_portrait.png" width="480"  / -->
     <!-- cdv:splash cdv:platform="android" height="200" src="res/screen/android_ldpi_landscape.png" width="320"  / -->
     <!-- cdv:splash cdv:platform="android" height="320" src="res/screen/android_ldpi_portrait.png" width="200"  / -->
-    <!-- cdv:splash cdv:platform="android" height="320" src="res/screen/android_mdpi_landscape.png" width="480"  / -->
+    <cdv:splash cdv:platform="android" height="179" src="res/icon/sahanalarge_14_179x178.png" width="178"  />
     <!-- cdv:splash cdv:platform="android" height="480" src="res/screen/android_mdpi_portrait.png" width="320"  / -->
     <!-- cdv:splash cdv:platform="android" height="720" src="res/screen/android_xhdpi_landscape.png" width="1280"  / -->
     <!-- cdv:splash cdv:platform="android" height="1280" src="res/screen/android_xhdpi_portrait.png" width="720"  / -->
