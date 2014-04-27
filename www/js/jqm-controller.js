@@ -46,7 +46,7 @@
         }
         options.xform.requestFormList(url,cbFormListComplete);
         */
-        //this.loadFormList();
+        this.loadFormList();
         
     };
     
