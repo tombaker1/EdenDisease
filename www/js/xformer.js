@@ -7,16 +7,6 @@
         };
     
     // create the form list item
-    /*
-    function formItem(name,url) {
-        this.url = url,
-        this.name = name,
-        this.loaded = false;
-        this.form = null;
-        this.model = null;
-    }
-    var formList = [];
-    */
     var formType = Backbone.Model.extend({
         defaults: {
             url: "",
@@ -26,7 +16,7 @@
             data: null
         },
         initialize: function() {
-            console.log("new formType name:" + this.get("name"));
+            //console.log("new formType name:" + this.get("name"));
         }
     });
     var formList = new Backbone.Collection;

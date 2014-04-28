@@ -29,6 +29,7 @@
     controller.prototype.init = function ( options ) {
         reqState = new XMLHttpRequest();
         state = options["state"];
+        this.loadList = [];
         
         // Set events
 
@@ -60,8 +61,27 @@
     
     controller.prototype.onLoadFormList = function ( event ) {
         console.log("onLoadFormList");
+        var $list = $("#form-list-data");
+        var $checkboxList = $list.find("input");
+        
+        // get list of forms to load
+        this.loadList = [];
+        for (var i = 0; i < xformHandler.numForms(); i++) {
+          var $form = xformHandler.getForm(i);
+          if ($checkboxList[i].checked && !$form.loaded) {
+            this.loadList.push(i);
+          }
+        }
+        if (this.loadList.length) {
+            var index = this.loadList.pop();
+            xformHandler.requestForm(index,this.cbFormLoadComplete.bind(this));
+        }
     };
 
+    controller.prototype.cbFormLoadComplete = function(evt) {
+        console.log("cbFormLoadComplete");
+    };
+    
     var cbFormListComplete = function() {
       
       // put the list of forms into the page
