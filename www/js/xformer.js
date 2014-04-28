@@ -151,10 +151,12 @@
         //formList[reqIndex].model = modelPrototype;
         //formList[reqIndex].loaded = true;
         //formList[reqIndex].form = fields;
-        var model = formLIst.at(reqIndex);
-        formList.at(reqIndex).set("data",modelPrototype);
-        model.set("loaded",true);
-        model.set("form",fields);
+        //var model = formList.at(reqIndex);
+        formList.at(reqIndex).set({"data":modelPrototype,
+                                  "loaded":true,
+                                  "form":fields});
+        //model.set("loaded",true);
+        //model.set("form",fields);
         // notify the controller that the load is complete
         reqCompleteCB(reqIndex);
     }; 
@@ -177,7 +179,7 @@
         var item = this.getForm(index);
         reqIndex = index;
         reqState.onload = this.cbReadForm.bind(this);
-        reqState.open("get", item.url, true);
+        reqState.open("get", item.get("url"), true);
         reqState.send();
         reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
     };

@@ -78,8 +78,16 @@
         }
     };
 
-    controller.prototype.cbFormLoadComplete = function(evt) {
+    controller.prototype.cbFormLoadComplete = function(index) {
         console.log("cbFormLoadComplete");
+        
+        // Create page here
+        
+        // get next page
+        if (this.loadList.length) {
+            var index = this.loadList.pop();
+            xformHandler.requestForm(index,this.cbFormLoadComplete.bind(this));
+        }
     };
     
     var cbFormListComplete = function() {
