@@ -12,6 +12,7 @@
     var xformHandler = null;
     var state;
     var view = null;
+    var formListItems = [];
     
 
 
@@ -101,16 +102,12 @@
 
       for (var i = 0; i < xformHandler.numForms(); i++) {
         var $form = xformHandler.getForm(i);
-        //console.log("form name: ",$form.name);
-        var item = "<label><input type='checkbox' name='checkbox-" + i + "'>" + $form.get("name") + "</label>";
-        listItems += item;
-        var newItem = view.newFormListItem({model:$form,index:i});
-        var stuff = newItem.render();
-         $list.append(stuff.$el);
+        var item = view.newFormListItem({model:$form,index:i});
+        item.render();
+        $list.append(item.$el);
+        formListItems[i] = item;
        }
-      //$list.html(listItems);
     
-      //$page.enhanceWithin();
       $list.enhanceWithin();
       //console.log("cbFormListComplete");
     }

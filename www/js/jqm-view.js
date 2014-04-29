@@ -5,15 +5,6 @@
 ;(function ( $, window, document, undefined ) {
     
     var formListItem = Backbone.View.extend({
-        /*
-        defaults: {
-            url: "",
-            name: "",
-            loaded: false,
-            form: null,
-            data: null
-        },*/
-        //"<label><input type='checkbox' name='checkbox-" + i + "'>" + $form.get("name") + "</label>"
         tagName: "label",
         template: _.template("<input type='checkbox' name='checkbox-<%= index %>'><%= name %>"),
         defaults: {
@@ -29,10 +20,6 @@
             $.extend(this,options);
         },
         render: function() {
-//var compiled = _.template("hello: <%= name %>",{name: 'moe'});
-//var cc = compiled({name: 'moe'});
-            var str = this.template({index:this.index,name:this.model.get("name")});
-            //var str2 = _.template(" <%= name %> ",{name:'wilbur'}); //<input type='checkbox' name='checkbox-'>
             this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
             return this;
         },
