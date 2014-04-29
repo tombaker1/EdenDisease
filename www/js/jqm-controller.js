@@ -11,6 +11,7 @@
     var reqState = null;
     var xformHandler = null;
     var state;
+    var view = null;
     
 
 
@@ -21,6 +22,7 @@
         this._defaults = defaults;
         this._name = pluginName;
         xformHandler = options.xform;
+        view = $.jqmView();
        
         this.init(options);
         $(document).bind( "pagebeforechange", pageChange );
@@ -85,8 +87,8 @@
         
         // get next page
         if (this.loadList.length) {
-            var index = this.loadList.pop();
-            xformHandler.requestForm(index,this.cbFormLoadComplete.bind(this));
+            xformHandler.requestForm(this.loadList.pop(),
+                                     this.cbFormLoadComplete.bind(this));
         }
     };
     
@@ -102,10 +104,12 @@
         //console.log("form name: ",$form.name);
         var item = "<label><input type='checkbox' name='checkbox-" + i + "'>" + $form.get("name") + "</label>";
         listItems += item;
+        var newItem = view.newFormListItem({model:$form,index:i});
+        var stuff = newItem.render();
+         $list.append(stuff.$el);
        }
-      $list.html(listItems);
+      //$list.html(listItems);
     
-      // Enhance the listview we just injected.
       //$page.enhanceWithin();
       $list.enhanceWithin();
       //console.log("cbFormListComplete");
