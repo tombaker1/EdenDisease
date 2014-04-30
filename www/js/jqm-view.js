@@ -38,9 +38,9 @@
 
     view.prototype.init = function ( options ) {
         console.log("jqm-view init");
-        this.formList = [];
-        this.$el = $("#form-list-data");
-        this.el = this.$el[0];
+        this.formArray = [];
+        this.$formList = $("#form-list-data");
+        this.formList = this.$formList[0];
     };
     
     view.prototype.newFormListItem = function ( options ) {
@@ -48,17 +48,20 @@
 
         var item =  new formListItem(options);
         item.render();
-        this.$el.append(item.$el);
-        this.formList.unshift(item);
+        this.$formList.append(item.$el);
+        this.formArray.unshift(item);
         return true;
     };
     
+    view.prototype.getFormList = function (i) {
+        return this.$formList;
+    };
     
     view.prototype.insertForms = function ( formList ) {
         for (var i = 0; i < formList.length; i++) {
             this.newFormListItem({model:formList.at(i)});
         }
-        this.$el.enhanceWithin();
+        this.$formList.enhanceWithin();
     };
     
     // bind the plugin to jQuery     

@@ -64,7 +64,7 @@
     
     controller.prototype.onLoadFormList = function ( event ) {
         console.log("onLoadFormList");
-        var $list = $("#form-list-data");
+        var $list = view.getFormList();
         var $checkboxList = $list.find("input");
         
         // get list of forms to load
