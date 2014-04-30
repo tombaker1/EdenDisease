@@ -46,6 +46,10 @@
         return formList.at(i); //[i];
     }
     
+    xformer.prototype.getAllForms = function () {
+        return formList; 
+    }
+    
     xformer.prototype.numForms = function (i) {
         return formList.length;
     }

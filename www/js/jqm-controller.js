@@ -96,20 +96,23 @@
     var cbFormListComplete = function() {
       
       // put the list of forms into the page
+      view.insertForms(xformHandler.getAllForms());
+      /*
       var $page = $( "#page-load-form" );
       var $list = $("#form-list-data");
       var listItems = "";
 
       for (var i = 0; i < xformHandler.numForms(); i++) {
         var $form = xformHandler.getForm(i);
-        var item = view.newFormListItem({model:$form,index:i});
-        item.render();
-        $list.append(item.$el);
-        formListItems[i] = item;
+        var item = view.newFormListItem({model:$form});
+        //item.render();
+        //$list.append(item.$el);
+        //formListItems[i] = item;
        }
     
       $list.enhanceWithin();
       //console.log("cbFormListComplete");
+      */
     }
     
     // handle the jqm page change to make sure dynamic content is handled
