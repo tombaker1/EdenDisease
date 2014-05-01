@@ -88,10 +88,8 @@
         
         // Create page here
         view.createForm(xformHandler.getForm(index));
-        //this.$checkboxList[index].checked = false;
-        //this.$checkboxList[index].disabled = true;
-        //this.checkboxArray[index].$el.checkboxradio();
-        //this.checkboxArray[index].$el.checkboxradio("refresh");
+        
+        // Uncheck and disable checkbox
         var searchStr = "input[name='formlist-"+index+"']";
         var $element = $(searchStr);
         $element.prop('checked', false).checkboxradio( "option", "disabled", true );

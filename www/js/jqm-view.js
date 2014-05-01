@@ -7,9 +7,7 @@
 
     var formListItem = Backbone.View.extend({
         tagName: "label",
-        //template: _.template("<input type='checkbox' id='formlist-<%= index %>' name='formlist-<%= index %>'><label for='formlist-<%= index %>'><%= name %></formList>"),
         template: _.template("<input type='checkbox' id='formlist-<%= index %>' name='formlist-<%= index %>'><%= name %>"),
-        //<label for='formlist-<%= index %>'>
         defaults: {
             //model: null,
             index: 0,
@@ -20,17 +18,8 @@
             console.log("new formListItem ");
             this.index = -1;
             
-            // add options into model
-            //$.extend(this,options);
-        },
+         },
         render: function() {
-            /*
-            var html, $oldel=this.$el, $newel;
-            html =
-            $newel=this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
-            $newel.insertAfter($oldel);
-            return this;
-            */
             var str = this.template({index:this.index,name:this.model.get("name")});
             this.$el.attr("for","formList-"+this.index);
             return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
