@@ -86,8 +86,8 @@
     controller.prototype.cbFormLoadComplete = function(index) {
         console.log("cbFormLoadComplete");
         
-        // Create page here
-        view.createForm(xformHandler.getForm(index));
+        // Create page
+        view.createForm({model:xformHandler.getForm(index)});
         
         // Uncheck and disable checkbox
         var searchStr = "input[name='formlist-"+index+"']";
@@ -102,6 +102,7 @@
         }
         else {
             view.getFormList().enhanceWithin();
+            view.$newFormList.listview('refresh');
         }
     };
     
@@ -112,18 +113,17 @@
     }
     
     // handle the jqm page change to make sure dynamic content is handled
-    var pageChange = function( e, data) {
+    var pageChange = function( event, data) {
 
       if ( typeof data.toPage === "string" ) {
     
-        var u = $.mobile.path.parseUrl( data.toPage );
-        var re = /#page/;
-        var pageselector = u.hash.replace( /\?.*$/, "" );
+        var pageURL = $.mobile.path.parseUrl( data.toPage );
+        var pageselector = pageURL.hash.replace( /\?.*$/, "" );
           
         if (pageselector.indexOf("#page-form-") >= 0) {
-          var index = u.hash.replace( /#page-form-/, "" );
-          showNewForm(index);
-          e.preventDefault();
+            //var $form = xformHandler.getForm(index);
+          view.showNewForm(pageURL.hash);
+          event.preventDefault();
           return;
         }
   
@@ -132,7 +132,7 @@
             requestFormList(defaultURL);
             break;
           case "#load-form":
-            var index = u.hash.replace( /.*index=/, "" );
+            var index = pageURL.hash.replace( /.*index=/, "" );
             console.log("loading form #" + index);
             requestForm(index);
             break;
@@ -140,7 +140,7 @@
             return;
         }
           
-        e.preventDefault();
+        event.preventDefault();
       }
     
     }
