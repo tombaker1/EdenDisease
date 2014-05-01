@@ -33,7 +33,8 @@
         reqState = new XMLHttpRequest();
         state = options["state"];
         this.loadList = [];
-        
+        this.$checkboxList = [];
+        this.checkboxArray = [];
         // Set events
 
         $("#load-form-list").click(this.onLoadFormList.bind(this));
@@ -65,14 +66,15 @@
     controller.prototype.onLoadFormList = function ( event ) {
         console.log("onLoadFormList");
         var $list = view.getFormList();
-        var $checkboxList = $list.find("input");
+        this.$checkboxList = $list.find("input");
+        this.checkboxArray = view.getFormArray();
         
         // get list of forms to load
         this.loadList = [];
         for (var i = 0; i < xformHandler.numForms(); i++) {
           var $form = xformHandler.getForm(i);
-          if ($checkboxList[i].checked && !$form.loaded) {
-            this.loadList.push(i);
+          if (this.$checkboxList[i].checked && !$form.loaded) {
+            this.loadList.unshift(i);
           }
         }
         if (this.loadList.length) {
@@ -85,11 +87,23 @@
         console.log("cbFormLoadComplete");
         
         // Create page here
+        view.createForm(xformHandler.getForm(index));
+        //this.$checkboxList[index].checked = false;
+        //this.$checkboxList[index].disabled = true;
+        //this.checkboxArray[index].$el.checkboxradio();
+        //this.checkboxArray[index].$el.checkboxradio("refresh");
+        var searchStr = "input[name='formlist-"+index+"']";
+        var $element = $(searchStr);
+        $element.prop('checked', false).checkboxradio( "option", "disabled", true );
+        $element.checkboxradio('refresh');
         
         // get next page
         if (this.loadList.length) {
             xformHandler.requestForm(this.loadList.pop(),
                                      this.cbFormLoadComplete.bind(this));
+        }
+        else {
+            view.getFormList().enhanceWithin();
         }
     };
     
@@ -97,22 +111,6 @@
       
       // put the list of forms into the page
       view.insertForms(xformHandler.getAllForms());
-      /*
-      var $page = $( "#page-load-form" );
-      var $list = $("#form-list-data");
-      var listItems = "";
-
-      for (var i = 0; i < xformHandler.numForms(); i++) {
-        var $form = xformHandler.getForm(i);
-        var item = view.newFormListItem({model:$form});
-        //item.render();
-        //$list.append(item.$el);
-        //formListItems[i] = item;
-       }
-    
-      $list.enhanceWithin();
-      //console.log("cbFormListComplete");
-      */
     }
     
     // handle the jqm page change to make sure dynamic content is handled
