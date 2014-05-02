@@ -55,10 +55,12 @@
     
     var formPage = Backbone.View.extend({
         tagName: "div",
-        template: _.template("<div data-role='header' data-add-back-btn='true'><h1><%= name %></h1></div>" +
+        template: _.template("<div data-role='header' data-add-back-btn='true' data-position='fixed'>" +
+                                "<h1><%= name %></h1>" +
+                            "</div>" +
                              "<div data-role='content'></div>" +
                              "<div data-role='footer' data-position='fixed'><h4>Cancel/Save/Submit</h4></div>"
-                             ),
+                            ),
        
         initialize: function(options) {
             console.log("new formPage ");
@@ -77,7 +79,12 @@
     var formSelect1 = Backbone.View.extend({
         //<fieldset id='select1' name='" + reference + "' data-role='controlgroup' data-mini='true'>
         tagName: "fieldset",
-        labelTemplate: _.template("<a id='new-item' href='#page-form-<%= index %>'><%= name %></a>"),
+        labelTemplate: _.template("<legend><%= label %></legend>"),
+        itemTemplate: _.template("<label for='<%= id %>'>" +
+                                 "<input type='radio' name='<%= name %>' id='<%= id %>' value='<%= value %>'>" +
+                                "</input>" +
+                                "<%= label %></label>"),
+        //itemValueTemplate: _.template("<a id='new-item' href='#page-form-<%= index %>'><%= name %></a>"),
         defaults: {
             //model: null,
             index: 0,
@@ -87,12 +94,51 @@
         initialize: function(options) {
             console.log("new newFormListItem ");
             this.index = -1;
+            this.label = "";
+            this.itemList = [];
             
          },
         render: function() {
             //var str = this.template({index:this.index,name:this.model.get("name")});
-            this.$el.attr("for","formList-"+this.index);
-            return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
+            this.$el.attr({"id":"select1",
+                          "name":this.reference,
+                          "data-role":"controlgroup",
+                          "data-mini":"true"});
+            this.$el.html(this.labelTemplate({label:this.label}));
+            
+            for (var i = 0; i < this.itemList.length; i++) {
+                var item = this.itemList[i];
+                this.$el.append(this.itemTemplate(item));
+            }
+            return this.$el; //.html(this.template({index:this.index,name:this.model.get("name")}));
+        },
+        
+        addItem: function(element,name,id) {
+            var children = element.children;
+            //var elementString =  "<input type='radio' name='" + name + "' id='" + id + "'";
+            var label = "";
+            var value = "";
+            for (var i = 0; i < children.length; i++) {
+              var field = children[i];
+              switch(field.nodeName) {
+                case "label":
+                  label = getStringRef(this.model.get("form"),field);
+                  break;
+                case "value":
+                  //elementString += " value='" + field.innerHTML + "'";
+                  value = field.textContent;
+                  break;
+                case "hint":
+                  console.log("hint not implemented");
+                  break;
+                default:
+                  console.log("parseSelect1 field not found " + field.nodeName);
+              }
+            }
+            this.itemList.unshift({name:name,id:id,label:label,value:value})
+        },
+        addHint: function(field) {
+            console.log("hint not implemented");
         }
     });
 
@@ -182,11 +228,11 @@
         this.$loadFormList.enhanceWithin();
     };
     
-    view.prototype.getStringRef = function ( $form, element ) {
+    getStringRef = function ( $form, element ) {
         var str = "";
         var ref = $(element).attr("ref");
         if (!ref) {
-          return element.innerHTML;
+          return element.textContent;
         }
         if (ref.indexOf("itext") >= 0) {
           var fields = ref.split("'");
@@ -223,27 +269,61 @@
         $("body").append(page.$el);
 
         // Add page content
-        var $form = options["model"].get("form");
+        var model = options["model"];
+        var $form = model.get("form");
         var $xml = $form.xml;
         var $fields = $xml[0].body.children;
         for (var i = 0; i < $fields.length; i++) {
           var field = $fields[i];
           var elementString = "";
+            var reference = $(field).attr("ref");
+                var label = $(field).find("label")[0];
+                var labelString =  getStringRef($form,label);
           switch (field.nodeName) {
             case "select1":
               //elementString += parseSelect1(field,$form.name);
-              elementString += "<div>select1</div>";
-              page.$el.append(elementString);
-              //var element = $page.find("[name*='" + $form.name + "']");
+
+    var element = new formSelect1(options);
+  var choiceNumber = 0;
+  var referenceItems = reference.split("/");
+  var fieldName = model.get("name") + "-" + referenceItems[2];
+  var children = field.children;
+
+ for (var j = 0; j < children.length; j++) {
+    var selectField = children[j];
+    switch(selectField.nodeName) {
+      case "label":
+        //elementString += "<legend>" + parseLabel(selectField) + "</legend>";
+        element.label = labelString;
+        break; 
+      case "item":
+        var choice = model.get("name") + "-choice-" + choiceNumber;
+        choiceNumber++;
+        //elementString += parseItem(selectField,fieldName,choice);
+        element.addItem(selectField,fieldName,choice);
+        break;
+      case "hint":
+        //elementString += parseHint(selectField);
+        //element.addHint(selectField);
+        break;
+      default:
+        console.log("parseSelect1 selectField not found " + selectField.nodeName);
+    }
+  }
+
+              element.render();
+            
+              page.$el.append(element.$el);
+              
               break;
             case "upload":
               //elementString += parseUpload(field);
               //elementString += "<div>upload</div>";
-              var element = new formUpload(options);
-                var reference = $(field).attr("ref");
+                var element = new formUpload(options);
+                //var reference = $(field).attr("ref");
                 element.reference = reference;
-                var label = $(field).find("label")[0];
-                var labelString = this.getStringRef($form,label); //label.textContent;
+                //var label = $(field).find("label")[0];
+                //var labelString = getStringRef($form,label); //label.textContent;
                 element.label = labelString;
                 element.render();
               
@@ -253,10 +333,7 @@
               //elementString += parseInput(field);
               //elementString += "<div>input</div>";
               var element = new formInput(options);
-                var reference = $(field).attr("ref");
                 element.reference = reference;
-                var label = $(field).find("label")[0];
-                var labelString = label.textContent;
                 element.label = labelString;
                 element.render();
               

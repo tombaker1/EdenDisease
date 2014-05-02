@@ -103,7 +103,7 @@
         }
         else {
             view.getFormList().enhanceWithin();
-            view.$newFormList.listview('refresh');
+            //view.$newFormList.listview('refresh');
         }
     };
     
