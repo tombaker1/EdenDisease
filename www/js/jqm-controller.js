@@ -90,6 +90,7 @@
         view.createForm({model:xformHandler.getForm(index)});
         
         // Uncheck and disable checkbox
+        // Todo this should be in the view 
         var searchStr = "input[name='formlist-"+index+"']";
         var $element = $(searchStr);
         $element.prop('checked', false).checkboxradio( "option", "disabled", true );

@@ -74,6 +74,74 @@
         }
     });
 
+    var formSelect1 = Backbone.View.extend({
+        //<fieldset id='select1' name='" + reference + "' data-role='controlgroup' data-mini='true'>
+        tagName: "fieldset",
+        labelTemplate: _.template("<a id='new-item' href='#page-form-<%= index %>'><%= name %></a>"),
+        defaults: {
+            //model: null,
+            index: 0,
+            name: ""
+        },
+       
+        initialize: function(options) {
+            console.log("new newFormListItem ");
+            this.index = -1;
+            
+         },
+        render: function() {
+            //var str = this.template({index:this.index,name:this.model.get("name")});
+            this.$el.attr("for","formList-"+this.index);
+            return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
+        }
+    });
+
+    var formUpload = Backbone.View.extend({
+        //<fieldset id='select1' name='" + reference + "' data-role='controlgroup' data-mini='true'>
+        tagName: "fieldset",
+        template: _.template("<%= label %><input id='upload' type='file' name='<%= reference %>'>"),
+        defaults: {
+            //model: null,
+            index: 0,
+            name: ""
+        },
+       
+        initialize: function(options) {
+            console.log("new newFormListItem ");
+            //this.index = -1;
+            this.reference = "";
+            
+         },
+        render: function() {
+            //var str = this.template({index:this.index,name:this.model.get("name")});
+            this.$el.attr("data-role","fieldcontain");
+            return this.$el.html(this.template({label:this.label,reference:this.reference}));
+        }
+    });
+    
+    var formInput= Backbone.View.extend({
+        //<fieldset id='select1' name='" + reference + "' data-role='controlgroup' data-mini='true'>
+        tagName: "fieldset",
+        template: _.template("<%= label %><input id='input' type='text' name='<%= reference %>'>"),
+        defaults: {
+            //model: null,
+            index: 0,
+            name: ""
+        },
+       
+        initialize: function(options) {
+            console.log("new newFormListItem ");
+            this.reference = "";
+            this.label = "";
+            
+         },
+        render: function() {
+            //var str = this.template({index:this.index,name:this.model.get("name")});
+            this.$el.attr("data-role","fieldcontain");
+            return this.$el.html(this.template({label:this.label,reference:this.reference}));
+        }
+    });
+
     function view( options ) {
         this.init();
     };
@@ -114,6 +182,30 @@
         this.$loadFormList.enhanceWithin();
     };
     
+    view.prototype.getStringRef = function ( $form, element ) {
+        var str = "";
+        var ref = $(element).attr("ref");
+        if (!ref) {
+          return element.innerHTML;
+        }
+        if (ref.indexOf("itext") >= 0) {
+          var fields = ref.split("'");
+          var srchStr = fields[1];
+          //var formData = $form.form;
+          var text = $form["strings"];
+          var srchStr = srchStr.replace(/\//g,"\\$&").replace(/:/g,"\\$&");
+          var ll =  $(text).find("#" + srchStr)[0]; 
+          var value = $(ll).find("value")[0];
+          str = value.textContent;
+          //console.log('ref:' + srchStr);
+        }
+        else {
+          console.log('not found');
+          alert("string not found");
+        }
+        return str;
+    };
+    
     view.prototype.createForm = function (options) {
         console.log("view createForm ");
         
@@ -129,8 +221,57 @@
         page.index = item.index;
         page.render();
         $("body").append(page.$el);
+
+        // Add page content
+        var $form = options["model"].get("form");
+        var $xml = $form.xml;
+        var $fields = $xml[0].body.children;
+        for (var i = 0; i < $fields.length; i++) {
+          var field = $fields[i];
+          var elementString = "";
+          switch (field.nodeName) {
+            case "select1":
+              //elementString += parseSelect1(field,$form.name);
+              elementString += "<div>select1</div>";
+              page.$el.append(elementString);
+              //var element = $page.find("[name*='" + $form.name + "']");
+              break;
+            case "upload":
+              //elementString += parseUpload(field);
+              //elementString += "<div>upload</div>";
+              var element = new formUpload(options);
+                var reference = $(field).attr("ref");
+                element.reference = reference;
+                var label = $(field).find("label")[0];
+                var labelString = this.getStringRef($form,label); //label.textContent;
+                element.label = labelString;
+                element.render();
+              
+              page.$el.append(element.$el);
+              break;
+            case "input":
+              //elementString += parseInput(field);
+              //elementString += "<div>input</div>";
+              var element = new formInput(options);
+                var reference = $(field).attr("ref");
+                element.reference = reference;
+                var label = $(field).find("label")[0];
+                var labelString = label.textContent;
+                element.label = labelString;
+                element.render();
+              
+              page.$el.append(element.$el);
+              break;
+            default:
+              console.log("<div>Unimplemented element" + field.nodeName + "</div>");
+            }
+
+            //elementString += "<hr>";
+             page.$el.append("<hr>");
+        }
+        page.$el.page();
     };
-    
+
     view.prototype.fillForm = function ($form,model) {
         console.log("fillForm" + $form.get("name"));
     };
