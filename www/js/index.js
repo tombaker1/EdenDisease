@@ -8,6 +8,14 @@ var app = {
     },
     
     initialize: function() {
+        if (window.cordova === undefined) {
+            console.log("running in browser");
+            $("#content-messages").html("browser<br>")
+        }
+        else {
+            console.log("running mobile");
+            $("#content-messages").html("mobile<br>")
+        }
         this.bind();
         //$(".page").each(function(){$(this).pageControl();});
         this.getState();
