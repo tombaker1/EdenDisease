@@ -199,6 +199,13 @@
         this.$loadFormList = $("#form-list-data");
         this.$newFormList = $("#form-items");
         this.formList = this.$loadFormList[0];
+        
+        // Initialize jqm
+        $("div.page").each(function(index){
+            $(this).page();
+            });
+        this.$loadFormList.enhanceWithin();
+        this.$newFormList.listview();
     };
     
     view.prototype.newFormListItem = function ( options ) {
@@ -226,6 +233,7 @@
             this.newFormListItem({model:formList.at(i)});
         }
         this.$loadFormList.enhanceWithin();
+        //this.$loadFormList.listview("refresh"); //enhanceWithin();
     };
     
     getStringRef = function ( $form, element ) {
