@@ -373,7 +373,6 @@ view.prototype.showForm = function($form,model,$page) {
     var type = $(element).attr("id");
     switch (type) {
       case "select1":
-        /*
         var value = item.value;
         element.listview();
         element.enhanceWithin();
@@ -393,7 +392,6 @@ view.prototype.showForm = function($form,model,$page) {
         }
         element.listview("refresh");
         element.enhanceWithin();
-        */
         break;
       case "upload":
         // I don't know if this will work.  It is a security risk 
