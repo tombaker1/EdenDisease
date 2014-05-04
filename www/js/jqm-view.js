@@ -135,7 +135,7 @@
                   console.log("parseSelect1 field not found " + field.nodeName);
               }
             }
-            this.itemList.unshift({name:name,id:id,label:label,value:value})
+            this.itemList.push({name:name,id:id,label:label,value:value})
         },
         addHint: function(field) {
             console.log("hint not implemented");
