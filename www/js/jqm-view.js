@@ -396,18 +396,14 @@ view.prototype.showForm = function($form,model,$page) {
         */
         break;
       case "upload":
-        /*
         // I don't know if this will work.  It is a security risk 
         // to change the value of a input type='file'
         var value = item.value;
-        element.value = value;
-        */
+        $(element).find("input")[0].value = value;
         break;
       case "input":
-        /*
         var value = item.value;
-        element.value = value;
-        */
+        $(element).find("input")[0].value = value;
         break;
       default:
         // other fields
