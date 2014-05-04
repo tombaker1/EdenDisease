@@ -285,6 +285,9 @@
         var $form = model.get("form");
         var $xml = $form.xml;
         var $fields = $xml[0].body.children;
+        //if ($form.value === undefined) {
+        //    $form.value = "";
+        //}
         for (var i = 0; i < $fields.length; i++) {
           var field = $fields[i];
           var elementString = "";

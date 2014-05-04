@@ -120,7 +120,10 @@
             for (var j = 0; j < fieldItems.length; j++) {
                 // get model element
                 var key = fieldItems[j].nodeName;
-                var value = fieldItems[j].innerHTML;
+                var value = fieldItems[j].textContent;
+                if (value === undefined) {
+                    value = "";
+                }
                 var field = {};
                 var item = {};
                 field["value"] = value;
