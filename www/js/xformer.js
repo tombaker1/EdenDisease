@@ -171,6 +171,8 @@
     var cbReqTimeout = function() {
         reqState.abort();
         alert("URL could not be found");
+        reqCompleteCB(false,reqIndex);            
+
     };
 
     xformer.prototype.requestFormList = function (url, cb) {
@@ -185,10 +187,16 @@
         reqCompleteCB = cb;
         var item = this.getForm(index);
         reqIndex = index;
-        reqState.onload = this.cbReadForm.bind(this);
-        reqState.open("get", item.get("url"), true);
-        reqState.send();
-        reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
+        try {
+            reqState.onload = this.cbReadForm.bind(this);
+            reqState.open("get", item.get("url"), true);
+            reqState.send();
+            reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
+        }
+        catch(err) {
+            alert("Error loading form");
+            reqCompleteCB(false,reqIndex);            
+        }
     };
 
     // bind the plugin to jQuery     
