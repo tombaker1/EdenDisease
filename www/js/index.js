@@ -10,7 +10,8 @@ var app = {
     initialize: function() {
         if (window.cordova === undefined) {
             console.log("running in browser");
-            $("#content-messages").html("browser<br>")
+            $("#content-messages").html("browser<br>");
+            window.cordova = window.cordova_webapp;
         }
         else {
             console.log("running mobile");

@@ -90,11 +90,14 @@
         clearTimeout(reqTimer);
         //console.log("cbReadFormList done");
         if (reqState.readyState != 4) {
-            alert("What?");
+            alert("Error loading form");
+            reqCompleteCB(false,reqIndex);
             return;
         }
         if (reqState.status != 200) {
-            alert("Error loading page");
+            var name = formList.at(reqIndex).get("name");
+            alert("Server error for form " + name);
+            reqCompleteCB(false,reqIndex);
             return;
         }
         
@@ -162,7 +165,7 @@
         //model.set("loaded",true);
         //model.set("form",fields);
         // notify the controller that the load is complete
-        reqCompleteCB(reqIndex);
+        reqCompleteCB(true,reqIndex);
     }; 
     
     var cbReqTimeout = function() {

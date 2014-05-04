@@ -1,7 +1,7 @@
 var config = {
     developerMode: true,
     defaults: {
-        url: "demo.eden.sahanafoundation.org/",
+        url: "http://demo.eden.sahanafoundation.org/eden/xforms/",
         formPath: "res/xml/",
         formList: "formList.xml"
     }

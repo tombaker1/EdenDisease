@@ -264,8 +264,9 @@
         console.log("view createForm ");
         
         // Add item into new form list
-        var item =  new newFormListItem(options);
-        item.index = this.newFormArray.length;
+        var model = options["model"];
+        var item =  new newFormListItem({model:model});
+        item.index = options["index"]; //this.newFormArray.length;
         item.render();
         this.$newFormList.append(item.$el);
         this.newFormArray.unshift(item);
@@ -277,7 +278,6 @@
         $("body").append(page.$el);
 
         // Add page content
-        var model = options["model"];
         var $form = model.get("form");
         var $xml = $form.xml;
         var $fields = $xml[0].body.children;
@@ -357,17 +357,70 @@
         page.$el.page();
     };
 
-    view.prototype.fillForm = function ($form,model) {
-        console.log("fillForm" + $form.get("name"));
-    };
+view.prototype.showForm = function($form,model,$page) {
+  // Loop through keys finding page elements
+  var formData = $form.get("form");
+  for (var key in $form.get("data")) {
+    var item = formData[key];
+    var name = item.nodeset;
+    var searchString = "[name*='" + name + "']";
+    var element = $page.find(searchString);
+    var type = $(element).attr("id");
+    switch (type) {
+      case "select1":
+        /*
+        var value = item.value;
+        element.listview();
+        element.enhanceWithin();
+        var subItems = $(element).find("input");
+        for (var subIndex = 0; subIndex < subItems.length; subIndex++) {
+          //var idSelector = "choice-" + i;
+          var subItem = subItems[subIndex];
+          var i = $(subItem).attr("id").split("-")[2];
+          
+          if (value === i) {
+            //subItem.checked = true;
+            $(subItem).attr("checked",true).checkboxradio("refresh");
+          }
+          else {
+            $(subItem).attr("checked",false).checkboxradio("refresh");
+          }
+        }
+        element.listview("refresh");
+        element.enhanceWithin();
+        */
+        break;
+      case "upload":
+        /*
+        // I don't know if this will work.  It is a security risk 
+        // to change the value of a input type='file'
+        var value = item.value;
+        element.value = value;
+        */
+        break;
+      case "input":
+        /*
+        var value = item.value;
+        element.value = value;
+        */
+        break;
+      default:
+        // other fields
+        break;
+    }
+    console.log("found element")
+  }
+  $.mobile.changePage($page);
+};
     
-    view.prototype.showNewForm = function (url) {
-        var index = url.replace( /#page-form-/, "" );
-        var menuItem = this.newFormArray[index];
-        var oldModel = menuItem.model;
-        var newModel = $.extend({name:oldModel.get("name"),timestamp:Date.now()},oldModel.model);
-        this.fillForm(oldModel,newModel);
+    view.prototype.showNewForm = function ($form,model,index) {
+        //var index = url.replace( /#page-form-/, "" );
+        //var menuItem = this.newFormArray[index];
+        //var oldModel = menuItem.model;
+        //var newModel = $.extend({name:oldModel.get("name"),timestamp:Date.now()},oldModel.model);
+        //this.fillForm(oldModel,newModel);
         var $page = $( "#page-form-"+index );
+        this.showForm($form,model,$page);
         $.mobile.changePage($page);
     };
     

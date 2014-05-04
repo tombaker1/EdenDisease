@@ -30,7 +30,7 @@
     };
     
     controller.prototype.init = function ( options ) {
-        reqState = new XMLHttpRequest();
+        reqState = options["xform"]; //new XMLHttpRequest();
         state = options["state"];
         this.loadList = [];
         this.$checkboxList = [];
@@ -83,12 +83,17 @@
         }
     };
 
-    controller.prototype.cbFormLoadComplete = function(index) {
+    controller.prototype.cbFormLoadComplete = function(status,index) {
         console.log("cbFormLoadComplete");
         
-        // Create page
-        view.createForm({model:xformHandler.getForm(index)});
+        // only do this if the form loaded successfully
+        if (status) {
+            // Create page
+            view.createForm({model:xformHandler.getForm(index),index:index});
+            
+        }
         
+        // success or failure you want to disable the item in the list
         // Uncheck and disable checkbox
         // Todo this should be in the view 
         var searchStr = "input[name='formlist-"+index+"']";
@@ -123,9 +128,14 @@
           
         if (pageselector.indexOf("#page-form-") >= 0) {
             //var $form = xformHandler.getForm(index);
-          view.showNewForm(pageURL.hash);
-          event.preventDefault();
-          return;
+            //var model = new 
+            var index = pageURL.hash.replace( /#page-form-/, "" );
+            var $form = xformHandler.getForm(index);
+            var newModel = $.extend({meta_name:$form.get("name"),meta_timestamp:Date.now()},$form.get("data"));
+            //var $page = $( "#page-form-"+index );
+            view.showNewForm($form,newModel,index);
+            event.preventDefault();
+            return;
         }
   
         switch (pageselector) {
