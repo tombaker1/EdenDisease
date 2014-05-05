@@ -21,7 +21,7 @@ var app = {
         //$(".page").each(function(){$(this).pageControl();});
         this.getState();
         this.xformHandler = $.xformer();
-        uiController = $.jqmController({state: this.state, xform:this.xformHandler});
+        this.uiController = $.jqmController({state: this.state, xform:this.xformHandler});
     },
     
     getState: function() {

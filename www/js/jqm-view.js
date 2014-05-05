@@ -55,18 +55,23 @@
     
     var formPage = Backbone.View.extend({
         tagName: "div",
-        template: _.template("<div data-role='header' data-add-back-btn='true' data-position='fixed'>" +
+        template: _.template("<div data-role='header' data-add-back-btn='false' data-position='fixed'>" +
                                 "<h1><%= name %></h1>" +
                             "</div>" +
                              "<div data-role='content'></div>" +
                              "<div data-role='footer' data-position='fixed'>" + 
                              //"<h4>Cancel/Save/Submit</h4>" +
-                             "<input type='button' data-role='button' href='#nav-cancel'>Cancel</input>" +
-                             "<input type='button' data-role='button' href='#nav-save'>Save</input>" +
-                             "<input type='button' data-role='button' href='#nav-submit'>Submit</input>" +
+                             "<input id='cancel' type='button' data-role='button' href='#nav-cancel'>Cancel</input>" +
+                             "<input id='save' type='button' data-role='button' href='#nav-save'>Save</input>" +
+                             "<input id='submit' type='button' data-role='button' href='#nav-submit'>Submit</input>" +
                              "</div>"
                             ),
-       
+        events: {
+            "click #cancel": "onCancel",
+            "click #save":    "onSave",
+            "click #submit":  "onSubmit"
+        },
+        
         initialize: function(options) {
             console.log("new formPage ");
             this.index = -1;
@@ -78,6 +83,20 @@
                           "name":this.model.get("name"),
                           "data-role":"page"});
             return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
+        },
+        onCancel: function() {
+            console.log("cancel button");
+            $.mobile.changePage("#page-new-form",
+                                {transition:"slide",
+                                reverse:"true"});
+            //$.jqmView.trigger("form-cancel");
+            $(app.uiController).trigger("form-cancel");
+        },
+        onSave: function() {
+            console.log("save button");
+        },
+        onSubmit: function() {
+            console.log("submit button");
         }
     });
 
@@ -427,10 +446,13 @@ view.prototype.showForm = function($form,model,$page) {
         //this.fillForm(oldModel,newModel);
         var $page = $( "#page-form-"+index );
         this.showForm($form,model,$page);
-        $.mobile.changePage($page);
+        //$.mobile.changePage($page);
     };
     
-    // bind the plugin to jQuery     
+    // bind the plugin to jQuery
+    //var jqmView = function(options) {
+    //    return new view( options );
+    //};
     $.jqmView = function(options) {
         return new view( options );
     };
