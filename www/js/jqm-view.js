@@ -415,11 +415,8 @@ view.prototype.showForm = function($form,model,$page) {
         // other fields
         break;
     }
-    //console.log("found element")
   }
-  console.log("calling changePage")
   $.mobile.changePage($page,{transition:"slide"});
-  console.log("changePage done")
 };
     
     view.prototype.showNewForm = function ($form,model,index) {
