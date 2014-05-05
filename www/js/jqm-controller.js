@@ -120,7 +120,7 @@
     
     // handle the jqm page change to make sure dynamic content is handled
     var pageChange = function( event, data) {
-
+        console.log("changePage " + data.toPage)
       if ( typeof data.toPage === "string" ) {
     
         var pageURL = $.mobile.path.parseUrl( data.toPage );
@@ -133,11 +133,17 @@
             var $form = xformHandler.getForm(index);
             var newModel = $.extend({meta_name:$form.get("name"),meta_timestamp:Date.now()},$form.get("data"));
             //var $page = $( "#page-form-"+index );
+            console.log("calling showNewForm");
             view.showNewForm($form,newModel,index);
             event.preventDefault();
             return;
         }
   
+        if (pageselector.indexOf("#nav-") >= 0) {
+            event.preventDefault();
+            return;            
+        }
+        
         switch (pageselector) {
           case "#page-formlist":
             requestFormList(defaultURL);
@@ -152,6 +158,9 @@
         }
           
         event.preventDefault();
+      }
+      else {
+        console.log("\tno string " + data.absUrl);
       }
     
     }

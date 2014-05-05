@@ -34,7 +34,7 @@
 
     var newFormListItem = Backbone.View.extend({
         tagName: "li",
-        template: _.template("<a id='new-item' href='#page-form-<%= index %>'><%= name %></a>"),
+        template: _.template("<a id='new-item' data-transition='slide' href='#page-form-<%= index %>'><%= name %></a>"),
         defaults: {
             //model: null,
             index: 0,
@@ -59,7 +59,12 @@
                                 "<h1><%= name %></h1>" +
                             "</div>" +
                              "<div data-role='content'></div>" +
-                             "<div data-role='footer' data-position='fixed'><h4>Cancel/Save/Submit</h4></div>"
+                             "<div data-role='footer' data-position='fixed'>" + 
+                             //"<h4>Cancel/Save/Submit</h4>" +
+                             "<input type='button' data-role='button' href='#nav-cancel'>Cancel</input>" +
+                             "<input type='button' data-role='button' href='#nav-save'>Save</input>" +
+                             "<input type='button' data-role='button' href='#nav-submit'>Submit</input>" +
+                             "</div>"
                             ),
        
         initialize: function(options) {
@@ -410,9 +415,11 @@ view.prototype.showForm = function($form,model,$page) {
         // other fields
         break;
     }
-    console.log("found element")
+    //console.log("found element")
   }
-  $.mobile.changePage($page);
+  console.log("calling changePage")
+  $.mobile.changePage($page,{transition:"slide"});
+  console.log("changePage done")
 };
     
     view.prototype.showNewForm = function ($form,model,index) {
