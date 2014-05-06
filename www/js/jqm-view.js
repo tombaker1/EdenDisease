@@ -58,15 +58,11 @@
         template: _.template("<div data-role='header' data-add-back-btn='false' data-position='fixed'>" +
                                 "<h1><%= name %></h1>" +
                             "</div>" +
-                             "<div data-role='content'></div>" +
+                             "<div id='page-form-content' data-role='content'></div>" +
                              "<div class='page-form-footer' data-role='footer' data-position='fixed' style='text-align:center'>" + 
-                             //"<h4>Cancel/Save/Submit</h4>" +
-                             "<a class='footer-button' id='cancel' data-role='button' data-inline='true' href='#nav-cancel' style='display:inline-table'>Cancel</a>" +
-                             "<a class='footer-button' id='save'   data-role='button' data-inline='true' href='#nav-save'   style='display:inline-table'>Save</a>" +
-                             "<a class='footer-button' id='submit' data-role='button' data-inline='true' href='#nav-submit' style='display:inline-table'>Submit</a>" +
-                             //"<input id='cancel' type='button' data-inline='true' value='Cancel' style='display:inline-table'>" +
-                             //"<input id='save'   type='button' data-inline='true' value='Save'   style='display:inline-table'>" +
-                             //"<input id='submit' type='button' data-inline='true' value='Submit' style='display:inline-table'>" +
+                                "<a class='footer-button' id='cancel' data-role='button' data-inline='true' href='#nav-cancel' style='display:inline-table'>Cancel</a>" +
+                                "<a class='footer-button' id='save'   data-role='button' data-inline='true' href='#nav-save'   style='display:inline-table'>Save</a>" +
+                                "<a class='footer-button' id='submit' data-role='button' data-inline='true' href='#nav-submit' style='display:inline-table'>Submit</a>" +
                              "</div>"
                             ),
         events: {
@@ -309,6 +305,7 @@
         page.index = item.index;
         page.render();
         $("body").append(page.$el);
+        var $container = $(page.$el.find("#page-form-content"));
 
         // Add page content
         var $form = model.get("form");
@@ -318,12 +315,12 @@
         //    $form.value = "";
         //}
         for (var i = 0; i < $fields.length; i++) {
-          var field = $fields[i];
-          var elementString = "";
+            var field = $fields[i];
+            var elementString = "";
             var reference = $(field).attr("ref");
-                var label = $(field).find("label")[0];
-                var labelString =  getStringRef($form,label);
-          switch (field.nodeName) {
+            var label = $(field).find("label")[0];
+            var labelString =  getStringRef($form,label);
+            switch (field.nodeName) {
             case "select1":
               //elementString += parseSelect1(field,$form.name);
 
@@ -358,38 +355,32 @@
 
                 element.render();
             
-                page.$el.append(element.$el);
+                //page.$el.append(element.$el);
+                $container.append(element.$el);
               
                 break;
             case "upload":
-              //elementString += parseUpload(field);
-              //elementString += "<div>upload</div>";
                 var element = new formUpload(options);
-                //var reference = $(field).attr("ref");
                 element.reference = reference;
-                //var label = $(field).find("label")[0];
-                //var labelString = getStringRef($form,label); //label.textContent;
                 element.label = labelString;
                 element.render();
               
-              page.$el.append(element.$el);
+                $container.append(element.$el);
               break;
             case "input":
-              //elementString += parseInput(field);
-              //elementString += "<div>input</div>";
-              var element = new formInput(options);
+                var element = new formInput(options);
                 element.reference = reference;
                 element.label = labelString;
                 element.render();
               
-              page.$el.append(element.$el);
+                $container.append(element.$el);
               break;
             default:
               console.log("<div>Unimplemented element" + field.nodeName + "</div>");
             }
 
             //elementString += "<hr>";
-             page.$el.append("<hr>");
+            $container.append("<hr>");
         }
         page.$el.page();
     };
