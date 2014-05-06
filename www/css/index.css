@@ -1,11 +1,14 @@
 
 
-// This centers the button on a header or footer
-.center-button{
+.footer-button{
 text-align:center;
 display: inline-table;
 }
 
 .page-form-footer {
     position: fixed;
+}
+
+ui-footer .ui-btn {
+display: inline-table;
 }

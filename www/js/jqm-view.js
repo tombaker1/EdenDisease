@@ -61,9 +61,12 @@
                              "<div data-role='content'></div>" +
                              "<div class='page-form-footer' data-role='footer' data-position='fixed' style='text-align:center'>" + 
                              //"<h4>Cancel/Save/Submit</h4>" +
-                             "<a class='footer-button' id='cancel' data-role='button' href='#nav-cancel'>Cancel</a>" +
-                             "<a class='footer-button' id='save'   data-role='button' href='#nav-save'  >Save</a>" +
-                             "<a class='footer-button' id='submit' data-role='button' href='#nav-submit'>Submit</a>" +
+                             "<a class='footer-button' id='cancel' data-role='button' data-inline='true' href='#nav-cancel' style='display:inline-table'>Cancel</a>" +
+                             "<a class='footer-button' id='save'   data-role='button' data-inline='true' href='#nav-save'   style='display:inline-table'>Save</a>" +
+                             "<a class='footer-button' id='submit' data-role='button' data-inline='true' href='#nav-submit' style='display:inline-table'>Submit</a>" +
+                             //"<input id='cancel' type='button' data-inline='true' value='Cancel' style='display:inline-table'>" +
+                             //"<input id='save'   type='button' data-inline='true' value='Save'   style='display:inline-table'>" +
+                             //"<input id='submit' type='button' data-inline='true' value='Submit' style='display:inline-table'>" +
                              "</div>"
                             ),
         events: {
