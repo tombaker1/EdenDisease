@@ -1,6 +1,7 @@
 var app = {
     xformHandler: null,
     uiController: null,
+    view: null,
     state: {
         settings: {
                 source: 1
@@ -22,6 +23,7 @@ var app = {
         this.getState();
         this.xformHandler = $.xformer();
         this.uiController = $.jqmController({state: this.state, xform:this.xformHandler});
+        this.view = $.jqmView();
     },
     
     getState: function() {

@@ -9,9 +9,9 @@
     var defaults = {
         };
     var reqState = null;
-    var xformHandler = null;
+    //var xformHandler = null;
     var state;
-    var view = null;
+    //var view = null;
     var formListItems = [];
     
 
@@ -22,8 +22,8 @@
         
         this._defaults = defaults;
         this._name = pluginName;
-        xformHandler = options.xform;
-        view = $.jqmView();
+        //app.xformHandler = options.xform;
+        //view = $.jqmView();
        
         this.init(options);
         $(document).bind( "pagebeforechange", pageChange );
@@ -52,10 +52,10 @@
         console.log("onFormCancel");
     };
     controller.prototype.onFormSave = function (  ) {
-        console.log("onFormCancel");
+        console.log("onFormSave");
     };
     controller.prototype.onFormSubmit = function (  ) {
-        console.log("onFormCancel");
+        console.log("onFormSubmit");
     };
     controller.prototype.loadFormList = function (  ) {
         // Load the form list
@@ -67,7 +67,7 @@
             url = config.defaults.url + config.defaults.formList;
             console.log("init: request " + url)
         }
-        xformHandler.requestFormList(url,cbFormListComplete);
+        app.xformHandler.requestFormList(url,cbFormListComplete);
     };
     
     controller.prototype.onDebug = function ( event ) {
@@ -77,21 +77,21 @@
     
     controller.prototype.onLoadFormList = function ( event ) {
         console.log("onLoadFormList");
-        var $list = view.getFormList();
+        var $list = app.view.getFormList();
         this.$checkboxList = $list.find("input");
-        this.checkboxArray = view.getFormArray();
+        this.checkboxArray = app.view.getFormArray();
         
         // get list of forms to load
         this.loadList = [];
-        for (var i = 0; i < xformHandler.numForms(); i++) {
-          var $form = xformHandler.getForm(i);
+        for (var i = 0; i < app.xformHandler.numForms(); i++) {
+          var $form = app.xformHandler.getForm(i);
           if (this.$checkboxList[i].checked && !$form.loaded) {
             this.loadList.unshift(i);
           }
         }
         if (this.loadList.length) {
             var index = this.loadList.pop();
-            xformHandler.requestForm(index,this.cbFormLoadComplete.bind(this));
+            app.xformHandler.requestForm(index,this.cbFormLoadComplete.bind(this));
         }
     };
 
@@ -101,7 +101,7 @@
         // only do this if the form loaded successfully
         if (status) {
             // Create page
-            view.createForm({model:xformHandler.getForm(index),index:index});
+            app.view.createForm({model:app.xformHandler.getForm(index),index:index});
             
         }
         
@@ -115,19 +115,19 @@
         
         // get next page
         if (this.loadList.length) {
-            xformHandler.requestForm(this.loadList.pop(),
+            app.xformHandler.requestForm(this.loadList.pop(),
                                      this.cbFormLoadComplete.bind(this));
         }
         else {
-            view.getFormList().enhanceWithin();
-            view.$newFormList.listview('refresh');
+            app.view.getFormList().enhanceWithin();
+            app.view.$newFormList.listview('refresh');
         }
     };
     
     var cbFormListComplete = function() {
       
       // put the list of forms into the page
-      view.insertForms(xformHandler.getAllForms());
+      app.view.insertForms(app.xformHandler.getAllForms());
     }
     
     // handle the jqm page change to make sure dynamic content is handled
@@ -142,10 +142,10 @@
             //var $form = xformHandler.getForm(index);
             //var model = new 
             var index = pageURL.hash.replace( /#page-form-/, "" );
-            var $form = xformHandler.getForm(index);
+            var $form = app.xformHandler.getForm(index);
             var newModel = $.extend({meta_name:$form.get("name"),meta_timestamp:Date.now()},$form.get("data"));
             //var $page = $( "#page-form-"+index );
-            view.showNewForm($form,newModel,index);
+            app.view.showNewForm($form,newModel,index);
             event.preventDefault();
             return;
         }

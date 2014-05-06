@@ -59,11 +59,11 @@
                                 "<h1><%= name %></h1>" +
                             "</div>" +
                              "<div data-role='content'></div>" +
-                             "<div data-role='footer' data-position='fixed'>" + 
+                             "<div data-role='footer' data-position='fixed' style='text-align:center'>" + 
                              //"<h4>Cancel/Save/Submit</h4>" +
-                             "<input id='cancel' type='button' data-role='button' href='#nav-cancel'>Cancel</input>" +
-                             "<input id='save' type='button' data-role='button' href='#nav-save'>Save</input>" +
-                             "<input id='submit' type='button' data-role='button' href='#nav-submit'>Submit</input>" +
+                             "<a id='cancel' data-role='button' href='#nav-cancel' class='ui-btn-left'>Cancel</a>" +
+                             "<a id='save' data-role='button' href='#nav-save'>Save</a>" +
+                             "<a id='submit' data-role='button' href='#nav-submit' class='ui-btn-right'>Submit</a>" +
                              "</div>"
                             ),
         events: {
@@ -94,9 +94,11 @@
         },
         onSave: function() {
             console.log("save button");
+            $(app.uiController).trigger("form-save");
         },
         onSubmit: function() {
             console.log("submit button");
+            $(app.uiController).trigger("form-submit");
         }
     });
 
@@ -450,11 +452,20 @@ view.prototype.showForm = function($form,model,$page) {
     };
     
     // bind the plugin to jQuery
-    //var jqmView = function(options) {
-    //    return new view( options );
-    //};
+
     $.jqmView = function(options) {
         return new view( options );
     };
-
+/*
+    var pluginName = "view";
+    $.jqmView = function(options) {
+        return this.each(function() {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName, 
+                new view( this, options ));
+            }
+            
+        });
+    }
+    */
 })( jQuery, window, document );
