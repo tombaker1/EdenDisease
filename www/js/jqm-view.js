@@ -59,11 +59,11 @@
                                 "<h1><%= name %></h1>" +
                             "</div>" +
                              "<div data-role='content'></div>" +
-                             "<div data-role='footer' data-position='fixed' style='text-align:center'>" + 
+                             "<div class='page-form-footer' data-role='footer' data-position='fixed' style='text-align:center'>" + 
                              //"<h4>Cancel/Save/Submit</h4>" +
-                             "<a id='cancel' data-role='button' href='#nav-cancel' class='ui-btn-left'>Cancel</a>" +
-                             "<a id='save' data-role='button' href='#nav-save'>Save</a>" +
-                             "<a id='submit' data-role='button' href='#nav-submit' class='ui-btn-right'>Submit</a>" +
+                             "<a class='footer-button' id='cancel' data-role='button' href='#nav-cancel'>Cancel</a>" +
+                             "<a class='footer-button' id='save'   data-role='button' href='#nav-save'  >Save</a>" +
+                             "<a class='footer-button' id='submit' data-role='button' href='#nav-submit'>Submit</a>" +
                              "</div>"
                             ),
         events: {
