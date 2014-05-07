@@ -22,6 +22,11 @@
         initialize: function(options) {
             this._name = "";
             this._timestamp = 0;
+            this._submit = false;
+        },
+        
+        submit: function() {
+            console.log("sending model " + _name);
         }
     });
     var activeForms = new Backbone.Collection;
@@ -64,17 +69,26 @@
     };
     controller.prototype.onFormSave = function ( evt, pageView ) {
         console.log("onFormSave");
-        var pageURL = pageView.$el.attr("id");
+        //var pageURL = pageView.$el.attr("id");
         //var pageURL = $.mobile.path.parseUrl( data.toPage );
-        var index = pageURL.replace( /page-form-/, "" );
-        var form = app.xformHandler.getForm(index);
-        var model = form.get("current");
-        activeForms.push(model);
+        //var index = pageURL.replace( /page-form-/, "" );
+        //var form = pageView.get("form");
         app.view.getModelData(pageView);
+        //var form = pageView.model;
+        activeForms.add(pageView.model.get("current"));
         //var pageURL = $.mobile.path.parseUrl( data.toPage );
     };
     controller.prototype.onFormSubmit = function (  ) {
         console.log("onFormSubmit");
+        var pageURL = pageView.$el.attr("id");
+        //var pageURL = $.mobile.path.parseUrl( data.toPage );
+        var index = pageURL.replace( /page-form-/, "" );
+        var form = app.xformHandler.getForm(index);
+        app.view.getModelData(pageView);
+        var model = form.get("current");
+        activeForms.add(model);
+        model.submit();
+        
     };
     controller.prototype.loadFormList = function (  ) {
         // Load the form list
