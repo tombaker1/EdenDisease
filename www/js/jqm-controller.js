@@ -70,12 +70,6 @@
     };
     controller.prototype.onFormSubmit = function ( evt,model ) {
         console.log("onFormSubmit");
-        //var pageURL = pageView.$el.attr("id");
-        //var index = pageURL.replace( /page-form-/, "" );
-        //var form = app.xformHandler.getForm(index);
-        //app.view.getModelData(pageView);
-        //var model = form.get("current");
-        //activeForms.add(model);
         model.submit();
         
     };

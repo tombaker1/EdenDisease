@@ -90,12 +90,12 @@
                                 {transition:"slide",
                                 reverse:"true"});
             
-            $(app.uiController).trigger("form-cancel",this.model.get("data"));
+            $(app.uiController).trigger("form-cancel",this.model.get("current"));
         },
         onSave: function() {
             console.log("save button");
             app.view.getModelData(this);
-            $(app.uiController).trigger("form-save",this.model.get("data"));
+            $(app.uiController).trigger("form-save",this.model.get("current"));
         },
         onSubmit: function() {
             console.log("submit button");
@@ -103,7 +103,7 @@
             $.mobile.changePage("#page-new-form",
                                 {transition:"slide",
                                 reverse:"true"});
-            $(app.uiController).trigger("form-submit",this.model.get("data"));
+            $(app.uiController).trigger("form-submit",this.model.get("current"));
         }
     });
 
