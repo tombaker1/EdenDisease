@@ -85,22 +85,25 @@
         },
         onCancel: function() {
             console.log("cancel button");
+            app.view.getModelData(this);
             $.mobile.changePage("#page-new-form",
                                 {transition:"slide",
                                 reverse:"true"});
-            //$.jqmView.trigger("form-cancel");
-            $(app.uiController).trigger("form-cancel");
+            
+            $(app.uiController).trigger("form-cancel",this.model.get("data"));
         },
         onSave: function() {
             console.log("save button");
-            $(app.uiController).trigger("form-save",this);
+            app.view.getModelData(this);
+            $(app.uiController).trigger("form-save",this.model.get("data"));
         },
         onSubmit: function() {
             console.log("submit button");
+            app.view.getModelData(this);
             $.mobile.changePage("#page-new-form",
                                 {transition:"slide",
                                 reverse:"true"});
-            $(app.uiController).trigger("form-submit",this);
+            $(app.uiController).trigger("form-submit",this.model.get("data"));
         }
     });
 
