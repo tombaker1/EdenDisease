@@ -13,7 +13,18 @@
     var state;
     //var view = null;
     var formListItems = [];
+    var formData = [];
     
+    // create the form list item
+    var formData = Backbone.Model.extend({
+        defaults: {
+         },
+        initialize: function(options) {
+            this._name = "";
+            this._timestamp = 0;
+        }
+    });
+    var activeForms = new Backbone.Collection;
 
 
     // The actual plugin constructor
@@ -51,8 +62,16 @@
     controller.prototype.onFormCancel = function (  ) {
         console.log("onFormCancel");
     };
-    controller.prototype.onFormSave = function (  ) {
+    controller.prototype.onFormSave = function ( evt, pageView ) {
         console.log("onFormSave");
+        var pageURL = pageView.$el.attr("id");
+        //var pageURL = $.mobile.path.parseUrl( data.toPage );
+        var index = pageURL.replace( /page-form-/, "" );
+        var form = app.xformHandler.getForm(index);
+        var model = form.get("current");
+        activeForms.push(model);
+        app.view.getModelData(pageView);
+        //var pageURL = $.mobile.path.parseUrl( data.toPage );
     };
     controller.prototype.onFormSubmit = function (  ) {
         console.log("onFormSubmit");
@@ -143,9 +162,13 @@
             //var model = new 
             var index = pageURL.hash.replace( /#page-form-/, "" );
             var $form = app.xformHandler.getForm(index);
-            var newModel = $.extend({meta_name:$form.get("name"),meta_timestamp:Date.now()},$form.get("data"));
+            var model = new formData($form.get("data"));
+            model._name = $form.get("name");
+            model._timestamp = Date.now();
+            //var newModel = $.extend({meta_name:$form.get("name"),meta_timestamp:Date.now()},$form.get("data"));
             //var $page = $( "#page-form-"+index );
-            app.view.showNewForm($form,newModel,index);
+            //activeForms.push(model);
+            app.view.showNewForm(index,model);
             event.preventDefault();
             return;
         }

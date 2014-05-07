@@ -61,7 +61,7 @@
                              "<div id='page-form-content' data-role='content'></div>" +
                              "<div class='page-form-footer' data-role='footer' data-position='fixed' style='text-align:center'>" + 
                                 "<a class='footer-button' id='cancel' data-role='button' data-inline='true' href='#nav-cancel' style='display:inline-table'>Cancel</a>" +
-                                "<a class='footer-button' id='save'   data-role='button' data-inline='true' href='#nav-save'   style='display:inline-table'>Save</a>" +
+                                "<a class='footer-button' id='save'   data-role='button' data-inline='true'    style='display:inline-table'>Save</a>" +
                                 "<a class='footer-button' id='submit' data-role='button' data-inline='true' href='#nav-submit' style='display:inline-table'>Submit</a>" +
                              "</div>"
                             ),
@@ -93,11 +93,14 @@
         },
         onSave: function() {
             console.log("save button");
-            $(app.uiController).trigger("form-save");
+            $(app.uiController).trigger("form-save",this);
         },
         onSubmit: function() {
             console.log("submit button");
-            $(app.uiController).trigger("form-submit");
+            $.mobile.changePage("#page-new-form",
+                                {transition:"slide",
+                                reverse:"true"});
+            $(app.uiController).trigger("form-submit",this);
         }
     });
 
@@ -385,18 +388,61 @@
         page.$el.page();
     };
 
+    view.prototype.getModelData = function(page) {
+        var form = page.model;
+        var formData = form.get("form");
+        var model = form.get("current");
+        for (var key in form.get("data")) {
+            var item = formData[key];
+            var name = item.nodeset;
+            //var value = model.get(key);
+            var searchString = "[name*='" + name + "']";
+            var element = page.$el.find(searchString);
+            var type = $(element).attr("id");
+            switch (type) {
+                case "select1":
+                    var subItems = $(element).find("input");
+                    for (var subIndex = 0; subIndex < subItems.length; subIndex++) {
+                      //var idSelector = "choice-" + i;
+                      var $subItem = $(subItems[subIndex]);
+                      //var $subItem 
+                      //var i = $subItem.attr("id").split("-")[2];
+                      
+                      if ($subItem.attr("checked")) {
+                        model.set(key,$subItem.attr("value"));
+                        //subItem.checked = true;
+                        //$(subItem).attr("checked",true).checkboxradio("refresh");
+                      }
+                    }
+                    break;
+                case "upload":
+                    var value = $(element).find("input")[0].value;
+                    model.set(key,value);
+                    break;
+                case "input":
+                    var value = $(element).find("input")[0].value;
+                    model.set(key,value);
+                    break;
+                default:
+                // other fields
+                break;
+            }
+        }
+    };
+
 view.prototype.showForm = function($form,model,$page) {
   // Loop through keys finding page elements
   var formData = $form.get("form");
   for (var key in $form.get("data")) {
     var item = formData[key];
     var name = item.nodeset;
+    var value = model.get(key);
     var searchString = "[name*='" + name + "']";
     var element = $page.find(searchString);
     var type = $(element).attr("id");
     switch (type) {
       case "select1":
-        var value = item.value;
+        //var value = item.value;
         element.listview();
         element.enhanceWithin();
         var subItems = $(element).find("input");
@@ -419,11 +465,11 @@ view.prototype.showForm = function($form,model,$page) {
       case "upload":
         // I don't know if this will work.  It is a security risk 
         // to change the value of a input type='file'
-        var value = item.value;
+        //var value = item.value;
         $(element).find("input")[0].value = value;
         break;
       case "input":
-        var value = item.value;
+        //var value = item.value;
         $(element).find("input")[0].value = value;
         break;
       default:
@@ -434,13 +480,15 @@ view.prototype.showForm = function($form,model,$page) {
   $.mobile.changePage($page,{transition:"slide"});
 };
     
-    view.prototype.showNewForm = function ($form,model,index) {
+    view.prototype.showNewForm = function (index,model) {
         //var index = url.replace( /#page-form-/, "" );
         //var menuItem = this.newFormArray[index];
         //var oldModel = menuItem.model;
         //var newModel = $.extend({name:oldModel.get("name"),timestamp:Date.now()},oldModel.model);
         //this.fillForm(oldModel,newModel);
+        var $form = app.xformHandler.getForm(index);
         var $page = $( "#page-form-"+index );
+        $form.set("current",model);
         this.showForm($form,model,$page);
         //$.mobile.changePage($page);
     };
