@@ -11,7 +11,7 @@
         <script type="text/javascript" src="cordova_webapp.js"></script>
         <script type="text/javascript" src="lib/jquery/jquery-2.1.0.min.js"></script>
         <script type="text/javascript" src="lib/underscore-1.6.0/underscore-min.js"></script>
-        <script type="text/javascript" src="lib/backbone-1.1.2/backbone-min.js"></script>
+        <script type="text/javascript" src="lib/backbone-1.1.2/backbone.js"></script>
         <link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.2.min.css"></link>
         <script type="text/javascript" src="lib/jquery/jquery.mobile-1.4.2.min.js"></script>
         <link rel="stylesheet" href="css/index.css"></link>
@@ -41,7 +41,9 @@
         
         <div id="page-saved-forms" class="page" data-role="page">
             <div data-role="header" data-add-back-btn="true"><h1>Saved Forms</h1></div>
-            <div data-role="content"></div>
+            <div data-role="content">
+                <ul id="form-saved-list" data-role="listview" data-inset="true"></ul>                
+            </div>
             <div data-role="footer"  data-position="fixed"><h4></h4></div>
         </div>
         

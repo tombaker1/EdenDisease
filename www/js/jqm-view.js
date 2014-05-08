@@ -5,6 +5,29 @@
 ;(function ( $, window, document, undefined ) {
     //var formListItems = [];
 
+    var savedFormItem = Backbone.View.extend({
+        tagName: "label",
+        //template: _.template("<input type='checkbox' id='savedform-<%= index %>' name='formlist-<%= index %>'>Type: <%= name %> <br>Created: <%= timestamp %>"),
+        template: _.template("<a id='new-item' data-transition='slide' href='#page-saved-<%= index %>'>Type: <%= name %> <br>Created: <%= timestamp %></a>"),
+        defaults: {
+            //model: null,
+            index: 0,
+            name: ""
+        },
+       
+        initialize: function(options) {
+            console.log("new savedFormItem ");
+            this.index = -1;
+            
+         },
+        render: function() {
+            //var str = this.template({index:this.index,name:this.model.get("name")});
+            var created = new Date(this.model._timestamp);
+            //this.$el.attr("for","savedform-"+this.index);
+            return this.$el.html(this.template({index:this.index,name:this.model._name,timestamp:created}));
+        }
+    });
+
     var loadFormListItem = Backbone.View.extend({
         tagName: "label",
         template: _.template("<input type='checkbox' id='formlist-<%= index %>' name='formlist-<%= index %>'><%= name %>"),
@@ -230,8 +253,10 @@
     view.prototype.init = function ( options ) {
         console.log("jqm-view init");
         this.loadFormArray = [];
+        this.savedFormArray = [];
         this.newFormArray = [];
         this.$loadFormList = $("#form-list-data");
+        this.$savedFormList = $("#form-saved-list");
         this.$newFormList = $("#form-items");
         this.formList = this.$loadFormList[0];
         
@@ -241,6 +266,20 @@
             });
         this.$loadFormList.enhanceWithin();
         this.$newFormList.listview();
+        this.$savedFormList.listview();
+    };
+    
+    view.prototype.newSavedFormItem = function ( options ) {
+        console.log("jqm-view newSavedFormItem");
+
+        var item =  new savedFormItem(options);
+        item.index = this.savedFormArray.length;
+        item.render();
+        this.$savedFormList.append(item.$el);
+        //item.$el.checkboxradio();
+        this.savedFormArray.unshift(item);
+        this.$savedFormList.listview("refresh");
+        return true;
     };
     
     view.prototype.newFormListItem = function ( options ) {

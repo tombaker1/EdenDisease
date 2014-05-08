@@ -24,11 +24,44 @@
         },
         
         submit: function() {
-            console.log("sending model " + _name);
+            console.log("sending model " + this._name);
+        },
+        
+        getKey: function() {
+            return this._name + this._timestamp;
         }
     });
     var activeForms = new Backbone.Collection;
 
+    Backbone.sync = function(method, model, options) {
+      options || (options = {});
+    
+      switch (method) {
+        case 'create':
+            console.log("create");
+            var path = "data-" + model.getKey();
+            localStorage.setItem(path,JSON.stringify(model));
+        break;
+    
+        case 'update':
+            console.log('update');
+            var path = "data-" + model.getKey();
+            localStorage.setItem(path,JSON.stringify(model));
+        break;
+    
+        case 'delete':
+            console.log('delete');
+            var path = "data-" + model.getKey();
+            localStorage.removeItem(path);
+        break;
+    
+        case 'read':
+            console.log('read');
+            var path = "data-" + model.getKey();
+            model = JSON.parse(localStorage.getItem(path));
+        break;
+      }
+    };
 
     // The actual plugin constructor
     function controller( options ) {
@@ -67,10 +100,14 @@
         console.log("onFormSave");
         //app.view.getModelData(pageView);
         activeForms.add(model);
+        model.sync('create',model);
+        app.view.newSavedFormItem({model:model});
     };
+    
     controller.prototype.onFormSubmit = function ( evt,model ) {
         console.log("onFormSubmit");
         model.submit();
+        model.sync('create',model);
         
     };
     controller.prototype.loadFormList = function (  ) {
