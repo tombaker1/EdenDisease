@@ -6,7 +6,7 @@
     //var formListItems = [];
 
     var savedFormItem = Backbone.View.extend({
-        tagName: "label",
+        tagName: "li",
         //template: _.template("<input type='checkbox' id='savedform-<%= index %>' name='formlist-<%= index %>'>Type: <%= name %> <br>Created: <%= timestamp %>"),
         template: _.template("<a id='new-item' data-transition='slide' href='#page-saved-<%= index %>'>Type: <%= name %> <br>Created: <%= timestamp %></a>"),
         defaults: {
@@ -71,7 +71,7 @@
          },
         render: function() {
             //var str = this.template({index:this.index,name:this.model.get("name")});
-            this.$el.attr("for","formList-"+this.index);
+            //this.$el.attr("for","formList-"+this.index);
             return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
         }
     });
