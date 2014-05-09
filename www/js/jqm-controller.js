@@ -218,62 +218,7 @@
     
         var pageURL = $.mobile.path.parseUrl( data.toPage );
         var pageselector = pageURL.hash.replace( /\?.*$/, "" );
-          
-        if (pageselector.indexOf("#page-form-") >= 0) {
-            /*
-            var name = pageURL.hash.replace( /#page-form-/, "" );
-            var $form = app.xformHandler.getFormByName(name);
-            
-            if (pageURL.hash.indexOf('?') < 0) {
-                //code
-                var $page = $(pageURL.hash);
-                var model = new formData($form.get("data"));
-                model._name = $form.get("name");
-                model._timestamp = Date.now();
-                $form.set("current",model);
-                //var pageID = pageURL.hash.replace( /#/, "" );
-                app.view.showForm($form,model,$page);
-            }
-            else {
-                
-                var fields = pageURL.hash.split('?');
-                var formName = fields[0].replace(/#page-form-/,"");
-                var $page = $(fields[0]);
-                var timestamp = fields[1];
-                var model;
-                for (var i = 0; i < activeForms.length; i++) {
-                    var modelItem = activeForms.at(i);
-                    if (modelItem._name == formName && modelItem._timestamp == fields[1]){
-                        model = modelItem;
-                    }
-                }
-                if (model) {
-                    app.view.showForm($form,model,$page);
-                }
-                //var pageID = pageURL.hash.replace( /#/, "" );
-                //var $page = $(pageID);
-                //$form.set("current",model);
-                
-              
-            }
-            */
-            event.preventDefault();
-            return;
-        }
-  
-        if (pageselector.indexOf("#page-edit-") >= 0) {
-            var index = pageURL.hash.replace( /#page-edit-/, "" );
-            var $form = app.xformHandler.getForm(index);
-            var model = new formData($form.get("data"));
-            model._name = $form.get("name");
-            model._timestamp = Date.now();
-            var pageID = pageURL.hash.replace( /#page-edit-/, "page-form-" );
-            var $page = $(pageID);
-            app.view.showForm($form,model,$page);
-            event.preventDefault();
-            return;
-        }
-  
+
         if (pageselector.indexOf("#nav-") >= 0) {
             event.preventDefault();
             return;            
