@@ -50,11 +50,20 @@
         return formList; 
     }
     
-    xformer.prototype.numForms = function (i) {
+    xformer.prototype.numForms = function () {
         return formList.length;
     }
     
-    xformer.prototype.getDoc = function () {
+    xformer.prototype.getFormByName = function (name) {
+        for (var i = 0; i < formList.length; i++) {
+            if (name === formList.at(i).get("name")) {
+                return formList.at(i);
+            }
+        }
+        return null;
+    };
+
+    xformer.prototype.getDoc = function (i) {
         return formList.at(i); //[i];
     }
     

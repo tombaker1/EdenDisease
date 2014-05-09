@@ -99,9 +99,16 @@
     controller.prototype.onFormSave = function ( evt,model) {
         console.log("onFormSave");
         //app.view.getModelData(pageView);
-        activeForms.add(model);
-        model.sync('create',model);
-        app.view.newSavedFormItem({model:model});
+        var a = _.contains(activeForms,model);
+        if (!activeForms.contains(model)) {
+            activeForms.add(model);
+            app.view.newSavedFormItem({model:model});
+            model.sync('create',model);
+        }
+        else {
+            model.sync('update',model);
+
+        }
     };
     
     controller.prototype.onFormSubmit = function ( evt,model ) {
@@ -183,6 +190,27 @@
       app.view.insertForms(app.xformHandler.getAllForms());
     }
     
+    controller.prototype.newForm = function(form) {
+        var $page = $("#page-form-" + form.get("name"));
+        var model = new formData(form.get("data"));
+        model._name = form.get("name");
+        model._timestamp = Date.now();
+        form.set("current",model);
+        //var pageID = pageURL.hash.replace( /#/, "" );
+        app.view.showForm(form,model,$page);
+    }
+     
+    controller.prototype.editForm = function(model) {
+        var form = app.xformHandler.getFormByName(model._name);
+        var $page = $("#page-form-" + form.get("name"));
+        //var model = new formData(form.get("data"));
+        //model._name = form.get("name");
+        //model._timestamp = Date.now();
+        form.set("current",model);
+        //var pageID = pageURL.hash.replace( /#/, "" );
+        app.view.showForm(form,model,$page);
+    }
+   
     // handle the jqm page change to make sure dynamic content is handled
     var pageChange = function( event, data) {
         // console.log("changePage " + data.toPage)
@@ -192,12 +220,56 @@
         var pageselector = pageURL.hash.replace( /\?.*$/, "" );
           
         if (pageselector.indexOf("#page-form-") >= 0) {
-            var index = pageURL.hash.replace( /#page-form-/, "" );
+            /*
+            var name = pageURL.hash.replace( /#page-form-/, "" );
+            var $form = app.xformHandler.getFormByName(name);
+            
+            if (pageURL.hash.indexOf('?') < 0) {
+                //code
+                var $page = $(pageURL.hash);
+                var model = new formData($form.get("data"));
+                model._name = $form.get("name");
+                model._timestamp = Date.now();
+                $form.set("current",model);
+                //var pageID = pageURL.hash.replace( /#/, "" );
+                app.view.showForm($form,model,$page);
+            }
+            else {
+                
+                var fields = pageURL.hash.split('?');
+                var formName = fields[0].replace(/#page-form-/,"");
+                var $page = $(fields[0]);
+                var timestamp = fields[1];
+                var model;
+                for (var i = 0; i < activeForms.length; i++) {
+                    var modelItem = activeForms.at(i);
+                    if (modelItem._name == formName && modelItem._timestamp == fields[1]){
+                        model = modelItem;
+                    }
+                }
+                if (model) {
+                    app.view.showForm($form,model,$page);
+                }
+                //var pageID = pageURL.hash.replace( /#/, "" );
+                //var $page = $(pageID);
+                //$form.set("current",model);
+                
+              
+            }
+            */
+            event.preventDefault();
+            return;
+        }
+  
+        if (pageselector.indexOf("#page-edit-") >= 0) {
+            var index = pageURL.hash.replace( /#page-edit-/, "" );
             var $form = app.xformHandler.getForm(index);
             var model = new formData($form.get("data"));
             model._name = $form.get("name");
             model._timestamp = Date.now();
-            app.view.showNewForm(index,model);
+            var pageID = pageURL.hash.replace( /#page-edit-/, "page-form-" );
+            var $page = $(pageID);
+            app.view.showForm($form,model,$page);
             event.preventDefault();
             return;
         }

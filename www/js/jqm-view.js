@@ -8,23 +8,35 @@
     var savedFormItem = Backbone.View.extend({
         tagName: "li",
         //template: _.template("<input type='checkbox' id='savedform-<%= index %>' name='formlist-<%= index %>'>Type: <%= name %> <br>Created: <%= timestamp %>"),
-        template: _.template("<a id='new-item' data-transition='slide' href='#page-saved-<%= index %>'>Type: <%= name %> <br>Created: <%= timestamp %></a>"),
+        //template: _.template("<a id='new-item' data-transition='slide' href='#page-form-<%= name %>?<%= timestamp %>'>Type: <%= name %> <br>Created: <%= date %></a>"),
+        template: _.template("<a id='new-item' data-transition='slide' href='#page-form-<%= name %>'>Type: <%= name %> <br>Created: <%= date %></a>"),
         defaults: {
             //model: null,
             index: 0,
             name: ""
         },
+        events: {
+            "click": "onClick"
+        },
        
         initialize: function(options) {
             console.log("new savedFormItem ");
             this.index = -1;
+            //this.on("click",this.onClick,this);
             
          },
         render: function() {
             //var str = this.template({index:this.index,name:this.model.get("name")});
             var created = new Date(this.model._timestamp);
             //this.$el.attr("for","savedform-"+this.index);
-            return this.$el.html(this.template({index:this.index,name:this.model._name,timestamp:created}));
+            //this.on("click",this.onClick,this);
+            return this.$el.html(this.template({index:this.index,name:this.model._name,timestamp:this.model._timestamp,date:created}));
+        },
+        
+        onClick: function() {
+            console.log("savedFormListItem onClick");
+            app.uiController.editForm(this.model);
+            event.preventDefault();
         }
     });
 
@@ -57,12 +69,16 @@
 
     var newFormListItem = Backbone.View.extend({
         tagName: "li",
-        template: _.template("<a id='new-item' data-transition='slide' href='#page-form-<%= index %>'><%= name %></a>"),
+        template: _.template("<a id='new-item' data-transition='slide' href='#page-form-<%= name %>'><%= name %></a>"),
         defaults: {
             //model: null,
             index: 0,
             name: ""
         },
+        events: {
+            "click": "onClick"
+        },
+       
        
         initialize: function(options) {
             console.log("new newFormListItem ");
@@ -73,6 +89,12 @@
             //var str = this.template({index:this.index,name:this.model.get("name")});
             //this.$el.attr("for","formList-"+this.index);
             return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
+        },
+        
+        onClick: function() {
+            console.log("newFormListItem onClick");
+            app.uiController.newForm(this.model);
+            event.preventDefault();
         }
     });
     
@@ -101,8 +123,9 @@
          },
         render: function() {
             //var str = this.template({index:this.index,name:this.model.get("name")});
-            this.$el.attr({"id":"page-form-" + this.index,
-                          "name":this.model.get("name"),
+            var name = this.model.get("name");
+            this.$el.attr({"id":"page-form-" + name,
+                          "name":name,
                           "data-role":"page"});
             return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
         },
@@ -301,7 +324,7 @@
     view.prototype.getFormArray = function () {
         return this.loadFormArray;
     };
-    
+        
     view.prototype.insertForms = function ( formList ) {
         for (var i = 0; i < formList.length; i++) {
             this.newFormListItem({model:formList.at(i)});
@@ -505,10 +528,10 @@ view.prototype.showForm = function($form,model,$page) {
         element.enhanceWithin();
         break;
       case "upload":
-        // I don't know if this will work.  It is a security risk 
+        // This does not work.  It is a security risk 
         // to change the value of a input type='file'
-        //var value = item.value;
-        $(element).find("input")[0].value = value;
+        // TODO: handle it the file browser programmatically
+        //$(element).find("input")[0].value = value;
         break;
       case "input":
         //var value = item.value;
