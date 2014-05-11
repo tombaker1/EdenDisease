@@ -8,7 +8,7 @@
     var pluginName = 'jqmController';
     var defaults = {
         };
-    var reqState = null;
+    //var reqState = null;
     var state;
     var formListItems = [];
     var formData = [];
@@ -75,14 +75,14 @@
     };
     
     controller.prototype.init = function ( options ) {
-        reqState = options["xform"]; //new XMLHttpRequest();
+        //reqState = options["xform"]; //new XMLHttpRequest();
         state = options["state"];
         this.loadList = [];
         this.$checkboxList = [];
         this.checkboxArray = [];
         // Set events
 
-        $("#load-form-list").click(this.onLoadFormList.bind(this));
+        $("#load-form-button").click(this.onLoadFormList.bind(this));
         $("#debug-button").click(this.onDebug.bind(this));
         //view.bind("form-cancel",this.onFormCancel.bind(this));
         $(this).bind("form-cancel",this.onFormCancel.bind(this));
@@ -90,9 +90,14 @@
         $(this).bind("form-submit",this.onFormSubmit.bind(this));
         
         // Load the saved data or initialize data
-        this.loadFormList();
+        //this.loadFormList();
         
     };
+    
+    controller.prototype.resetAll = function (  ) {
+        console.log("resetAll");
+    };
+    
     controller.prototype.onFormCancel = function (  ) {
         console.log("onFormCancel");
     };
@@ -184,7 +189,11 @@
         }
     };
     
-    var cbFormListComplete = function() {
+    var cbFormListComplete = function(xmlFile) {
+      
+      // Save the form to local memory
+      var filename = "form-list";
+      localStorage.setItem(filename,xmlFile);
       
       // put the list of forms into the page
       app.view.insertForms(app.xformHandler.getAllForms());

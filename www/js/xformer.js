@@ -78,7 +78,8 @@
             return;
         }
         
-        var xmlDoc = $.parseXML(reply.target.responseText);
+        var rawXml = reply.target.responseText;
+        var xmlDoc = $.parseXML(rawXml);
         var $xml = $( xmlDoc );
         forms = $xml.find( "form" );
         for (var i = 0; i < forms.length; i++) {
@@ -91,7 +92,7 @@
         }
         
         // return and show the form
-        reqCompleteCB();
+        reqCompleteCB(rawXml);
         
     };
     
