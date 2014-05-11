@@ -1,7 +1,7 @@
 <forms>
-<form url="res/xml/irs_ireport.xml">Ireport</form>
-<form url="res/xml/rms_req.xml">Req</form>
-<form url="res/xml/cr_shelter.xml">Shelter</form>
-<form url="res/xml/pr_person.xml">Person</form>
-<form url="res/xml/pr_image.xml">Image</form>
+<form url="www/res/xml/irs_ireport.xml">Ireport</form>
+<form url="www/res/xml/rms_req.xml">Req</form>
+<form url="www/res/xml/cr_shelter.xml">Shelter</form>
+<form url="www/res/xml/pr_person.xml">Person</form>
+<form url="www/res/xml/pr_image.xml">Image</form>
 </forms>
