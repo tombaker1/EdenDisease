@@ -4,5 +4,6 @@ var config = {
         url: "http://demo.eden.sahanafoundation.org/eden/xforms/",
         formPath: "www/res/xml/",
         formList: "formList.xml"
-    }
+    },
+    version: "0.1.0"
 };

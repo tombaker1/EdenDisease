@@ -22,8 +22,11 @@ var app = {
         //$(".page").each(function(){$(this).pageControl();});
         this.getState();
         this.xformHandler = $.xformer();
-        this.uiController = $.jqmController({state: this.state, xform:this.xformHandler});
+        this.uiController = $.jqmController({state: this.state});
         this.view = $.jqmView();
+        
+        // set version
+        $("#version").html("Version: " + config.version);
     },
     
     getState: function() {
@@ -32,6 +35,16 @@ var app = {
     
     bind: function() {
         document.addEventListener('deviceready', this.deviceready, false);
+        $("#reset-button").on("click",this.onReset.bind(this));
+        $("#load-form-list-button").on("click",this.onLoad.bind(this));
+    },
+    
+    onLoad: function() {
+        this.uiController.loadFormList();
+    },
+    
+    onReset: function() {
+        this.uiController.resetAll();
     },
     
     deviceready: function() {

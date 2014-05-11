@@ -54,7 +54,7 @@
                 <fieldset id="form-list-data" data-role="controlgroup">
                 </fieldset>
                 <!-- ul id="form-list-data" data-role="listview" data-inset="true"></ul -->
-                <input id="load-form-list" type="button" value="Load" data-inline="true">
+                <input id="load-form-button" type="button" value="Load" data-inline="true">
                 </div>
             </div>
             <div data-role="footer"  data-position="fixed"><h4></h4></div>
@@ -63,6 +63,7 @@
         <div id="page-settings" class="page" data-role="page">
             <div data-role="header" data-add-back-btn="true"><h1>Settings</h1></div>
             <div id="content-settings" data-role="content">
+                <div id="version"></div>
                 <div class="ui-field-contain">
                     <fieldset name="form-source" data-role="controlgroup">
                       <legend>Select form source</legend>
@@ -72,6 +73,8 @@
                             Remote</label>
                     </fieldset>
                 </div>
+                <input id="load-form-list-button" type="button" value="Load" data-inline="true">
+                <input id="reset-button" type="button" value="reset" data-inline="true">
                 <!-- input id="debug-button" type="button" value="Debug" data-inline="true" style="display: none;" -->
                 <div id="content-messages"></div>
             </div>

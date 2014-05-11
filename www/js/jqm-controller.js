@@ -8,7 +8,7 @@
     var pluginName = 'jqmController';
     var defaults = {
         };
-    var reqState = null;
+    //var reqState = null;
     var state;
     var formListItems = [];
     var formData = [];
@@ -75,14 +75,14 @@
     };
     
     controller.prototype.init = function ( options ) {
-        reqState = options["xform"]; //new XMLHttpRequest();
+        //reqState = options["xform"]; //new XMLHttpRequest();
         state = options["state"];
         this.loadList = [];
         this.$checkboxList = [];
         this.checkboxArray = [];
         // Set events
 
-        $("#load-form-list").click(this.onLoadFormList.bind(this));
+        $("#load-form-button").click(this.onLoadFormList.bind(this));
         $("#debug-button").click(this.onDebug.bind(this));
         //view.bind("form-cancel",this.onFormCancel.bind(this));
         $(this).bind("form-cancel",this.onFormCancel.bind(this));
@@ -90,18 +90,30 @@
         $(this).bind("form-submit",this.onFormSubmit.bind(this));
         
         // Load the saved data or initialize data
-        this.loadFormList();
+        //this.loadFormList();
         
     };
+    
+    controller.prototype.resetAll = function (  ) {
+        console.log("resetAll");
+    };
+    
     controller.prototype.onFormCancel = function (  ) {
         console.log("onFormCancel");
     };
     controller.prototype.onFormSave = function ( evt,model) {
         console.log("onFormSave");
         //app.view.getModelData(pageView);
-        activeForms.add(model);
-        model.sync('create',model);
-        app.view.newSavedFormItem({model:model});
+        var a = _.contains(activeForms,model);
+        if (!activeForms.contains(model)) {
+            activeForms.add(model);
+            app.view.newSavedFormItem({model:model});
+            model.sync('create',model);
+        }
+        else {
+            model.sync('update',model);
+
+        }
     };
     
     controller.prototype.onFormSubmit = function ( evt,model ) {
@@ -177,12 +189,37 @@
         }
     };
     
-    var cbFormListComplete = function() {
+    var cbFormListComplete = function(xmlFile) {
+      
+      // Save the form to local memory
+      var filename = "form-list";
+      localStorage.setItem(filename,xmlFile);
       
       // put the list of forms into the page
       app.view.insertForms(app.xformHandler.getAllForms());
     }
     
+    controller.prototype.newForm = function(form) {
+        var $page = $("#page-form-" + form.get("name"));
+        var model = new formData(form.get("data"));
+        model._name = form.get("name");
+        model._timestamp = Date.now();
+        form.set("current",model);
+        //var pageID = pageURL.hash.replace( /#/, "" );
+        app.view.showForm(form,model,$page);
+    }
+     
+    controller.prototype.editForm = function(model) {
+        var form = app.xformHandler.getFormByName(model._name);
+        var $page = $("#page-form-" + form.get("name"));
+        //var model = new formData(form.get("data"));
+        //model._name = form.get("name");
+        //model._timestamp = Date.now();
+        form.set("current",model);
+        //var pageID = pageURL.hash.replace( /#/, "" );
+        app.view.showForm(form,model,$page);
+    }
+   
     // handle the jqm page change to make sure dynamic content is handled
     var pageChange = function( event, data) {
         // console.log("changePage " + data.toPage)
@@ -190,18 +227,7 @@
     
         var pageURL = $.mobile.path.parseUrl( data.toPage );
         var pageselector = pageURL.hash.replace( /\?.*$/, "" );
-          
-        if (pageselector.indexOf("#page-form-") >= 0) {
-            var index = pageURL.hash.replace( /#page-form-/, "" );
-            var $form = app.xformHandler.getForm(index);
-            var model = new formData($form.get("data"));
-            model._name = $form.get("name");
-            model._timestamp = Date.now();
-            app.view.showNewForm(index,model);
-            event.preventDefault();
-            return;
-        }
-  
+
         if (pageselector.indexOf("#nav-") >= 0) {
             event.preventDefault();
             return;            

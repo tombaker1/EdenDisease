@@ -50,11 +50,20 @@
         return formList; 
     }
     
-    xformer.prototype.numForms = function (i) {
+    xformer.prototype.numForms = function () {
         return formList.length;
     }
     
-    xformer.prototype.getDoc = function () {
+    xformer.prototype.getFormByName = function (name) {
+        for (var i = 0; i < formList.length; i++) {
+            if (name === formList.at(i).get("name")) {
+                return formList.at(i);
+            }
+        }
+        return null;
+    };
+
+    xformer.prototype.getDoc = function (i) {
         return formList.at(i); //[i];
     }
     
@@ -69,7 +78,8 @@
             return;
         }
         
-        var xmlDoc = $.parseXML(reply.target.responseText);
+        var rawXml = reply.target.responseText;
+        var xmlDoc = $.parseXML(rawXml);
         var $xml = $( xmlDoc );
         forms = $xml.find( "form" );
         for (var i = 0; i < forms.length; i++) {
@@ -82,7 +92,7 @@
         }
         
         // return and show the form
-        reqCompleteCB();
+        reqCompleteCB(rawXml);
         
     };
     
