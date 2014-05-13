@@ -132,10 +132,10 @@
         onCancel: function() {
             console.log("cancel button");
             app.view.getModelData(this);
-            $.mobile.changePage("#page-new-form",
-                                {transition:"slide",
-                                reverse:"true"});
-            
+            //$.mobile.changePage("#page-new-form",
+            //                    {transition:"slide",
+            //                    reverse:"true"});
+            parent.history.back();
             $(app.uiController).trigger("form-cancel",this.model.get("current"));
         },
         onSave: function() {
@@ -146,9 +146,7 @@
         onSubmit: function() {
             console.log("submit button");
             app.view.getModelData(this);
-            $.mobile.changePage("#page-new-form",
-                                {transition:"slide",
-                                reverse:"true"});
+            parent.history.back();
             $(app.uiController).trigger("form-submit",this.model.get("current"));
         }
     });
