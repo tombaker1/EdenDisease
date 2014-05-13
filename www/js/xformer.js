@@ -79,6 +79,14 @@
         }
         
         var rawXml = reply.target.responseText;
+        this.parseFormList(rawXml);
+        
+        // return and show the form
+        reqCompleteCB(rawXml);
+        
+    };
+    
+    xformer.prototype.parseFormList = function (rawXml) {
         var xmlDoc = $.parseXML(rawXml);
         var $xml = $( xmlDoc );
         forms = $xml.find( "form" );
@@ -90,10 +98,6 @@
             //var model = new formType({"name":name, "url":url});
             formList.add(new formType({"name":name, "url":url}));
         }
-        
-        // return and show the form
-        reqCompleteCB(rawXml);
-        
     };
     
     xformer.prototype.cbReadForm = function (reply) {

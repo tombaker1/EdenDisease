@@ -22,8 +22,8 @@ var app = {
         //$(".page").each(function(){$(this).pageControl();});
         this.getState();
         this.xformHandler = $.xformer();
-        this.uiController = $.jqmController({state: this.state});
         this.view = $.jqmView();
+        this.uiController = $.jqmController({state: this.state});
         
         // set version
         $("#version").html("Version: " + config.version);

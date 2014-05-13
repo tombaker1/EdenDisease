@@ -90,7 +90,13 @@
         $(this).bind("form-submit",this.onFormSubmit.bind(this));
         
         // Load the saved data or initialize data
-        //this.loadFormList();
+        var formData = localStorage.getItem("form-list");
+        if (formData) {
+            app.xformHandler.parseFormList(formData);
+            // put the list of forms into the page
+            app.view.insertForms(app.xformHandler.getAllForms());
+        }
+      
         
     };
     
