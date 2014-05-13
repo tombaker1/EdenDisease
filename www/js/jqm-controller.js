@@ -95,6 +95,30 @@
             app.xformHandler.parseFormList(formData);
             // put the list of forms into the page
             app.view.insertForms(app.xformHandler.getAllForms());
+            
+            // Parse all keys
+            var savedData = [];
+            for (var key in localStorage) {
+                if (key.indexOf("form-xml") >= 0) {
+                    var xml = localStorage.getItem(key);
+                    var formName = key.split('-')[2];
+                    var index = app.xformHandler.parseForm(xml,formName);
+                    var form = app.xformHandler.getFormByName(formName);
+                    app.view.createForm({model:form,index:index});
+
+                    // Uncheck and disable checkbox
+                    // Todo this should be in the view 
+                    var searchStr = "input[name='formlist-"+formName+"']";
+                    var $element = $(searchStr);
+                    $element.prop('checked', false).checkboxradio( "option", "disabled", true );
+                    $element.checkboxradio('refresh');
+                }
+                else if (key.indexOf("data-") >= 0) {
+                    savedData.unshift(key);
+                }
+            }
+            app.view.getFormList().enhanceWithin();
+            app.view.$newFormList.listview('refresh');
         }
       
         
@@ -161,25 +185,30 @@
           }
         }
         if (this.loadList.length) {
-            var index = this.loadList.pop();
-            app.xformHandler.requestForm(index,this.cbFormLoadComplete.bind(this));
+            var name = app.xformHandler.getForm(this.loadList.pop());
+            app.xformHandler.requestForm(name,this.cbFormLoadComplete.bind(this));
         }
     };
 
-    controller.prototype.cbFormLoadComplete = function(status,index) {
+    controller.prototype.cbFormLoadComplete = function(status,name) {
         console.log("cbFormLoadComplete");
         
         // only do this if the form loaded successfully
         if (status) {
             // Create page
-            app.view.createForm({model:app.xformHandler.getForm(index),index:index});
+            var form = app.xformHandler.getFormByName(name);
+            app.view.createForm({model:form,name:name});
+            
+            // Save xml to local storage
+            var formName = "form-xml-"+form.get("name");
+            localStorage.setItem(formName,form.get("form")["xml"]);
             
         }
         
         // success or failure you want to disable the item in the list
         // Uncheck and disable checkbox
         // Todo this should be in the view 
-        var searchStr = "input[name='formlist-"+index+"']";
+        var searchStr = "input[name='formlist-"+name+"']";
         var $element = $(searchStr);
         $element.prop('checked', false).checkboxradio( "option", "disabled", true );
         $element.checkboxradio('refresh');
@@ -188,7 +217,7 @@
         if (this.loadList.length) {
             app.xformHandler.requestForm(this.loadList.pop(),
                                      this.cbFormLoadComplete.bind(this));
-        }
+        } 
         else {
             app.view.getFormList().enhanceWithin();
             app.view.$newFormList.listview('refresh');
