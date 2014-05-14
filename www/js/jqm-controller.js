@@ -124,7 +124,7 @@
                 var data = JSON.parse(localStorage[key]);
                 var model = new mFormData(data);
                 model._name = formName;
-                model._timestamp = timestamp;
+                model._timestamp = +timestamp;
                 activeForms.add(model);
                 app.view.newSavedFormItem({model:model});
             }
