@@ -108,7 +108,7 @@
 
                     // Uncheck and disable checkbox
                     // Todo this should be in the view 
-                    var searchStr = "input[name='formlist-"+formName+"']";
+                    var searchStr = "input[name='"+formName+"']";
                     var $element = $(searchStr);
                     $element.prop('checked', false).checkboxradio( "option", "disabled", true );
                     $element.checkboxradio('refresh');
@@ -181,11 +181,13 @@
         for (var i = 0; i < app.xformHandler.numForms(); i++) {
           var $form = app.xformHandler.getForm(i);
           if (this.$checkboxList[i].checked && !$form.loaded) {
-            this.loadList.unshift(i);
+            var name = this.$checkboxList[i].attributes["name"].textContent;
+            this.loadList.unshift(name);
           }
         }
         if (this.loadList.length) {
-            var name = app.xformHandler.getForm(this.loadList.pop());
+            var name = this.loadList.pop();
+            //var form = app.xformHandler.getForm(this.loadList.pop());
             app.xformHandler.requestForm(name,this.cbFormLoadComplete.bind(this));
         }
     };
@@ -208,14 +210,15 @@
         // success or failure you want to disable the item in the list
         // Uncheck and disable checkbox
         // Todo this should be in the view 
-        var searchStr = "input[name='formlist-"+name+"']";
+        var searchStr = "input[name='"+name+"']";
         var $element = $(searchStr);
         $element.prop('checked', false).checkboxradio( "option", "disabled", true );
         $element.checkboxradio('refresh');
         
         // get next page
         if (this.loadList.length) {
-            app.xformHandler.requestForm(this.loadList.pop(),
+            var nextName = this.loadList.pop();
+            app.xformHandler.requestForm(nextName,
                                      this.cbFormLoadComplete.bind(this));
         } 
         else {

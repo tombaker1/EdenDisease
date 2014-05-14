@@ -208,13 +208,14 @@
         reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
     };
 
-    xformer.prototype.requestForm = function (form, cb) {
+    xformer.prototype.requestForm = function (name, cb) {
         reqCompleteCB = cb;
         //var item = this.getForm(index);
-        reqName = form.get("name");
+        var url = this.getFormByName(name).get("url");
+        reqName = name;
         try {
             reqState.onload = this.cbReadForm.bind(this);
-            reqState.open("get", form.get("url"), true);
+            reqState.open("get", url, true);
             reqState.send();
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         }

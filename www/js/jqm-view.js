@@ -42,7 +42,7 @@
 
     var loadFormListItem = Backbone.View.extend({
         tagName: "label",
-        template: _.template("<input type='checkbox' id='formlist-<%= name %>' name='formlist-<%= name %>'><%= name %>"),
+        template: _.template("<input type='checkbox' id='formlist-<%= name %>' name='<%= name %>'><%= name %>"),
         defaults: {
             //model: null,
             index: 0,
@@ -56,8 +56,9 @@
          },
         render: function() {
             //var str = this.template({index:this.index,name:this.model.get("name")});
-            this.$el.attr("for","formList-"+this.name);
-            return this.$el.html(this.template({name:this.model.get("name")}));
+            var name = this.model.get("name");
+            this.$el.attr("for",name);
+            return this.$el.html(this.template({name:name}));
         },
         enable: function(options) {
             if (options) {
