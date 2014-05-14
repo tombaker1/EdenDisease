@@ -10,11 +10,9 @@
         };
     //var reqState = null;
     var state;
-    var formListItems = [];
-    var formData = [];
     
     // create the form list item
-    var formData = Backbone.Model.extend({
+    var mFormData = Backbone.Model.extend({
         defaults: {
          },
         initialize: function(options) {
@@ -28,7 +26,7 @@
         },
         
         getKey: function() {
-            return this._name + this._timestamp;
+            return this._name + '-' + this._timestamp;
         }
     });
     var activeForms = new Backbone.Collection;
@@ -90,9 +88,9 @@
         $(this).bind("form-submit",this.onFormSubmit.bind(this));
         
         // Load the saved data or initialize data
-        var formData = localStorage.getItem("form-list");
-        if (formData) {
-            app.xformHandler.parseFormList(formData);
+        var formListXml = localStorage.getItem("form-list");
+        if (formListXml) {
+            app.xformHandler.parseFormList(formListXml);
             // put the list of forms into the page
             app.view.insertForms(app.xformHandler.getAllForms());
             
@@ -117,6 +115,21 @@
                     savedData.unshift(key);
                 }
             }
+            
+            while (savedData.length) {
+                var key = savedData.pop();
+                var fields = key.split('-');
+                var formName = fields[1];
+                var timestamp = fields[2];
+                var data = JSON.parse(localStorage[key]);
+                var model = new mFormData(data);
+                model._name = formName;
+                model._timestamp = timestamp;
+                activeForms.add(model);
+                app.view.newSavedFormItem({model:model});
+            }
+            
+            // update view lists
             app.view.getFormList().enhanceWithin();
             app.view.$newFormList.listview('refresh');
         }
@@ -239,7 +252,7 @@
     
     controller.prototype.newForm = function(form) {
         var $page = $("#page-form-" + form.get("name"));
-        var model = new formData(form.get("data"));
+        var model = new mFormData(form.get("data"));
         model._name = form.get("name");
         model._timestamp = Date.now();
         form.set("current",model);
