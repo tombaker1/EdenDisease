@@ -138,6 +138,9 @@
     };
     
     controller.prototype.resetAll = function (  ) {
+        for (var key in localStorage) {
+            localStorage.removeItem(key);
+        }
         console.log("resetAll");
     };
     

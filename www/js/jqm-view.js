@@ -472,7 +472,8 @@
                       //var $subItem 
                       //var i = $subItem.attr("id").split("-")[2];
                       
-                      if ($subItem.attr("checked")) {
+                      //if ($subItem.attr("checked")) {
+                      if ($subItem[0].checked) {
                         model.set(key,$subItem.attr("value"));
                         //subItem.checked = true;
                         //$(subItem).attr("checked",true).checkboxradio("refresh");
@@ -514,8 +515,9 @@ view.prototype.showForm = function($form,model,$page) {
           //var idSelector = "choice-" + i;
           var subItem = subItems[subIndex];
           var i = $(subItem).attr("id").split("-")[2];
+          var elementValue = subItem.value;
           
-          if (value === i) {
+          if (value === elementValue) {
             //subItem.checked = true;
             $(subItem).attr("checked",true).checkboxradio("refresh");
           }
