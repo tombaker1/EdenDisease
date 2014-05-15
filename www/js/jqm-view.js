@@ -570,7 +570,7 @@ view.prototype.showForm = function($form,model,$page) {
     
     view.prototype.resetDialog = function (event) {
         var dialog = $("#reset-dialog-popup");
-        $("#reset-dialog").popup("open").popup({transition:"pop"});
+        $("#reset-dialog").popup("open").popup({transition:"none"});
     };
     
     view.prototype.onResetOK = function (event) {
