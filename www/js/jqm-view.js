@@ -282,9 +282,18 @@
         this.$newFormList = $("#form-items");
         this.formList = this.$loadFormList[0];
         
+        // Set events
+        $("#reset-dialog input[value='ok']").on("click",this.onResetOK.bind(this));
+        $("#reset-dialog input[value='cancel']").on("click",this.onResetCancel.bind(this));
+        
         // Initialize jqm
         $("div.page").each(function(index){
             $(this).page();
+            });
+        $("div.popup").each(function(index){
+            $(this).popup(); //.dialog("close");
+            //$(this).attr("width",320)
+            //        .attr("height",240)
             });
         this.$loadFormList.enhanceWithin();
         this.$newFormList.listview();
@@ -557,6 +566,22 @@ view.prototype.showForm = function($form,model,$page) {
         $form.set("current",model);
         this.showForm($form,model,$page);
         //$.mobile.changePage($page);
+    };
+    
+    view.prototype.resetDialog = function (event) {
+        var dialog = $("#reset-dialog-popup");
+        $("#reset-dialog").popup("open").popup({transition:"pop"});
+    };
+    
+    view.prototype.onResetOK = function (event) {
+        console.log("onResetOK");
+        $("#reset-dialog").popup("close");
+        app.uiController.onReset();
+    };
+    
+    view.prototype.onResetCancel = function (event) {
+        console.log("onResetCancel");
+        $("#reset-dialog").popup("close");
     };
     
     // bind the plugin to jQuery

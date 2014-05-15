@@ -86,6 +86,7 @@
         $(this).bind("form-cancel",this.onFormCancel.bind(this));
         $(this).bind("form-save",this.onFormSave.bind(this));
         $(this).bind("form-submit",this.onFormSubmit.bind(this));
+        $(this).bind("reset-all",this.onReset.bind(this));
         
         // Load the saved data or initialize data
         var formListXml = localStorage.getItem("form-list");
@@ -138,6 +139,10 @@
     };
     
     controller.prototype.resetAll = function (  ) {
+        app.view.resetDialog();
+    };
+    
+    controller.prototype.onReset = function (  ) {
         for (var key in localStorage) {
             localStorage.removeItem(key);
         }
