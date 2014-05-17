@@ -4,7 +4,7 @@ var app = {
     view: null,
     state: {
         settings: {
-                source: 1
+                source: 2
             }  
     },
     

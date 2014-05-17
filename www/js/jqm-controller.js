@@ -188,7 +188,50 @@
     
     controller.prototype.onDebug = function ( event ) {
         console.log("onDebug");
-        this.loadFormList();
+        //this.loadFormList();
+        xhr = new XMLHttpRequest();
+        var form = app.xformHandler.getFormByName("Shelter");
+        var data = form.get("data");
+        var urlData = "";
+        var pairs = [];
+        
+        // Fill field
+        for (var key in data) {
+            var value = "data for " + key;
+            if (key === "status") {
+                pairs.push(encodeURIComponent(key) + "=" + encodeURIComponent("1"));
+            }
+            else {
+                pairs.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
+            }
+            
+        }
+        urlData = pairs.join('&').replace(/%20/g, '+');
+        xhr.addEventListener('load', function(reply){
+            var response = "ready " + reply.readyState + " status " + reply.status;
+            //alert("success " + response);
+        });
+        xhr.addEventListener('error', function(reply){
+            //alert("failure");
+        });
+        xhr.onreadystatechange=function(reply){
+            var response = "ready " + xhr.readyState + " status " + xhr.status;
+            console.log("success " + response);
+        };
+        // We setup our request
+        xhr.open('POST', form.get("url"));
+      
+        // We add the required HTTP header to handle a form data POST request
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        //xhr.setRequestHeader('Content-Length', urlData.length);
+      
+        // And finally, We send our data.
+        try {
+            xhr.send(urlData);
+        }
+        catch (err) {
+            alert("send error");
+        }
     };
     
     controller.prototype.onLoadFormList = function ( event ) {
@@ -248,8 +291,11 @@
         }
     };
     
-    var cbFormListComplete = function(xmlFile) {
+    var cbFormListComplete = function(success, xmlFile) {
       
+      if (!success) {
+        return;
+      }
       // Save the form to local memory
       var filename = "form-list";
       localStorage.setItem(filename,xmlFile);

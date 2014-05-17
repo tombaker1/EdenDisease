@@ -83,7 +83,7 @@
         this.parseFormList(rawXml);
         
         // return and show the form
-        reqCompleteCB(rawXml);
+        reqCompleteCB(true, rawXml);
         
     };
     
