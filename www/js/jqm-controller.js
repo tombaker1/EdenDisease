@@ -10,11 +10,9 @@
         };
     //var reqState = null;
     var state;
-    var formListItems = [];
-    var formData = [];
     
     // create the form list item
-    var formData = Backbone.Model.extend({
+    var mFormData = Backbone.Model.extend({
         defaults: {
          },
         initialize: function(options) {
@@ -28,7 +26,7 @@
         },
         
         getKey: function() {
-            return this._name + this._timestamp;
+            return this._name + '-' + this._timestamp;
         }
     });
     var activeForms = new Backbone.Collection;
@@ -88,13 +86,66 @@
         $(this).bind("form-cancel",this.onFormCancel.bind(this));
         $(this).bind("form-save",this.onFormSave.bind(this));
         $(this).bind("form-submit",this.onFormSubmit.bind(this));
+        $(this).bind("reset-all",this.onReset.bind(this));
         
         // Load the saved data or initialize data
-        //this.loadFormList();
+        var formListXml = localStorage.getItem("form-list");
+        if (formListXml) {
+            app.xformHandler.parseFormList(formListXml);
+            // put the list of forms into the page
+            app.view.insertForms(app.xformHandler.getAllForms());
+            
+            // Parse all keys
+            var savedData = [];
+            for (var key in localStorage) {
+                if (key.indexOf("form-xml") >= 0) {
+                    var xml = localStorage.getItem(key);
+                    var formName = key.split('-')[2];
+                    var index = app.xformHandler.parseForm(xml,formName);
+                    var form = app.xformHandler.getFormByName(formName);
+                    app.view.createForm({model:form,index:index});
+
+                    // Uncheck and disable checkbox
+                    // Todo this should be in the view 
+                    var searchStr = "input[name='"+formName+"']";
+                    var $element = $(searchStr);
+                    $element.prop('checked', false).checkboxradio( "option", "disabled", true );
+                    $element.checkboxradio('refresh');
+                }
+                else if (key.indexOf("data-") >= 0) {
+                    savedData.unshift(key);
+                }
+            }
+            
+            while (savedData.length) {
+                var key = savedData.pop();
+                var fields = key.split('-');
+                var formName = fields[1];
+                var timestamp = fields[2];
+                var data = JSON.parse(localStorage[key]);
+                var model = new mFormData(data);
+                model._name = formName;
+                model._timestamp = +timestamp;
+                activeForms.add(model);
+                app.view.newSavedFormItem({model:model});
+            }
+            
+            // update view lists
+            app.view.getFormList().enhanceWithin();
+            app.view.$newFormList.listview('refresh');
+        }
+      
         
     };
     
     controller.prototype.resetAll = function (  ) {
+        app.view.resetDialog();
+    };
+    
+    controller.prototype.onReset = function (  ) {
+        for (var key in localStorage) {
+            localStorage.removeItem(key);
+        }
         console.log("resetAll");
     };
     
@@ -151,38 +202,46 @@
         for (var i = 0; i < app.xformHandler.numForms(); i++) {
           var $form = app.xformHandler.getForm(i);
           if (this.$checkboxList[i].checked && !$form.loaded) {
-            this.loadList.unshift(i);
+            var name = this.$checkboxList[i].attributes["name"].textContent;
+            this.loadList.unshift(name);
           }
         }
         if (this.loadList.length) {
-            var index = this.loadList.pop();
-            app.xformHandler.requestForm(index,this.cbFormLoadComplete.bind(this));
+            var name = this.loadList.pop();
+            //var form = app.xformHandler.getForm(this.loadList.pop());
+            app.xformHandler.requestForm(name,this.cbFormLoadComplete.bind(this));
         }
     };
 
-    controller.prototype.cbFormLoadComplete = function(status,index) {
+    controller.prototype.cbFormLoadComplete = function(status,name) {
         console.log("cbFormLoadComplete");
         
         // only do this if the form loaded successfully
         if (status) {
             // Create page
-            app.view.createForm({model:app.xformHandler.getForm(index),index:index});
+            var form = app.xformHandler.getFormByName(name);
+            app.view.createForm({model:form,name:name});
+            
+            // Save xml to local storage
+            var formName = "form-xml-"+form.get("name");
+            localStorage.setItem(formName,form.get("form")["xml"]);
             
         }
         
         // success or failure you want to disable the item in the list
         // Uncheck and disable checkbox
         // Todo this should be in the view 
-        var searchStr = "input[name='formlist-"+index+"']";
+        var searchStr = "input[name='"+name+"']";
         var $element = $(searchStr);
         $element.prop('checked', false).checkboxradio( "option", "disabled", true );
         $element.checkboxradio('refresh');
         
         // get next page
         if (this.loadList.length) {
-            app.xformHandler.requestForm(this.loadList.pop(),
+            var nextName = this.loadList.pop();
+            app.xformHandler.requestForm(nextName,
                                      this.cbFormLoadComplete.bind(this));
-        }
+        } 
         else {
             app.view.getFormList().enhanceWithin();
             app.view.$newFormList.listview('refresh');
@@ -201,7 +260,7 @@
     
     controller.prototype.newForm = function(form) {
         var $page = $("#page-form-" + form.get("name"));
-        var model = new formData(form.get("data"));
+        var model = new mFormData(form.get("data"));
         model._name = form.get("name");
         model._timestamp = Date.now();
         form.set("current",model);

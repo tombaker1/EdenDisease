@@ -42,7 +42,7 @@
 
     var loadFormListItem = Backbone.View.extend({
         tagName: "label",
-        template: _.template("<input type='checkbox' id='formlist-<%= index %>' name='formlist-<%= index %>'><%= name %>"),
+        template: _.template("<input type='checkbox' id='formlist-<%= name %>' name='<%= name %>'><%= name %>"),
         defaults: {
             //model: null,
             index: 0,
@@ -56,8 +56,9 @@
          },
         render: function() {
             //var str = this.template({index:this.index,name:this.model.get("name")});
-            this.$el.attr("for","formList-"+this.index);
-            return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
+            var name = this.model.get("name");
+            this.$el.attr("for",name);
+            return this.$el.html(this.template({name:name}));
         },
         enable: function(options) {
             if (options) {
@@ -88,7 +89,7 @@
         render: function() {
             //var str = this.template({index:this.index,name:this.model.get("name")});
             //this.$el.attr("for","formList-"+this.index);
-            return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
+            return this.$el.html(this.template({name:this.model.get("name")}));
         },
         
         onClick: function() {
@@ -132,10 +133,10 @@
         onCancel: function() {
             console.log("cancel button");
             app.view.getModelData(this);
-            $.mobile.changePage("#page-new-form",
-                                {transition:"slide",
-                                reverse:"true"});
-            
+            //$.mobile.changePage("#page-new-form",
+            //                    {transition:"slide",
+            //                    reverse:"true"});
+            parent.history.back();
             $(app.uiController).trigger("form-cancel",this.model.get("current"));
         },
         onSave: function() {
@@ -146,9 +147,7 @@
         onSubmit: function() {
             console.log("submit button");
             app.view.getModelData(this);
-            $.mobile.changePage("#page-new-form",
-                                {transition:"slide",
-                                reverse:"true"});
+            parent.history.back();
             $(app.uiController).trigger("form-submit",this.model.get("current"));
         }
     });
@@ -283,9 +282,18 @@
         this.$newFormList = $("#form-items");
         this.formList = this.$loadFormList[0];
         
+        // Set events
+        $("#reset-dialog input[value='ok']").on("click",this.onResetOK.bind(this));
+        $("#reset-dialog input[value='cancel']").on("click",this.onResetCancel.bind(this));
+        
         // Initialize jqm
         $("div.page").each(function(index){
             $(this).page();
+            });
+        $("div.popup").each(function(index){
+            $(this).popup(); //.dialog("close");
+            //$(this).attr("width",320)
+            //        .attr("height",240)
             });
         this.$loadFormList.enhanceWithin();
         this.$newFormList.listview();
@@ -309,7 +317,7 @@
         console.log("jqm-view newFormListItem");
 
         var item =  new loadFormListItem(options);
-        item.index = this.loadFormArray.length;
+        //item.index = this.loadFormArray.length;
         item.render();
         this.$loadFormList.append(item.$el);
         //item.$el.checkboxradio();
@@ -377,7 +385,7 @@
 
         // Add page content
         var $form = model.get("form");
-        var $xml = $form.xml;
+        var $xml = $form["$xml"];
         var $fields = $xml[0].body.children;
         //if ($form.value === undefined) {
         //    $form.value = "";
@@ -473,7 +481,8 @@
                       //var $subItem 
                       //var i = $subItem.attr("id").split("-")[2];
                       
-                      if ($subItem.attr("checked")) {
+                      //if ($subItem.attr("checked")) {
+                      if ($subItem[0].checked) {
                         model.set(key,$subItem.attr("value"));
                         //subItem.checked = true;
                         //$(subItem).attr("checked",true).checkboxradio("refresh");
@@ -515,8 +524,9 @@ view.prototype.showForm = function($form,model,$page) {
           //var idSelector = "choice-" + i;
           var subItem = subItems[subIndex];
           var i = $(subItem).attr("id").split("-")[2];
+          var elementValue = subItem.value;
           
-          if (value === i) {
+          if (value === elementValue) {
             //subItem.checked = true;
             $(subItem).attr("checked",true).checkboxradio("refresh");
           }
@@ -556,6 +566,22 @@ view.prototype.showForm = function($form,model,$page) {
         $form.set("current",model);
         this.showForm($form,model,$page);
         //$.mobile.changePage($page);
+    };
+    
+    view.prototype.resetDialog = function (event) {
+        var dialog = $("#reset-dialog-popup");
+        $("#reset-dialog").popup("open").popup({transition:"none"});
+    };
+    
+    view.prototype.onResetOK = function (event) {
+        console.log("onResetOK");
+        $("#reset-dialog").popup("close");
+        app.uiController.onReset();
+    };
+    
+    view.prototype.onResetCancel = function (event) {
+        console.log("onResetCancel");
+        $("#reset-dialog").popup("close");
     };
     
     // bind the plugin to jQuery

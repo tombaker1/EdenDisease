@@ -24,7 +24,8 @@
     // create the query state
     var reqState = null,
         reqTimer = null,
-        reqIndex = 0,
+        //reqIndex = 0,
+        reqName = "",
         reqCompleteCB = null,
         REQ_WAIT_TIME = 4000;
 
@@ -79,6 +80,14 @@
         }
         
         var rawXml = reply.target.responseText;
+        this.parseFormList(rawXml);
+        
+        // return and show the form
+        reqCompleteCB(rawXml);
+        
+    };
+    
+    xformer.prototype.parseFormList = function (rawXml) {
         var xmlDoc = $.parseXML(rawXml);
         var $xml = $( xmlDoc );
         forms = $xml.find( "form" );
@@ -90,28 +99,10 @@
             //var model = new formType({"name":name, "url":url});
             formList.add(new formType({"name":name, "url":url}));
         }
-        
-        // return and show the form
-        reqCompleteCB(rawXml);
-        
     };
     
-    xformer.prototype.cbReadForm = function (reply) {
-        clearTimeout(reqTimer);
-        //console.log("cbReadFormList done");
-        if (reqState.readyState != 4) {
-            alert("Error loading form");
-            reqCompleteCB(false,reqIndex);
-            return;
-        }
-        if (reqState.status != 200) {
-            var name = formList.at(reqIndex).get("name");
-            alert("Server error for form " + name);
-            reqCompleteCB(false,reqIndex);
-            return;
-        }
-        
-        var xmlDoc = $.parseXML(reply.target.responseText);
+    xformer.prototype.parseForm = function (rawXML,formName) {
+        var xmlDoc = $.parseXML(rawXML);
         var $xml = $( xmlDoc );
         
         // Parse the model
@@ -167,24 +158,45 @@
         fields["strings"] = strings;
                 
         // parse the body
-        fields['xml'] = $xml;
+        fields['xml'] = rawXML;
+        fields['$xml'] = $xml;
         //formList[reqIndex].model = modelPrototype;
         //formList[reqIndex].loaded = true;
         //formList[reqIndex].form = fields;
         //var model = formList.at(reqIndex);
-        formList.at(reqIndex).set({"data":modelPrototype,
+        this.getFormByName(formName).set({"data":modelPrototype,
                                   "loaded":true,
                                   "form":fields});
+        return reqName;
+    };
+    
+    xformer.prototype.cbReadForm = function (reply) {
+        clearTimeout(reqTimer);
+        //console.log("cbReadFormList done");
+        if (reqState.readyState != 4) {
+            alert("Error loading form");
+            reqCompleteCB(false,reqName);
+            return;
+        }
+        if (reqState.status != 200) {
+            alert("Server error for form " + reqName);
+            reqCompleteCB(false,reqName);
+            return;
+        }
+        
+        var rawXML = reply.target.responseText;
+        this.parseForm(rawXML,reqName);
+
         //model.set("loaded",true);
         //model.set("form",fields);
         // notify the controller that the load is complete
-        reqCompleteCB(true,reqIndex);
+        reqCompleteCB(true,reqName);
     }; 
     
     var cbReqTimeout = function() {
         reqState.abort();
         alert("URL could not be found");
-        reqCompleteCB(false,reqIndex);            
+        reqCompleteCB(false,reqName);            
 
     };
 
@@ -196,19 +208,20 @@
         reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
     };
 
-    xformer.prototype.requestForm = function (index, cb) {
+    xformer.prototype.requestForm = function (name, cb) {
         reqCompleteCB = cb;
-        var item = this.getForm(index);
-        reqIndex = index;
+        //var item = this.getForm(index);
+        var url = this.getFormByName(name).get("url");
+        reqName = name;
         try {
             reqState.onload = this.cbReadForm.bind(this);
-            reqState.open("get", item.get("url"), true);
+            reqState.open("get", url, true);
             reqState.send();
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         }
         catch(err) {
             alert("Error loading form");
-            reqCompleteCB(false,reqIndex);            
+            reqCompleteCB(false,reqName);            
         }
     };
 
