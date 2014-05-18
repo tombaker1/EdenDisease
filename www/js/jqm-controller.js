@@ -9,7 +9,7 @@
     var defaults = {
         };
     //var reqState = null;
-    var state;
+    //var state;
     
     // create the form list item
     var mFormData = Backbone.Model.extend({
@@ -31,6 +31,16 @@
     });
     var activeForms = new Backbone.Collection;
 
+    
+    controller.prototype.cbFormSendComplete = function(status,name) {
+        if (status) {
+            console.log("cbFormSendComplete success");
+        }
+        else {
+            console.log("cbFormSendComplete failure");
+        }
+    };
+
     Backbone.sync = function(method, model, options) {
       options || (options = {});
     
@@ -38,7 +48,14 @@
         case 'create':
             console.log("create");
             var path = "data-" + model.getKey();
-            localStorage.setItem(path,JSON.stringify(model));
+            if (app.uiController.state.offline || options["local"]) {
+                localStorage.setItem(path,JSON.stringify(model));
+            }
+            else {
+                var controller = app.uiController;
+                app.xformHandler.sendModel(model,controller.cbFormSendComplete.bind(controller), options);
+            }
+            //localStorage.setItem(path,JSON.stringify(model));
         break;
     
         case 'update':
@@ -74,7 +91,8 @@
     
     controller.prototype.init = function ( options ) {
         //reqState = options["xform"]; //new XMLHttpRequest();
-        state = options["state"];
+        this.state = options["state"];
+        //this.state.offline = false;
         this.loadList = [];
         this.$checkboxList = [];
         this.checkboxArray = [];
@@ -121,11 +139,13 @@
                 var key = savedData.pop();
                 var fields = key.split('-');
                 var formName = fields[1];
+                var form = app.xformHandler.getFormByName(formName);
                 var timestamp = fields[2];
                 var data = JSON.parse(localStorage[key]);
                 var model = new mFormData(data);
                 model._name = formName;
                 model._timestamp = +timestamp;
+                model.urlRoot = form.get("url");
                 activeForms.add(model);
                 app.view.newSavedFormItem({model:model});
             }
@@ -159,10 +179,10 @@
         if (!activeForms.contains(model)) {
             activeForms.add(model);
             app.view.newSavedFormItem({model:model});
-            model.sync('create',model);
+            model.sync('create',model,{local:true});
         }
         else {
-            model.sync('update',model);
+            model.sync('update',model,{local:true});
 
         }
     };
@@ -170,7 +190,7 @@
     controller.prototype.onFormSubmit = function ( evt,model ) {
         console.log("onFormSubmit");
         model.submit();
-        model.sync('create',model);
+        model.sync('create',model,{local:false});
         
     };
     controller.prototype.loadFormList = function (  ) {
@@ -208,15 +228,24 @@
         }
         urlData = pairs.join('&').replace(/%20/g, '+');
         xhr.addEventListener('load', function(reply){
-            var response = "ready " + reply.readyState + " status " + reply.status;
+            var response = "ready " + xhr.readyState + " status " + xhr.status;
             //alert("success " + response);
+            console.log("onload " + response)
         });
         xhr.addEventListener('error', function(reply){
             //alert("failure");
         });
         xhr.onreadystatechange=function(reply){
-            var response = "ready " + xhr.readyState + " status " + xhr.status;
-            console.log("success " + response);
+            console.log("onreadystatechange " + xhr.readyState);
+        if ( xhr.readyState === 4 ) {
+            if ( xhr.status === 200 ) {
+                console.log("onreadystatechange " + xhr.status);
+            } else {
+                console.log("onreadystatechange " + xhr.status);
+            }
+        }
+            //var response = "ready " + xhr.readyState + " status " + xhr.status;
+            //console.log("onreadystatechange " + response);
         };
         // We setup our request
         xhr.open('POST', form.get("url"));
@@ -233,7 +262,7 @@
             alert("send error");
         }
     };
-    
+
     controller.prototype.onLoadFormList = function ( event ) {
         console.log("onLoadFormList");
         var $list = app.view.getFormList();
@@ -309,6 +338,7 @@
         var model = new mFormData(form.get("data"));
         model._name = form.get("name");
         model._timestamp = Date.now();
+        model.urlRoot = form.get("url");
         form.set("current",model);
         //var pageID = pageURL.hash.replace( /#/, "" );
         app.view.showForm(form,model,$page);

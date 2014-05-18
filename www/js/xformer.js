@@ -193,6 +193,21 @@
         reqCompleteCB(true,reqName);
     }; 
     
+    xformer.prototype.cbSendResponse = function (reply) {
+        //console.log("cbReadFormList done");
+        if (reqState.readyState != 4) {
+            //alert("Error sending model");
+            //reqCompleteCB(false);
+            return;
+        }
+        clearTimeout(reqTimer);
+        if (reqState.status != 200) {
+            alert("Server error for send ");
+            reqCompleteCB(false);
+            return;
+        }
+        reqCompleteCB(true);
+    }
     var cbReqTimeout = function() {
         reqState.abort();
         alert("URL could not be found");
@@ -225,6 +240,38 @@
         }
     };
 
+    xformer.prototype.sendModel = function (model, cb, options) {
+        reqCompleteCB = cb;
+        reqState.onload = null;
+        var urlData = "";
+        var pairs = [];
+        
+        // Fill field
+        for (var key in model.attributes) {
+            var value = encodeURIComponent(model.get(key));
+            pairs.push(encodeURIComponent(key) + "=" + value);
+            
+        }
+        urlData = pairs.join('&').replace(/%20/g, '+');        
+        // We setup our request
+        reqState.onreadystatechange=this.cbSendResponse.bind(this);
+        reqState.open('POST', model.urlRoot);
+      
+        // We add the required HTTP header to handle a form data POST request
+        reqState.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        //xhr.setRequestHeader('Content-Length', urlData.length);
+      
+        // And finally, We send our data.
+        try {
+            reqState.send(urlData);
+            reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
+        }
+        catch (err) {
+            alert("send error");
+            reqCompleteCB(false,reqName);
+        }
+    };
+    
     // bind the plugin to jQuery     
     $.xformer = function(options) {
         return new xformer( this, options );

@@ -4,8 +4,9 @@ var app = {
     view: null,
     state: {
         settings: {
-                source: 2
-            }  
+                source: 1
+            },
+        offline: false
     },
     
     initialize: function() {
@@ -13,10 +14,15 @@ var app = {
             console.log("running in browser");
             $("#content-messages").html("browser<br>");
             window.cordova = window.cordova_webapp;
+            this.state.offline = true;
         }
         else {
             console.log("running mobile");
-            $("#content-messages").html("mobile<br>")
+            $("#content-messages").html("mobile<br>");
+            
+            // if mobile then make it remote
+            this.state.settings.source = 2;
+            this.state.offline = false
         }
         this.bind();
         //$(".page").each(function(){$(this).pageControl();});
