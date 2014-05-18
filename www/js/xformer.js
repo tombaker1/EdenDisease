@@ -198,6 +198,7 @@
         if (reqState.readyState != 4) {
             //alert("Error sending model");
             //reqCompleteCB(false);
+            console.log("cbSendResponse " + reqState.readyState);
             return;
         }
         clearTimeout(reqTimer);
