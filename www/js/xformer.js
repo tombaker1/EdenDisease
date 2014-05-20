@@ -22,12 +22,18 @@
     var formList = new Backbone.Collection;
     
     // create the query state
-    var reqState = null,
+    var xhr = null,
         reqTimer = null,
         //reqIndex = 0,
-        reqName = "",
-        reqCompleteCB = null,
+        //reqName = "",
+        //reqCompleteCB = null,
         REQ_WAIT_TIME = 4000;
+        
+    var reqState = {
+        type: "",
+        data: null,
+        callback: null
+    };
 
     // The actual plugin constructor
     function xformer( options ) {
@@ -40,7 +46,7 @@
     };
     
     xformer.prototype.init = function () {
-        reqState = new XMLHttpRequest();
+        xhr = new XMLHttpRequest();
     };
     
     xformer.prototype.getForm = function (i) {
@@ -70,11 +76,11 @@
     
     xformer.prototype.cbReadFormList = function (reply) {
         clearTimeout(reqTimer);
-        if (reqState.readyState != 4) {
+        if (xhr.readyState != 4) {
             alert("What?");
             return;
         }
-        if (reqState.status != 200) {
+        if (xhr.status != 200) {
             alert("Error loading page");
             return;
         }
@@ -83,7 +89,7 @@
         this.parseFormList(rawXml);
         
         // return and show the form
-        reqCompleteCB(rawXml);
+        reqState.callback(true, rawXml);
         
     };
     
@@ -167,64 +173,118 @@
         this.getFormByName(formName).set({"data":modelPrototype,
                                   "loaded":true,
                                   "form":fields});
-        return reqName;
+        return reqState.data;
     };
     
     xformer.prototype.cbReadForm = function (reply) {
         clearTimeout(reqTimer);
         //console.log("cbReadFormList done");
-        if (reqState.readyState != 4) {
+        if (xhr.readyState != 4) {
             alert("Error loading form");
-            reqCompleteCB(false,reqName);
+            reqState.callback(false,reqState.data);
             return;
         }
-        if (reqState.status != 200) {
-            alert("Server error for form " + reqName);
-            reqCompleteCB(false,reqName);
+        if (xhr.status != 200) {
+            alert("Server error for form " + reqState.data);
+            reqState.callback(false,reqState.data);
             return;
         }
         
         var rawXML = reply.target.responseText;
-        this.parseForm(rawXML,reqName);
+        this.parseForm(rawXML,reqState.data);
 
         //model.set("loaded",true);
         //model.set("form",fields);
         // notify the controller that the load is complete
-        reqCompleteCB(true,reqName);
+        reqState.callback(true,reqState.data);
     }; 
     
+    xformer.prototype.cbSendResponse = function (reply) {
+        //console.log("cbReadFormList done");
+        if (xhr.readyState != 4) {
+            //alert("Error sending model");
+            //reqCompleteCB(false);
+            console.log("cbSendResponse " + xhr.readyState);
+            return;
+        }
+        clearTimeout(reqTimer);
+        if (xhr.status != 200) {
+            alert("Server error for send ");
+            reqState.callback(false);
+            return;
+        }
+        reqState.callback(true,reqState.data);
+    }
     var cbReqTimeout = function() {
-        reqState.abort();
+        xhr.abort();
         alert("URL could not be found");
-        reqCompleteCB(false,reqName);            
+        reqState.callback(false,reqState.data);            
 
     };
 
     xformer.prototype.requestFormList = function (url, cb) {
-        reqCompleteCB = cb;
-        reqState.onload = this.cbReadFormList.bind(this);
-        reqState.open("get", url, true);
-        reqState.send();
+        reqState.type = "request-form-list";
+        reqState.callback = cb;
+        reqState.data = url;
+        xhr.onload = this.cbReadFormList.bind(this);
+        xhr.open("get", url, true);
+        xhr.send();
         reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
     };
 
     xformer.prototype.requestForm = function (name, cb) {
-        reqCompleteCB = cb;
+        reqState.type = "request-form";
+        reqState.callback = cb;
+        reqState.data = name;
         //var item = this.getForm(index);
         var url = this.getFormByName(name).get("url");
-        reqName = name;
+        reqState.data = name;
         try {
-            reqState.onload = this.cbReadForm.bind(this);
-            reqState.open("get", url, true);
-            reqState.send();
+            xhr.onload = this.cbReadForm.bind(this);
+            xhr.open("get", url, true);
+            xhr.send();
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         }
         catch(err) {
             alert("Error loading form");
-            reqCompleteCB(false,reqName);            
+            reqState.callback(false,reqState.data);            
         }
     };
 
+    xformer.prototype.sendModel = function (model, cb, options) {
+        reqState.type = "send-form";
+        reqState.callback = cb;
+        reqState.data = model;
+        xhr.onload = null;
+        var urlData = "";
+        var pairs = [];
+        
+        // Fill field
+        for (var key in model.attributes) {
+            var value = encodeURIComponent(model.get(key));
+            pairs.push(encodeURIComponent(key) + "=" + value);
+            
+        }
+        urlData = pairs.join('&').replace(/%20/g, '+');        
+        // We setup our request
+        xhr.onreadystatechange=this.cbSendResponse.bind(this);
+        xhr.open('POST', model.urlRoot);
+      
+        // We add the required HTTP header to handle a form data POST request
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        //xhr.setRequestHeader('Content-Length', urlData.length);
+      
+        // And finally, We send our data.
+        try {
+            xhr.send(urlData);
+            reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
+        }
+        catch (err) {
+            alert("send error");
+            reqState.callback(false,reqState.data);
+        }
+    };
+    
     // bind the plugin to jQuery     
     $.xformer = function(options) {
         return new xformer( this, options );

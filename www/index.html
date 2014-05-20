@@ -75,20 +75,20 @@
                 </div>
                 <input id="load-form-list-button" type="button" value="Load" data-inline="true">
                 <input id="reset-button" type="button" value="reset" data-inline="true">
-                <!-- input id="debug-button" type="button" value="Debug" data-inline="true" style="display: none;" -->
+                <!-- input id="debug-button" type="button" value="debug" data-inline="true" style="display: inline;" -->
                 <div id="content-messages"></div>
             </div>
             <div data-role="footer" data-position="fixed"><h4></h4></div>
         </div>
         
-        <div id="reset-dialog"  class="popup" data-rel="popup" data-theme="a" data-dismissible="false" style="max-width:400px;" class="ui-corner-all">
+        <div id="reset-dialog"  class="popup" data-role="popup" data-theme="a"  data-overlay-theme="a" data-dismissible="false" style="max-width:400px;" class="ui-corner-all">
             <div data-role="header"><h3>Reset all saved forms?</h3></div>
             <div id="content" data-role="content">
                 <h3>
                     Are you sure that you want to delete all forms and data?
                 </h3>
-                <input id="cancel" type="button" value="cancel" data-inline="true" data-theme="a">
-                <input id="ok" type="button" value="ok" data-inline="true">
+                <input id="cancel"  data-role="button" type="button" value="cancel" data-inline="true" data-theme="a">
+                <input id="ok"  data-role="button" type="button" value="ok" data-inline="true" data-theme="b">
            </div>
         </div>
         
