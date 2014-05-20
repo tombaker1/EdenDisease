@@ -38,7 +38,7 @@
             console.log("cbFormSendComplete success");
             activeForms.remove(model);
             app.view.removeSavedFormItem({model:model});
-            model.sync("delete",{local:true});
+            model.sync("delete",model,{local:true});
             //model.
         }
         else {

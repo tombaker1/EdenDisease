@@ -328,7 +328,9 @@
         
         item.remove();
         this.$savedFormList.listview("refresh");
-        this.savedFormArray.remove(item);
+        //this.savedFormArray.remove(item);
+        var index = this.savedFormArray.indexOf(item);
+        this.savedFormArray.splice(index,1);
         return true;
     };
     
