@@ -23,6 +23,7 @@
         
         submit: function() {
             console.log("sending model " + this._name);
+            this._submit = true;
         },
         
         getKey: function() {
@@ -32,12 +33,21 @@
     var activeForms = new Backbone.Collection;
 
     
-    controller.prototype.cbFormSendComplete = function(status,name) {
+    controller.prototype.cbFormSendComplete = function(status,model) {
         if (status) {
             console.log("cbFormSendComplete success");
+            activeForms.remove(model);
+            app.view.removeSavedFormItem({model:model});
+            model.sync("delete",{local:true});
+            //model.
         }
         else {
             console.log("cbFormSendComplete failure");
+            //this.onFormSave(null,model);
+            if (!activeForms.contains(model)) {
+                activeForms.add(model);
+                app.view.newSavedFormItem({model:model});
+            }
         }
     };
 
@@ -50,6 +60,7 @@
             var path = "data-" + model.getKey();
             if (app.uiController.state.offline || options["local"]) {
                 localStorage.setItem(path,JSON.stringify(model));
+                app.uiController.cbFormSendComplete(false,model);
             }
             else {
                 var controller = app.uiController;
@@ -66,8 +77,10 @@
     
         case 'delete':
             console.log('delete');
-            var path = "data-" + model.getKey();
-            localStorage.removeItem(path);
+            if (options["local"]) {
+                var path = "data-" + model.getKey();
+                localStorage.removeItem(path);
+            }
         break;
     
         case 'read':
@@ -175,7 +188,7 @@
     controller.prototype.onFormSave = function ( evt,model) {
         console.log("onFormSave");
         //app.view.getModelData(pageView);
-        var a = _.contains(activeForms,model);
+        //var a = _.contains(activeForms,model);
         if (!activeForms.contains(model)) {
             activeForms.add(model);
             app.view.newSavedFormItem({model:model});
@@ -196,7 +209,7 @@
     controller.prototype.loadFormList = function (  ) {
         // Load the form list
         var url = "";
-        if (state.settings.source === 1) {
+        if (this.state.settings.source === 1) {
             url = config.defaults.formPath + config.defaults.formList;
         }
         else {
@@ -208,6 +221,7 @@
     
     controller.prototype.onDebug = function ( event ) {
         console.log("onDebug");
+        /*
         //this.loadFormList();
         xhr = new XMLHttpRequest();
         var form = app.xformHandler.getFormByName("Shelter");
@@ -261,6 +275,7 @@
         catch (err) {
             alert("send error");
         }
+        */
     };
 
     controller.prototype.onLoadFormList = function ( event ) {

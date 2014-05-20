@@ -313,6 +313,25 @@
         return true;
     };
     
+    view.prototype.removeSavedFormItem = function ( options ) {
+        console.log("jqm-view newSavedFormItem");
+        var model = options["model"];
+        var item = null;
+        for (var i = 0; i < this.savedFormArray.length; i++) {
+            if (model === this.savedFormArray[i].model) {
+                item = this.savedFormArray[i];
+            }
+        }
+        if (!item) {
+            return false;
+        }
+        
+        item.remove();
+        this.$savedFormList.listview("refresh");
+        this.savedFormArray.remove(item);
+        return true;
+    };
+    
     view.prototype.newFormListItem = function ( options ) {
         console.log("jqm-view newFormListItem");
 
