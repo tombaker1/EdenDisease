@@ -201,10 +201,10 @@
     
     xformer.prototype.cbSendResponse = function (reply) {
         //console.log("cbReadFormList done");
+        console.log("cbSendResponse " + xhr.readyState +
+                    " type " + xhr.responseType +
+                    " length " + xhr.responseText.length);
         if (xhr.readyState != 4) {
-            //alert("Error sending model");
-            //reqCompleteCB(false);
-            console.log("cbSendResponse " + xhr.readyState);
             return;
         }
         clearTimeout(reqTimer);
@@ -213,6 +213,7 @@
             reqState.callback(false);
             return;
         }
+        localStorage.setItem("test",xhr.responseText);
         reqState.callback(true,reqState.data);
     }
     var cbReqTimeout = function() {
@@ -268,7 +269,8 @@
         urlData = pairs.join('&').replace(/%20/g, '+');        
         // We setup our request
         xhr.onreadystatechange=this.cbSendResponse.bind(this);
-        xhr.open('POST', model.urlRoot);
+        //xhr.open('POST', model.urlRoot);
+        xhr.open('urlencoded-post', model.urlRoot);
       
         // We add the required HTTP header to handle a form data POST request
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

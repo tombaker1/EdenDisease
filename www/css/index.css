@@ -9,6 +9,7 @@ display: inline-table;
     position: fixed;
 }
 
-ui-footer .ui-btn {
+.ui-footer .ui-btn {
 display: inline-table;
 }
+

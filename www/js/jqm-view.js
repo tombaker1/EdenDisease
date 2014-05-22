@@ -268,20 +268,21 @@
         }
     });
 
-    function view( options ) {
-        this.init();
+    function view(  ) {
+        //this.init();
+        this.loadFormArray = [];
+        this.savedFormArray = [];
+        this.newFormArray = [];
     };
 
     view.prototype.init = function ( options ) {
         console.log("jqm-view init");
-        this.loadFormArray = [];
-        this.savedFormArray = [];
-        this.newFormArray = [];
+        
         this.$loadFormList = $("#form-list-data");
         this.$savedFormList = $("#form-saved-list");
         this.$newFormList = $("#form-items");
         this.formList = this.$loadFormList[0];
-        
+
         // Set events
         $("#reset-dialog input[value='ok']").on("click",this.onResetOK.bind(this));
         $("#reset-dialog input[value='cancel']").on("click",this.onResetCancel.bind(this));
@@ -606,10 +607,11 @@ view.prototype.showForm = function($form,model,$page) {
     };
     
     // bind the plugin to jQuery
-
-    $.jqmView = function(options) {
-        return new view( options );
-    };
+    var localView = new view();
+    
+    $.jqmView = localView; //function(options) {
+        //return new view( options );
+    //};
 /*
     var pluginName = "view";
     $.jqmView = function(options) {

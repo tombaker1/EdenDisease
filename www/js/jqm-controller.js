@@ -98,26 +98,32 @@
         this._defaults = defaults;
         this._name = pluginName;
        
-        this.init(options);
-        $(document).bind( "pagebeforechange", pageChange );
-    };
-    
-    controller.prototype.init = function ( options ) {
-        //reqState = options["xform"]; //new XMLHttpRequest();
-        this.state = options["state"];
-        //this.state.offline = false;
         this.loadList = [];
         this.$checkboxList = [];
         this.checkboxArray = [];
         // Set events
 
-        $("#load-form-button").click(this.onLoadFormList.bind(this));
-        $("#debug-button").click(this.onDebug.bind(this));
         //view.bind("form-cancel",this.onFormCancel.bind(this));
         $(this).bind("form-cancel",this.onFormCancel.bind(this));
         $(this).bind("form-save",this.onFormSave.bind(this));
         $(this).bind("form-submit",this.onFormSubmit.bind(this));
         $(this).bind("reset-all",this.onReset.bind(this));
+
+        //this.init(options);
+        $(document).bind( "pagebeforechange", pageChange );
+    };
+    
+    controller.prototype.init = function ( options ) {
+        //reqState = options["xform"]; //new XMLHttpRequest();
+        if (options["state"]) {
+            this.state = options["state"];
+        }
+        else {
+            this.state = app.state;
+        }
+        
+        $("#load-form-button").click(this.onLoadFormList.bind(this));
+        $("#debug-button").click(this.onDebug.bind(this));
         
         // Load the saved data or initialize data
         var formListXml = localStorage.getItem("form-list");
@@ -131,6 +137,7 @@
             for (var key in localStorage) {
                 if (key.indexOf("form-xml") >= 0) {
                     var xml = localStorage.getItem(key);
+                    //console.log("loading form " + key + " length " + xml.length);
                     var formName = key.split('-')[2];
                     var index = app.xformHandler.parseForm(xml,formName);
                     var form = app.xformHandler.getFormByName(formName);
@@ -401,9 +408,11 @@
     
     }
     
+    var localController = new controller();
+    
     // bind the plugin to jQuery     
-    $.jqmController = function(options) {
-        return new controller( options );
-    }
+    $.jqmController = localController; //function(options) {
+    //    return localController; //new controller( options );
+    //}
 
 })( jQuery, window, document );
