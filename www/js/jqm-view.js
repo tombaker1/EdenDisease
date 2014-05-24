@@ -26,7 +26,7 @@
         tagName: "li",
         //template: _.template("<input type='checkbox' id='savedform-<%= index %>' name='formlist-<%= index %>'>Type: <%= name %> <br>Created: <%= timestamp %>"),
         //template: _.template("<a id='new-item' data-transition='slide' href='#page-form-<%= name %>?<%= timestamp %>'>Type: <%= name %> <br>Created: <%= date %></a>"),
-        template: _.template("<a id='new-item' data-transition='slide' href='#page-form-<%= name %>'>Type: <%= name %> <br>Created: <%= date %></a>"),
+        template: _.template("<a id='new-item' data-transition='none' href='#page-form-<%= name %>'>Type: <%= name %> <br>Created: <%= date %></a>"),
         defaults: {
             //model: null,
             index: 0,
@@ -87,7 +87,7 @@
 
     var newFormListItem = Backbone.View.extend({
         tagName: "li",
-        template: _.template("<a id='new-item' data-transition='slide' href='#page-form-<%= name %>'><%= name %></a>"),
+        template: _.template("<a id='new-item' data-transition='none' href='#page-form-<%= name %>'><%= name %></a>"),
         defaults: {
             //model: null,
             index: 0,
@@ -591,7 +591,8 @@ view.prototype.showForm = function($form,model,$page) {
         break;
     }
   }
-  $.mobile.changePage($page,{transition:"slide"});
+  $.mobile.changePage($page,{transition:"none"});
+  //$.mobile.changePage($page);
 };
     
     view.prototype.showNewForm = function (index,model) {
