@@ -19,50 +19,16 @@
 //  THE SOFTWARE.
 
 ;(function ( $, window, document, undefined ) {
-    
-
-Backbone.sync = function(method, model, options) {
-  options || (options = {});
-
-  switch (method) {
-    case 'create':
-        console.log("create");
-        var path = "data-" + model.getKey();
-        if (app.uiController.state.offline || options["local"]) {
-            localStorage.setItem(path,JSON.stringify(model));
-            app.uiController.cbFormSendComplete(false,model);
-        }
-        else {
-            var controller = app.uiController;
-            app.xformHandler.sendModel(model,controller.cbFormSendComplete.bind(controller), options);
-        }
-        //localStorage.setItem(path,JSON.stringify(model));
-    break;
-
-    case 'update':
-        console.log('update');
-        var path = "data-" + model.getKey();
-        localStorage.setItem(path,JSON.stringify(model));
-    break;
-
-    case 'delete':
-        console.log('delete');
-        if (options["local"]) {
-            var path = "data-" + model.getKey();
-            localStorage.removeItem(path);
-        }
-    break;
-
-    case 'read':
-        console.log('read');
-        var path = "data-" + model.getKey();
-        model = JSON.parse(localStorage.getItem(path));
-    break;
-  }
-};
 
     function storage(  ) {
     };
 
+    storage.prototype.init = function ( options ) {
+    };
+    
+    var localStorage = new storage();
+    
+    // bind the plugin to jQuery     
+    $.storage = localStorage; //function(options) {
 
 })( jQuery, window, document );
