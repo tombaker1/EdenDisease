@@ -26,9 +26,33 @@
     storage.prototype.init = function ( options ) {
     };
     
-    var localStorage = new storage();
+    storage.prototype.write = function ( path, value ) {
+        localStorage.setItem(path,value);
+    };
     
+    storage.prototype.read = function ( path ) {
+        return localStorage.getItem(path);
+    };
+    
+    storage.prototype.list = function (  ) {
+        var keys = Object.keys(localStorage); //[];
+        //for (var key in localStorage) {
+        //    keys.push(key);
+        //}
+        return keys;
+    };
+    
+    storage.prototype.delete = function ( path ) {
+        if (localStorage.getItem(path)) {
+            localStorage.removeItem(path);
+        }
+    };
+    
+    // Warning: don't call this 'localStorage' or you will
+    // override the W3C feature 'localStorage'
+    var localStore = new storage();
+
     // bind the plugin to jQuery     
-    $.storage = localStorage; //function(options) {
+    app.storage = localStore; //function(options) {
 
 })( jQuery, window, document );

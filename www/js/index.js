@@ -23,6 +23,7 @@ var app = {
     xformHandler: null,
     uiController: null,
     view: null,
+    storage: null,
     state: {
         settings: {
                 source: 1
@@ -47,6 +48,7 @@ var app = {
         }
         this.bind();
         //$(".page").each(function(){$(this).pageControl();});
+        this.storage.init();
         this.getState();
         this.xformHandler = $.xformer();
         this.view = $.jqmView;

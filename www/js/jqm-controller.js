@@ -105,7 +105,8 @@
         $("#debug-button").click(this.onDebug.bind(this));
         
         // Load the saved data or initialize data
-        var formListXml = localStorage.getItem("form-list");
+        //var formListXml = localStorage.getItem("form-list");
+        var formListXml = app.storage.read("form-list");
         if (formListXml) {
             app.xformHandler.parseFormList(formListXml);
             // put the list of forms into the page
@@ -113,9 +114,11 @@
             
             // Parse all keys
             var savedData = [];
-            for (var key in localStorage) {
+            var storageList = app.storage.list();
+            for (var i = 0; i < storageList.length; i++) {
+                var key = storageList[i];
                 if (key.indexOf("form-xml") >= 0) {
-                    var xml = localStorage.getItem(key);
+                    var xml = app.storage.read(key);
                     //console.log("loading form " + key + " length " + xml.length);
                     var formName = key.split('-')[2];
                     var index = app.xformHandler.parseForm(xml,formName);
@@ -140,7 +143,8 @@
                 var formName = fields[1];
                 var form = app.xformHandler.getFormByName(formName);
                 var timestamp = fields[2];
-                var data = JSON.parse(localStorage[key]);
+                var storageData = app.storage.read(key);
+                var data = JSON.parse(storageData);
                 var model = new mFormData(data);
                 model._name = formName;
                 model._timestamp = +timestamp;
@@ -162,8 +166,10 @@
     };
     
     controller.prototype.onReset = function (  ) {
-        for (var key in localStorage) {
-            localStorage.removeItem(key);
+        var list = app.storage.list();
+        for (var i = 0; i < list.length; i++) {
+            var path = list[i];
+            app.storage.delete(path);
         }
         console.log("resetAll");
     };

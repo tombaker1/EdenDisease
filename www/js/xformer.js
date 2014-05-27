@@ -232,7 +232,7 @@
             reqState.callback(false);
             return;
         }
-        localStorage.setItem("test",xhr.responseText);
+        //localStorage.setItem("test",xhr.responseText);
         reqState.callback(true,reqState.data);
     }
     var cbReqTimeout = function() {
