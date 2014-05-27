@@ -36,9 +36,6 @@
     
     storage.prototype.list = function (  ) {
         var keys = Object.keys(localStorage); //[];
-        //for (var key in localStorage) {
-        //    keys.push(key);
-        //}
         return keys;
     };
     
@@ -53,6 +50,5 @@
     var localStore = new storage();
 
     // bind the plugin to jQuery     
-    app.storage = localStore; //function(options) {
-
+    app.storage = localStore; 
 })( jQuery, window, document );
