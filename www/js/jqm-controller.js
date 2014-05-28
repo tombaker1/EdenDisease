@@ -156,6 +156,7 @@
     controller.prototype.onFormCancel = function (  ) {
         console.log("onFormCancel");
     };
+    
     controller.prototype.onFormSave = function ( evt,model) {
         console.log("onFormSave");
         //app.view.getModelData(pageView);
