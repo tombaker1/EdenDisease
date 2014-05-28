@@ -21,7 +21,7 @@
 
 ;(function ( $, window, document, undefined ) {
     //var formListItems = [];
-
+/*
     var savedFormItem = Backbone.View.extend({
         tagName: "li",
         //template: _.template("<input type='checkbox' id='savedform-<%= index %>' name='formlist-<%= index %>'>Type: <%= name %> <br>Created: <%= timestamp %>"),
@@ -284,7 +284,7 @@
             return this.$el.html(this.template({label:this.label,reference:this.reference}));
         }
     });
-
+*/
     function view(  ) {
         //this.init();
         this.loadFormArray = [];
@@ -627,19 +627,6 @@ view.prototype.showForm = function($form,model,$page) {
     // bind the plugin to jQuery
     var localView = new view();
     
-    $.jqmView = localView; //function(options) {
-        //return new view( options );
-    //};
-/*
-    var pluginName = "view";
-    $.jqmView = function(options) {
-        return this.each(function() {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName, 
-                new view( this, options ));
-            }
-            
-        });
-    }
-    */
+    $.jqmView = localView; 
+
 })( jQuery, window, document );
