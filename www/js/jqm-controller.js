@@ -49,27 +49,6 @@
     });
     var activeForms = new Backbone.Collection;
 
-    
-    controller.prototype.cbFormSendComplete = function(status,model) {
-        if (status) {
-            console.log("cbFormSendComplete success");
-            activeForms.remove(model);
-            app.view.removeSavedFormItem({model:model});
-            model.sync("delete",model,{local:true});
-            //model.
-        }
-        else {
-            console.log("cbFormSendComplete failure");
-            //this.onFormSave(null,model);
-            if (!activeForms.contains(model)) {
-                activeForms.add(model);
-                app.view.newSavedFormItem({model:model});
-            }
-        }
-    };
-
-
-
     // The actual plugin constructor
     function controller(  ) {
         
@@ -339,6 +318,24 @@
       // put the list of forms into the page
       app.view.insertForms(app.xformHandler.getAllForms());
     }
+    
+    controller.prototype.cbFormSendComplete = function(status,model) {
+        if (status) {
+            console.log("cbFormSendComplete success");
+            activeForms.remove(model);
+            app.view.removeSavedFormItem({model:model});
+            model.sync("delete",model,{local:true});
+            //model.
+        }
+        else {
+            console.log("cbFormSendComplete failure");
+            //this.onFormSave(null,model);
+            if (!activeForms.contains(model)) {
+                activeForms.add(model);
+                app.view.newSavedFormItem({model:model});
+            }
+        }
+    };
     
     controller.prototype.newForm = function(form) {
         var $page = $("#page-form-" + form.get("name"));
