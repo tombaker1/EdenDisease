@@ -25,31 +25,7 @@
     var pluginName = 'jqmController';
     var defaults = {
         };
-        /*
-    //var reqState = null;
-    //var state;
-    
-    // create the form list item
-    var mFormData = Backbone.Model.extend({
-        defaults: {
-         },
-        initialize: function(options) {
-            this._name = "";
-            this._timestamp = 0;
-            this._submit = false;
-        },
-        
-        submit: function() {
-            console.log("sending model " + this._name);
-            this._submit = true;
-        },
-        
-        getKey: function() {
-            return this._name + '-' + this._timestamp;
-        }
-    });
-    var activeForms = new Backbone.Collection({model:mFormData});
-*/
+ 
     // The actual plugin constructor
     function controller(  ) {
         
@@ -57,6 +33,7 @@
         this._name = pluginName;
        
         this.loadList = [];
+        //TODO: Move this into the view
         this.$checkboxList = [];
         this.checkboxArray = [];
         // Set events
@@ -85,7 +62,7 @@
         $("#debug-button").click(this.onDebug.bind(this));
         
         // Load the saved data or initialize data
-        //var formListXml = localStorage.getItem("form-list");
+        //TODO: Move this into the model or the collection
         var formListXml = app.storage.read("form-list");
         if (formListXml) {
             app.xformHandler.parseFormList(formListXml);
@@ -117,6 +94,7 @@
                 }
             }
             
+        //TODO: Move this into the model or the collection
             while (savedData.length) {
                 var key = savedData.pop();
                 var fields = key.split('-');
@@ -146,6 +124,7 @@
     };
     
     controller.prototype.onReset = function (  ) {
+        //TODO: Move this into the model or the collection
         var list = app.storage.list();
         for (var i = 0; i < list.length; i++) {
             var path = list[i];
@@ -249,6 +228,7 @@
                                      this.cbFormLoadComplete.bind(this));
         } 
         else {
+        //TODO: Move this into the view
             app.view.getFormList().enhanceWithin();
             app.view.$newFormList.listview('refresh');
         }
@@ -261,7 +241,8 @@
       }
       // Save the form to local memory
       var filename = "form-list";
-      localStorage.setItem(filename,xmlFile);
+      //localStorage.setItem(filename,xmlFile);
+      app.storage.write(filename,xmlFile);
       
       // put the list of forms into the page
       app.view.insertForms(app.xformHandler.getAllForms());
@@ -341,8 +322,6 @@
     var localController = new controller();
     
     // bind the plugin to jQuery     
-    $.jqmController = localController; //function(options) {
-    //    return localController; //new controller( options );
-    //}
+    $.jqmController = localController; 
 
 })( jQuery, window, document );
