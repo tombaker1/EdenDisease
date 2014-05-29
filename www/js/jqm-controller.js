@@ -25,6 +25,7 @@
     var pluginName = 'jqmController';
     var defaults = {
         };
+        /*
     //var reqState = null;
     //var state;
     
@@ -47,8 +48,8 @@
             return this._name + '-' + this._timestamp;
         }
     });
-    var activeForms = new Backbone.Collection;
-
+    var activeForms = new Backbone.Collection({model:mFormData});
+*/
     // The actual plugin constructor
     function controller(  ) {
         
@@ -193,61 +194,7 @@
     
     controller.prototype.onDebug = function ( event ) {
         console.log("onDebug");
-        /*
-        //this.loadFormList();
-        xhr = new XMLHttpRequest();
-        var form = app.xformHandler.getFormByName("Shelter");
-        var data = form.get("data");
-        var urlData = "";
-        var pairs = [];
-        
-        // Fill field
-        for (var key in data) {
-            var value = "data for " + key;
-            if (key === "status") {
-                pairs.push(encodeURIComponent(key) + "=" + encodeURIComponent("1"));
-            }
-            else {
-                pairs.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
-            }
-            
-        }
-        urlData = pairs.join('&').replace(/%20/g, '+');
-        xhr.addEventListener('load', function(reply){
-            var response = "ready " + xhr.readyState + " status " + xhr.status;
-            //alert("success " + response);
-            console.log("onload " + response)
-        });
-        xhr.addEventListener('error', function(reply){
-            //alert("failure");
-        });
-        xhr.onreadystatechange=function(reply){
-            console.log("onreadystatechange " + xhr.readyState);
-        if ( xhr.readyState === 4 ) {
-            if ( xhr.status === 200 ) {
-                console.log("onreadystatechange " + xhr.status);
-            } else {
-                console.log("onreadystatechange " + xhr.status);
-            }
-        }
-            //var response = "ready " + xhr.readyState + " status " + xhr.status;
-            //console.log("onreadystatechange " + response);
-        };
-        // We setup our request
-        xhr.open('POST', form.get("url"));
-      
-        // We add the required HTTP header to handle a form data POST request
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        //xhr.setRequestHeader('Content-Length', urlData.length);
-      
-        // And finally, We send our data.
-        try {
-            xhr.send(urlData);
-        }
-        catch (err) {
-            alert("send error");
-        }
-        */
+
     };
 
     controller.prototype.onLoadFormList = function ( event ) {

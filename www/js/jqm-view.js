@@ -263,52 +263,52 @@
         }
     };
 
-view.prototype.showForm = function($form,model,$page) {
-  // Loop through keys finding page elements
-  var formData = $form.get("form");
-  for (var key in $form.get("data")) {
-    var item = formData[key];
-    var name = item.nodeset;
-    var value = model.get(key);
-    var searchString = "[name*='" + name + "']";
-    var element = $page.find(searchString);
-    var type = $(element).attr("id");
-    switch (type) {
-      case "select1":
-        element.listview();
-        element.enhanceWithin();
-        var subItems = $(element).find("input");
-        for (var subIndex = 0; subIndex < subItems.length; subIndex++) {
-          var subItem = subItems[subIndex];
-          var i = $(subItem).attr("id").split("-")[2];
-          var elementValue = subItem.value;
-          
-          if (value === elementValue) {
-            $(subItem).attr("checked",true).checkboxradio("refresh");
-          }
-          else {
-            $(subItem).attr("checked",false).checkboxradio("refresh");
-          }
+    view.prototype.showForm = function($form,model,$page) {
+      // Loop through keys finding page elements
+      var formData = $form.get("form");
+      for (var key in $form.get("data")) {
+        var item = formData[key];
+        var name = item.nodeset;
+        var value = model.get(key);
+        var searchString = "[name*='" + name + "']";
+        var element = $page.find(searchString);
+        var type = $(element).attr("id");
+        switch (type) {
+          case "select1":
+            element.listview();
+            element.enhanceWithin();
+            var subItems = $(element).find("input");
+            for (var subIndex = 0; subIndex < subItems.length; subIndex++) {
+              var subItem = subItems[subIndex];
+              var i = $(subItem).attr("id").split("-")[2];
+              var elementValue = subItem.value;
+              
+              if (value === elementValue) {
+                $(subItem).attr("checked",true).checkboxradio("refresh");
+              }
+              else {
+                $(subItem).attr("checked",false).checkboxradio("refresh");
+              }
+            }
+            element.listview("refresh");
+            element.enhanceWithin();
+            break;
+          case "upload":
+            // This does not work.  It is a security risk 
+            // to change the value of a input type='file'
+            // TODO: handle it the file browser programmatically
+            //$(element).find("input")[0].value = value;
+            break;
+          case "input":
+            $(element).find("input")[0].value = value;
+            break;
+          default:
+            // other fields
+            break;
         }
-        element.listview("refresh");
-        element.enhanceWithin();
-        break;
-      case "upload":
-        // This does not work.  It is a security risk 
-        // to change the value of a input type='file'
-        // TODO: handle it the file browser programmatically
-        //$(element).find("input")[0].value = value;
-        break;
-      case "input":
-        $(element).find("input")[0].value = value;
-        break;
-      default:
-        // other fields
-        break;
-    }
-  }
-  $.mobile.changePage($page,{transition:"slide"});
-};
+      }
+      $.mobile.changePage($page,{transition:"slide"});
+    };
     
     view.prototype.showNewForm = function (index,model) {
         var $form = app.xformHandler.getForm(index);
