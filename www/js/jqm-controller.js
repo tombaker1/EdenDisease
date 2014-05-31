@@ -57,6 +57,7 @@
         else {
             this.state = app.state;
         }
+        this.getLocation();
         
         $("#load-form-button").click(this.onLoadFormList.bind(this));
         $("#debug-button").click(this.onDebug.bind(this));
@@ -317,6 +318,23 @@
         event.preventDefault();
       }
     
+    };
+    
+    /*controller.prototype.*/ var postLocation = function(latitude,longitude) {
+        var msg = $("#content-messages").html();
+        msg += "latitude: " + latitude + "<br>";
+        msg += "longitude: " + longitude + "<br>";
+        $("#content-messages").html(msg);
+    };
+    
+    controller.prototype.getLocation = function() {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                /*this.*/postLocation(position.coords.latitude, position.coords.longitude);
+            },function() { alert("location failed");});
+        } else {
+            /* geolocation IS NOT available */
+        }
     }
     
     var localController = new controller();
