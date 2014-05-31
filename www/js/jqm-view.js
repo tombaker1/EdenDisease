@@ -132,6 +132,40 @@
         return str;
     };
     
+    view.prototype.parseSelect1 = function (options,reference,field,labelString) {
+        var model = options["model"];
+        var element = new formSelect1(options);
+        var choiceNumber = 0;
+        var referenceItems = reference.split("/");
+        var fieldName = model.get("name") + "-" + referenceItems[2];
+        var children = field.children;
+        element.reference = reference;
+        
+        // TODO: put this into another function
+        for (var j = 0; j < children.length; j++) {
+            var selectField = children[j];
+            switch(selectField.nodeName) {
+              case "label":
+                //elementString += "<legend>" + parseLabel(selectField) + "</legend>";
+                element.label = labelString;
+                break; 
+              case "item":
+                var choice = model.get("name") + "-choice-" + choiceNumber;
+                choiceNumber++;
+                //elementString += parseItem(selectField,fieldName,choice);
+                element.addItem(selectField,fieldName,choice);
+                break;
+              case "hint":
+                //elementString += parseHint(selectField);
+                //element.addHint(selectField);
+                break;
+              default:
+                console.log("parseSelect1 selectField not found " + selectField.nodeName);
+            }
+        }
+        return element;
+    };
+    
     view.prototype.createForm = function (options) {
         console.log("view createForm ");
         
@@ -163,14 +197,16 @@
             switch (field.nodeName) {
             case "select1":
               //elementString += parseSelect1(field,$form.name);
-
+                var element = this.parseSelect1(options,reference,field,labelString);
+                /*
                 var element = new formSelect1(options);
                 var choiceNumber = 0;
                 var referenceItems = reference.split("/");
                 var fieldName = model.get("name") + "-" + referenceItems[2];
                 var children = field.children;
                 element.reference = reference;
-
+                
+                // TODO: put this into another function
                 for (var j = 0; j < children.length; j++) {
                     var selectField = children[j];
                     switch(selectField.nodeName) {
@@ -192,7 +228,7 @@
                         console.log("parseSelect1 selectField not found " + selectField.nodeName);
                     }
                 }
-
+                */
                 element.render();
             
                 //page.$el.append(element.$el);
