@@ -167,24 +167,8 @@
         console.log("onLoadFormList");
         var forms = app.xformHandler.getAllForms();
         this.loadList = app.view.getSelectedForms(forms);
-        /*
-        var $list = app.view.getFormList();
-        this.$checkboxList = $list.find("input");
-        this.checkboxArray = app.view.getFormArray();
-        
-        // get list of forms to load
-        this.loadList = [];
-        for (var i = 0; i < app.xformHandler.numForms(); i++) {
-          var $form = app.xformHandler.getForm(i);
-          if (this.$checkboxList[i].checked && !$form.loaded) {
-            var name = this.$checkboxList[i].attributes["name"].textContent;
-            this.loadList.unshift(name);
-          }
-        }
-        */
         if (this.loadList.length) {
             var name = this.loadList.pop();
-            //var form = app.xformHandler.getForm(this.loadList.pop());
             app.xformHandler.requestForm(name,this.cbFormLoadComplete.bind(this));
         }
     };
@@ -206,14 +190,7 @@
         
         // success or failure you want to disable the item in the list
         // Uncheck and disable checkbox
-        // Todo this should be in the view
         app.view.setFormListItem({name:name,checked:false,disabled:true});
-        /*
-        var searchStr = "input[name='"+name+"']";
-        var $element = $(searchStr);
-        $element.prop('checked', false).checkboxradio( "option", "disabled", true );
-        $element.checkboxradio('refresh');
-        */
         
         // get next page
         if (this.loadList.length) {
