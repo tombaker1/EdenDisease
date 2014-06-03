@@ -95,25 +95,8 @@
                 }
             }
             
-        //TODO: Move this into the model or the collection
-        activeForms.restore(savedData);
-        /*
-            while (savedData.length) {
-                var key = savedData.pop();
-                var fields = key.split('-');
-                var formName = fields[1];
-                var form = app.xformHandler.getFormByName(formName);
-                var timestamp = fields[2];
-                var storageData = app.storage.read(key);
-                var data = JSON.parse(storageData);
-                var model = new mFormData(data);
-                model._name = formName;
-                model._timestamp = +timestamp;
-                model.urlRoot = form.get("url");
-                activeForms.add(model);
-                app.view.newSavedFormItem({model:model});
-            }
-            */
+            //read the list into the collection 
+            activeForms.restore(savedData);
             
             // update view lists
             app.view.getFormList().enhanceWithin();

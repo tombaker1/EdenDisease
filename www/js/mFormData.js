@@ -42,10 +42,6 @@ var mFormData = Backbone.Model.extend({
 var mActiveFormList = Backbone.Collection.extend({
     model:mFormData,
     restore: function(modelList) {
-        //for (var i = 0; i < storageList.length; i++) {
-            //var key = storageList[i];
-            //if (key.indexOf("data-") >= 0) {
-            //var key = savedData.pop();
         while (modelList.length) {
             var key = modelList.pop();                var fields = key.split('-');
             var formName = fields[1];
@@ -60,9 +56,7 @@ var mActiveFormList = Backbone.Collection.extend({
             this.add(model);
             app.view.newSavedFormItem({model:model});
         }
-        //}
     } 
 });
 
-//var activeForms = new mActiveFormList();
 var activeForms = new mActiveFormList([]);
