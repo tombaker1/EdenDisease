@@ -26,6 +26,8 @@
         this.loadFormArray = [];
         this.savedFormArray = [];
         this.newFormArray = [];
+        this.$checkboxList = [];
+        this.checkboxArray = [];
     };
 
     view.prototype.init = function ( options ) {
@@ -218,7 +220,39 @@
         }
         page.$el.page();
     };
+    
+    view.prototype.getSelectedForms = function(forms) {
+        var $list = app.view.getFormList();
+        this.$checkboxList = $list.find("input");
+        this.checkboxArray = app.view.getFormArray();
+        
+        // get list of forms to load
+        loadList = [];
+        for (var i = 0; i < forms.length; i++) {
+          var $form = forms.at(i);
+          if (this.$checkboxList[i].checked && !$form.loaded) {
+            var name = this.$checkboxList[i].attributes["name"].textContent;
+            loadList.unshift(name);
+          }
+        }
+        return loadList;
+    };
 
+    view.prototype.setFormListItem = function(options) {
+        if (!("name" in options) ||
+            !("checked" in options) ||
+            !("disabled" in options)) {
+            return;
+        }
+        var name = options["name"];
+        var checked = options["checked"];
+        var disabled = options["disabled"];
+        var searchStr = "input[name='"+name+"']";
+        var $element = $(searchStr);
+        $element.prop('checked', checked).checkboxradio( "option", "disabled", disabled );
+        $element.checkboxradio('refresh');
+    };
+    
     view.prototype.getModelData = function(page) {
         var form = page.model;
         var formData = form.get("form");

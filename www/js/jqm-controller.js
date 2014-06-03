@@ -32,10 +32,10 @@
         this._defaults = defaults;
         this._name = pluginName;
        
-        this.loadList = [];
+        //this.loadList = [];
         //TODO: Move this into the view
-        this.$checkboxList = [];
-        this.checkboxArray = [];
+        //this.$checkboxList = [];
+        //this.checkboxArray = [];
         // Set events
 
         //view.bind("form-cancel",this.onFormCancel.bind(this));
@@ -165,6 +165,9 @@
 
     controller.prototype.onLoadFormList = function ( event ) {
         console.log("onLoadFormList");
+        var forms = app.xformHandler.getAllForms();
+        this.loadList = app.view.getSelectedForms(forms);
+        /*
         var $list = app.view.getFormList();
         this.$checkboxList = $list.find("input");
         this.checkboxArray = app.view.getFormArray();
@@ -178,6 +181,7 @@
             this.loadList.unshift(name);
           }
         }
+        */
         if (this.loadList.length) {
             var name = this.loadList.pop();
             //var form = app.xformHandler.getForm(this.loadList.pop());
@@ -202,11 +206,14 @@
         
         // success or failure you want to disable the item in the list
         // Uncheck and disable checkbox
-        // Todo this should be in the view 
+        // Todo this should be in the view
+        app.view.setFormListItem({name:name,checked:false,disabled:true});
+        /*
         var searchStr = "input[name='"+name+"']";
         var $element = $(searchStr);
         $element.prop('checked', false).checkboxradio( "option", "disabled", true );
         $element.checkboxradio('refresh');
+        */
         
         // get next page
         if (this.loadList.length) {

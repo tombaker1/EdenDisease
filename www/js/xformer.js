@@ -286,16 +286,9 @@
             
         }
         urlData = pairs.join('&').replace(/%20/g, '+');        
-        // We setup our request
         xhr.onreadystatechange=this.cbSendResponse.bind(this);
-        //xhr.open('POST', model.urlRoot);
         xhr.open('urlencoded-post', model.urlRoot);
-      
-        // We add the required HTTP header to handle a form data POST request
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        //xhr.setRequestHeader('Content-Length', urlData.length);
-      
-        // And finally, We send our data.
         try {
             xhr.send(urlData);
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
