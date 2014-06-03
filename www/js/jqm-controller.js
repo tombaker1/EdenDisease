@@ -32,12 +32,6 @@
         this._defaults = defaults;
         this._name = pluginName;
        
-        //this.loadList = [];
-        //TODO: Move this into the view
-        //this.$checkboxList = [];
-        //this.checkboxArray = [];
-        // Set events
-
         //view.bind("form-cancel",this.onFormCancel.bind(this));
         $(this).bind("form-cancel",this.onFormCancel.bind(this));
         $(this).bind("form-save",this.onFormSave.bind(this));
@@ -63,7 +57,6 @@
         $("#debug-button").click(this.onDebug.bind(this));
         
         // Load the saved data or initialize data
-        //TODO: Move this into the model or the collection
         var formListXml = app.storage.read("form-list");
         if (formListXml) {
             app.xformHandler.parseFormList(formListXml);
@@ -84,11 +77,9 @@
                     app.view.createForm({model:form,index:index});
 
                     // Uncheck and disable checkbox
-                    // Todo this should be in the view 
-                    var searchStr = "input[name='"+formName+"']";
-                    var $element = $(searchStr);
-                    $element.prop('checked', false).checkboxradio( "option", "disabled", true );
-                    $element.checkboxradio('refresh');
+                    app.view.setFormListItem({name:formName,
+                                             checked:false,
+                                             disabled:true});
                 }
                 else if (key.indexOf("data-") >= 0) {
                     savedData.unshift(key);
