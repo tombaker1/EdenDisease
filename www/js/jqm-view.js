@@ -163,6 +163,20 @@
         return element;
     };
     
+    view.prototype.parseUpload = function (options,reference,field,labelString) {
+        var element = new formUpload(options);
+        // Check to see if it is an image type
+        //var m = field.attributes.mediatype;
+        var mediatype = field.getAttribute("mediatype");
+        //var tu = field.getAttribute("error");
+        if ("image\/*" === mediatype) {
+            element.imageType = true;
+        }
+        element.reference = reference;
+        element.label = labelString;
+        return element;
+    };
+    
     view.prototype.createForm = function (options) {
         console.log("view createForm ");
         
@@ -198,9 +212,7 @@
                 $container.append(element.$el);
                 break;
             case "upload":
-                var element = new formUpload(options);
-                element.reference = reference;
-                element.label = labelString;
+                var element = this.parseUpload(options,reference,field,labelString);
                 element.render();
                 $container.append(element.$el);
               break;

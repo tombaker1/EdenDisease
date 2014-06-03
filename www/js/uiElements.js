@@ -219,12 +219,14 @@ var formUpload = Backbone.View.extend({
     defaults: {
         //model: null,
         index: 0,
-        name: ""
+        name: "",
+        imageType: false
     },
    
     initialize: function(options) {
         console.log("new newFormListItem ");
         this.reference = "";
+        //this.imageType = false;
         
      },
     render: function() {
