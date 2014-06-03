@@ -38,6 +38,7 @@ var mFormData = Backbone.Model.extend({
         return this._name + '-' + this._timestamp;
     }
 });
+
 var mActiveFormList = Backbone.Collection.extend({
     model:mFormData,
     restore: function(modelList) {
