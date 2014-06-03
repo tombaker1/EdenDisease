@@ -38,4 +38,30 @@ var mFormData = Backbone.Model.extend({
         return this._name + '-' + this._timestamp;
     }
 });
-var activeForms = new Backbone.Collection({model:mFormData});
+var mActiveFormList = Backbone.Collection.extend({
+    model:mFormData,
+    restore: function(modelList) {
+        //for (var i = 0; i < storageList.length; i++) {
+            //var key = storageList[i];
+            //if (key.indexOf("data-") >= 0) {
+            //var key = savedData.pop();
+        while (modelList.length) {
+            var key = modelList.pop();                var fields = key.split('-');
+            var formName = fields[1];
+            var form = app.xformHandler.getFormByName(formName);
+            var timestamp = fields[2];
+            var storageData = app.storage.read(key);
+            var data = JSON.parse(storageData);
+            var model = new mFormData(data);
+            model._name = formName;
+            model._timestamp = +timestamp;
+            model.urlRoot = form.get("url");
+            this.add(model);
+            app.view.newSavedFormItem({model:model});
+        }
+        //}
+    } 
+});
+
+//var activeForms = new mActiveFormList();
+var activeForms = new mActiveFormList([]);

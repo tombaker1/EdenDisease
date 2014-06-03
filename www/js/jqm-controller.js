@@ -96,6 +96,8 @@
             }
             
         //TODO: Move this into the model or the collection
+        activeForms.restore(savedData);
+        /*
             while (savedData.length) {
                 var key = savedData.pop();
                 var fields = key.split('-');
@@ -111,6 +113,7 @@
                 activeForms.add(model);
                 app.view.newSavedFormItem({model:model});
             }
+            */
             
             // update view lists
             app.view.getFormList().enhanceWithin();
