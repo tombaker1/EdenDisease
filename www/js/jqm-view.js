@@ -201,6 +201,7 @@
         var $fields = $xml[0].body.children;
         for (var i = 0; i < $fields.length; i++) {
             var field = $fields[i];
+            var element = null;
             var elementString = "";
             var reference = $(field).attr("ref");
             var label = $(field).find("label")[0];
@@ -208,27 +209,31 @@
             switch (field.nodeName) {
             case "select1":
                 var element = this.parseSelect1(options,reference,field,labelString);
-                element.render();
-                $container.append(element.$el);
+                //element.render();
+                //$container.append(element.$el);
                 break;
             case "upload":
                 var element = this.parseUpload(options,reference,field,labelString);
-                element.render();
-                $container.append(element.$el);
+                //element.render();
+                //$container.append(element.$el);
               break;
             case "input":
                 var element = new formInput(options);
                 element.reference = reference;
                 element.label = labelString;
-                element.render();
-                $container.append(element.$el);
+                //element.render();
+                //$container.append(element.$el);
               break;
             default:
               console.log("<div>Unimplemented element" + field.nodeName + "</div>");
             }
 
-            //elementString += "<hr>";
-            $container.append("<hr>");
+            // Render new element and add to the page
+            if (element) {
+                element.render();
+                $container.append(element.$el);
+                $container.append("<hr>");
+            }
         }
         page.$el.page();
     };
