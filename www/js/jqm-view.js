@@ -31,7 +31,7 @@
     };
 
     view.prototype.init = function ( options ) {
-        console.log("jqm-view init");
+        //console.log("jqm-view init");
         
         this.$loadFormList = $("#form-list-data");
         this.$savedFormList = $("#form-saved-list");
@@ -55,7 +55,7 @@
     };
     
     view.prototype.newSavedFormItem = function ( options ) {
-        console.log("jqm-view newSavedFormItem");
+        //console.log("jqm-view newSavedFormItem");
 
         var item =  new savedFormItem(options);
         item.index = this.savedFormArray.length;
@@ -67,7 +67,7 @@
     };
     
     view.prototype.removeSavedFormItem = function ( options ) {
-        console.log("jqm-view newSavedFormItem");
+        //console.log("jqm-view newSavedFormItem");
         var model = options["model"];
         var item = null;
         for (var i = 0; i < this.savedFormArray.length; i++) {
@@ -87,7 +87,7 @@
     };
     
     view.prototype.newFormListItem = function ( options ) {
-        console.log("jqm-view newFormListItem");
+        //console.log("jqm-view newFormListItem");
 
         var item =  new loadFormListItem(options);
         item.render();
@@ -178,7 +178,7 @@
     };
     
     view.prototype.createForm = function (options) {
-        console.log("view createForm ");
+        //console.log("view createForm ");
         
         // Add item into new form list
         var model = options["model"];
@@ -209,20 +209,14 @@
             switch (field.nodeName) {
             case "select1":
                 var element = this.parseSelect1(options,reference,field,labelString);
-                //element.render();
-                //$container.append(element.$el);
                 break;
             case "upload":
                 var element = this.parseUpload(options,reference,field,labelString);
-                //element.render();
-                //$container.append(element.$el);
               break;
             case "input":
                 var element = new formInput(options);
                 element.reference = reference;
                 element.label = labelString;
-                //element.render();
-                //$container.append(element.$el);
               break;
             default:
               console.log("<div>Unimplemented element" + field.nodeName + "</div>");
@@ -369,13 +363,13 @@
     };
     
     view.prototype.onResetOK = function (event) {
-        console.log("onResetOK");
+        //console.log("onResetOK");
         $("#reset-dialog").popup("close");
         app.uiController.onReset();
     };
     
     view.prototype.onResetCancel = function (event) {
-        console.log("onResetCancel");
+        //console.log("onResetCancel");
         $("#reset-dialog").popup("close");
     };
     

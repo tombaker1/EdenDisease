@@ -108,15 +108,15 @@
             var path = list[i];
             app.storage.delete(path);
         }
-        console.log("resetAll");
+        //console.log("resetAll");
     };
     
     controller.prototype.onFormCancel = function (  ) {
-        console.log("onFormCancel");
+        //console.log("onFormCancel");
     };
     
     controller.prototype.onFormSave = function ( evt,model) {
-        console.log("onFormSave");
+        //console.log("onFormSave");
         //app.view.getModelData(pageView);
         //var a = _.contains(activeForms,model);
         if (!activeForms.contains(model)) {
@@ -131,7 +131,7 @@
     };
     
     controller.prototype.onFormSubmit = function ( evt,model ) {
-        console.log("onFormSubmit");
+        //console.log("onFormSubmit");
         model.submit();
         model.sync('create',model,{local:false});
         
@@ -144,7 +144,7 @@
         }
         else {
             url = config.defaults.url + config.defaults.formList;
-            console.log("init: request " + url)
+            //console.log("init: request " + url)
         }
         app.xformHandler.requestFormList(url,cbFormListComplete);
     };
@@ -155,7 +155,7 @@
     };
 
     controller.prototype.onLoadFormList = function ( event ) {
-        console.log("onLoadFormList");
+        //console.log("onLoadFormList");
         var forms = app.xformHandler.getAllForms();
         this.loadList = app.view.getSelectedForms(forms);
         if (this.loadList.length) {
@@ -165,7 +165,7 @@
     };
 
     controller.prototype.cbFormLoadComplete = function(status,name) {
-        console.log("cbFormLoadComplete");
+        //console.log("cbFormLoadComplete");
         
         // only do this if the form loaded successfully
         if (status) {
@@ -212,14 +212,14 @@
     
     controller.prototype.cbFormSendComplete = function(status,model) {
         if (status) {
-            console.log("cbFormSendComplete success");
+            //console.log("cbFormSendComplete success");
             activeForms.remove(model);
             app.view.removeSavedFormItem({model:model});
             model.sync("delete",model,{local:true});
             //model.
         }
         else {
-            console.log("cbFormSendComplete failure");
+            //console.log("cbFormSendComplete failure");
             //this.onFormSave(null,model);
             if (!activeForms.contains(model)) {
                 activeForms.add(model);
@@ -252,7 +252,7 @@
    
     // handle the jqm page change to make sure dynamic content is handled
     var pageChange = function( event, data) {
-         console.log("changePage " + data.toPage)
+         //console.log("changePage " + data.toPage)
       if ( typeof data.toPage === "string" ) {
     
         var pageURL = $.mobile.path.parseUrl( data.toPage );
@@ -269,7 +269,7 @@
             break;
           case "#load-form":
             var index = pageURL.hash.replace( /.*index=/, "" );
-            console.log("loading form #" + index);
+            //console.log("loading form #" + index);
             requestForm(index);
             break;
           default:

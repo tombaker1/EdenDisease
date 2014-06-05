@@ -39,7 +39,7 @@ var app = {
             this.state.offline = true;
         }
         else {
-            console.log("running mobile");
+            //console.log("running mobile");
             $("#content-messages").html("mobile<br>");
             
             // if mobile then make it remote
@@ -83,13 +83,5 @@ var app = {
         // so we need to call app.report(), and not this.report()
         //app.report('deviceready');
         console.log("deviceready");
-    }/*,
-    
-    report: function(id) { 
-        console.log("report:" + id);
-        // hide the .pending <p> and show the .complete <p>
-        document.querySelector('#' + id + ' .pending').className += ' hide';
-        var completeElem = document.querySelector('#' + id + ' .complete');
-        completeElem.className = completeElem.className.split('hide').join('');
-    }*/
+    }
 };

@@ -32,7 +32,7 @@ var savedFormItem = Backbone.View.extend({
     },
    
     initialize: function(options) {
-        console.log("new savedFormItem ");
+        //console.log("new savedFormItem ");
         this.index = -1;
         
      },
@@ -42,7 +42,7 @@ var savedFormItem = Backbone.View.extend({
     },
     
     onClick: function() {
-        console.log("savedFormListItem onClick");
+        //console.log("savedFormListItem onClick");
         app.uiController.editForm(this.model);
         event.preventDefault();
     }
@@ -57,7 +57,7 @@ var loadFormListItem = Backbone.View.extend({
     },
    
     initialize: function(options) {
-        console.log("new loadFormListItem ");
+        //console.log("new loadFormListItem ");
         this.index = -1;
         
      },
@@ -69,7 +69,7 @@ var loadFormListItem = Backbone.View.extend({
     },
     enable: function(options) {
         if (options) {
-            console.log("enable item");
+            //console.log("enable item");
         }
     }
 });
@@ -87,7 +87,7 @@ var newFormListItem = Backbone.View.extend({
    
    
     initialize: function(options) {
-        console.log("new newFormListItem ");
+        //console.log("new newFormListItem ");
         this.index = -1;
         
      },
@@ -96,7 +96,7 @@ var newFormListItem = Backbone.View.extend({
     },
     
     onClick: function() {
-        console.log("newFormListItem onClick");
+        //console.log("newFormListItem onClick");
         app.uiController.newForm(this.model);
         event.preventDefault();
     }
@@ -121,7 +121,7 @@ var formPage = Backbone.View.extend({
     },
     
     initialize: function(options) {
-        console.log("new formPage ");
+        //console.log("new formPage ");
         this.index = -1;
         
      },
@@ -134,18 +134,18 @@ var formPage = Backbone.View.extend({
         return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
     },
     onCancel: function() {
-        console.log("cancel button");
+        //console.log("cancel button");
         app.view.getModelData(this);
         parent.history.back();
         $(app.uiController).trigger("form-cancel",this.model.get("current"));
     },
     onSave: function() {
-        console.log("save button");
+        //console.log("save button");
         app.view.getModelData(this);
         $(app.uiController).trigger("form-save",this.model.get("current"));
     },
     onSubmit: function() {
-        console.log("submit button");
+        //console.log("submit button");
         app.view.getModelData(this);
         parent.history.back();
         $(app.uiController).trigger("form-submit",this.model.get("current"));
@@ -165,7 +165,7 @@ var formSelect1 = Backbone.View.extend({
     },
    
     initialize: function(options) {
-        console.log("new newFormListItem ");
+        //console.log("new newFormListItem ");
         this.index = -1;
         this.label = "";
         this.itemList = [];
@@ -200,7 +200,7 @@ var formSelect1 = Backbone.View.extend({
               value = field.textContent;
               break;
             case "hint":
-              console.log("hint not implemented");
+              //console.log("hint not implemented");
               break;
             default:
               console.log("parseSelect1 field not found " + field.nodeName);
@@ -224,7 +224,7 @@ var formUpload = Backbone.View.extend({
     },
    
     initialize: function(options) {
-        console.log("new newFormListItem ");
+        //console.log("new newFormListItem ");
         this.reference = "";
         //this.imageType = false;
         
@@ -247,7 +247,7 @@ var formInput= Backbone.View.extend({
     },
    
     initialize: function(options) {
-        console.log("new newFormListItem ");
+        //console.log("new newFormListItem ");
         this.reference = "";
         this.label = "";
         
