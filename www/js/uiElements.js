@@ -215,12 +215,20 @@ var formSelect1 = Backbone.View.extend({
 
 var formUpload = Backbone.View.extend({
     tagName: "fieldset",
-    template: _.template("<%= label %><input id='upload' type='file' name='<%= reference %>'>"),
+    //template: _.template("<%= label %><input id='upload' type='file' name='<%= reference %>'>"),
+    basicTemplate: _.template("<%= label %><input id='upload' name='<%= reference %>' type='button' value='Load'>"),
+    imageTemplate: _.template("<img style='display:none;width:auto;height:60px;' id='smallImage' src='' />" +
+                         "<div id='title'></div>"),
+    //display:none;
     defaults: {
         //model: null,
         index: 0,
         name: "",
-        imageType: false
+        imageType: false,
+        path: ""
+    },
+    events: {
+        "click": "onClick"
     },
    
     initialize: function(options) {
@@ -233,7 +241,38 @@ var formUpload = Backbone.View.extend({
         this.$el.attr({"id":"upload",
                       "name":this.reference,
                       "data-role":"fieldcontain"});
-        return this.$el.html(this.template({label:this.label,reference:this.reference}));
+        //return this.$el.html(this.template({label:this.label,reference:this.reference}));
+        var elementString = this.basicTemplate({label:this.label,reference:this.reference});
+        if (this.imageType) {
+            elementString += this.imageTemplate({label:this.label,reference:this.reference});
+        }
+        return this.$el.html(elementString);
+    },
+    onClick: function() {
+        if (this.imageType) {
+            navigator.camera.getPicture( this.onImageSelectSuccess.bind(this),
+                                        this.onImageSelectError.bind(this),
+                                        { sourceType : Camera.PictureSourceType.SAVEDPHOTOALBUM,
+                                        destinationType: Camera.DestinationType.NATIVE_URI
+                                         } );
+        }
+        else {
+            //TODO: select generic fileh
+            console.log("upload file not implemented");
+        }
+    },
+    onImageSelectSuccess: function(imageURL) {
+        console.log("success " + imageURL);
+        this.$el.find("#title").html(imageURL);
+        var $image = this.$el.find("#smallImage");
+        $image.attr("src",imageURL);
+        $image.show();
+    },
+    onImageSelectError: function(message) {
+        console.log("error");
+        alert("Could not select image because " + message);
+        var $image = this.$el.find("#smallImage");
+        $image.hide();
     }
 });
 
