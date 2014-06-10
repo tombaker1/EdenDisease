@@ -281,9 +281,11 @@
         
         // Fill field
         for (var key in model.attributes) {
-            var value = encodeURIComponent(model.get(key));
-            pairs.push(encodeURIComponent(key) + "=" + value);
-            
+            // Don't send any meta data that begins with '_'
+            if (!key.indexof("_" === 1)) {
+                var value = encodeURIComponent(model.get(key));
+                pairs.push(encodeURIComponent(key) + "=" + value);
+            }
         }
         urlData = pairs.join('&').replace(/%20/g, '+');        
         xhr.onreadystatechange=this.cbSendResponse.bind(this);

@@ -21,7 +21,7 @@
 
 var savedFormItem = Backbone.View.extend({
     tagName: "li",
-    template: _.template("<a id='new-item' data-transition='slide' href='#page-form-<%= name %>'>Type: <%= name %> <br>Created: <%= date %></a>"),
+    template: _.template("<a id='new-item' data-transition='slide' href='#page-form-<%= name %>'><span>Type: <%= name %> <div style='color:red'><%= submitted %></div></span><br>Created: <%= date %></a>"),
     defaults: {
         //model: null,
         index: 0,
@@ -37,8 +37,16 @@ var savedFormItem = Backbone.View.extend({
         
      },
     render: function() {
-        var created = new Date(this.model._timestamp);
-        return this.$el.html(this.template({index:this.index,name:this.model._name,timestamp:this.model._timestamp,date:created}));
+        var created = new Date(this.model.timestamp());
+        var submittedText = "";
+        if (this.model.submitted()) {
+            submittedText = "Submitted";
+        }
+        return this.$el.html(this.template({index:this.index,
+                                           name:this.model.name(),
+                                           timestamp:this.model.timestamp(),
+                                           date:created,
+                                           submitted:submittedText}));
     },
     
     onClick: function() {

@@ -22,21 +22,44 @@
 // create the form list item
 var mFormData = Backbone.Model.extend({
     defaults: {
+        _name:"",
+        _timestamp:0,
+        _submitted:false
      },
     initialize: function(options) {
-        this._name = "";
-        this._timestamp = 0;
-        this._submit = false;
+        //this._name = "";
+        //this._timestamp = 0;
+        //this.submitted = false;
     },
     
     submit: function() {
-        console.log("sending model " + this._name);
-        this._submit = true;
+        console.log("sending model " + this.get("_name"));
+        //this.set("_submitted",true);
+        this.submitted(true);
     },
     
     getKey: function() {
-        return this._name + '-' + this._timestamp;
+        return this.get("_name") + '-' + this.get("_timestamp");
+    },
+    name: function(_name) {
+        if (_name) {
+            this.set("_name",_name);
+        }
+        return this.get("_name");
+    },
+    timestamp: function(_timestamp) {
+        if (_timestamp) {
+            this.set("_timestamp",_timestamp);
+        }
+        return this.get("_timestamp");
+    },
+    submitted: function(_submitted) {
+        if (_submitted) {
+            this.set("_submitted",_submitted);
+        }
+        return this.get("_submitted");
     }
+
 });
 
 var mActiveFormList = Backbone.Collection.extend({
@@ -50,8 +73,9 @@ var mActiveFormList = Backbone.Collection.extend({
             var storageData = app.storage.read(key);
             var data = JSON.parse(storageData);
             var model = new mFormData(data);
-            model._name = formName;
-            model._timestamp = +timestamp;
+            //model.name(formName);
+            //model.timestamp(+timestamp);
+            //model.submitted(data["_submitted"]);
             model.urlRoot = form.get("url");
             this.add(model);
             app.view.newSavedFormItem({model:model});

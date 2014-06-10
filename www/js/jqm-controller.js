@@ -231,8 +231,8 @@
     controller.prototype.newForm = function(form) {
         var $page = $("#page-form-" + form.get("name"));
         var model = new mFormData(form.get("data"));
-        model._name = form.get("name");
-        model._timestamp = Date.now();
+        model.name(form.get("name"));
+        model.timestamp(Date.now());
         model.urlRoot = form.get("url");
         form.set("current",model);
         //var pageID = pageURL.hash.replace( /#/, "" );
@@ -240,7 +240,7 @@
     }
      
     controller.prototype.editForm = function(model) {
-        var form = app.xformHandler.getFormByName(model._name);
+        var form = app.xformHandler.getFormByName(model.name());
         var $page = $("#page-form-" + form.get("name"));
         //var model = new formData(form.get("data"));
         //model._name = form.get("name");
