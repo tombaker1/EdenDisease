@@ -133,7 +133,7 @@
     controller.prototype.onFormSubmit = function ( evt,model ) {
         //console.log("onFormSubmit");
         model.submit();
-        model.sync('create',model,{local:false});
+        //model.sync('create',model,{local:false});
         
     };
     controller.prototype.loadFormList = function (  ) {

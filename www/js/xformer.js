@@ -282,7 +282,7 @@
         // Fill field
         for (var key in model.attributes) {
             // Don't send any meta data that begins with '_'
-            if (!key.indexof("_" === 1)) {
+            if (key[0] != '_') {
                 var value = encodeURIComponent(model.get(key));
                 pairs.push(encodeURIComponent(key) + "=" + value);
             }

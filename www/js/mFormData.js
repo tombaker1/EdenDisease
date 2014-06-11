@@ -36,6 +36,7 @@ var mFormData = Backbone.Model.extend({
         console.log("sending model " + this.get("_name"));
         //this.set("_submitted",true);
         this.submitted(true);
+        this.sync('create',this,{local:false});
     },
     
     getKey: function() {
