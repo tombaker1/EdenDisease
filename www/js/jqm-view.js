@@ -37,6 +37,7 @@
         this.$savedFormList = $("#form-saved-list");
         this.$newFormList = $("#form-items");
         this.formList = this.$loadFormList[0];
+        this.confirm = new confirmDialog();
 
         // Set events
         $("#reset-dialog input[value='ok']").on("click",this.onResetOK.bind(this));
@@ -371,6 +372,10 @@
     view.prototype.onResetCancel = function (event) {
         //console.log("onResetCancel");
         $("#reset-dialog").popup("close");
+    };
+    
+    view.prototype.reset = function() {
+        
     };
     
     // bind the plugin to jQuery

@@ -306,3 +306,45 @@ var formInput= Backbone.View.extend({
         return this.$el.html(this.template({label:this.label,reference:this.reference}));
     }
 });
+
+var confirmDialog= Backbone.View.extend({
+    //tagName: "fieldset",
+    //template: _.template("<%= label %><input id='input' type='text' name='<%= reference %>'>"),
+    defaults: {
+        headerText: "",
+        messageText: ""
+    },
+    events: {
+        "click #ok": "onOK"
+    },
+   
+    initialize: function(options) {
+        //console.log("new newFormListItem ");
+        //this.reference = "";
+        //this.label = "";
+        var element = document.getElementById('confirm-dialog');
+        this.setElement(element);
+        //this.$el.hide();
+        
+        
+     },
+     
+    render: function() {
+        return this.$el;
+    },
+    
+    setText: function(header,message) {
+        this.$('#header h3').html(header);
+        this.$('#content h3').html(message);
+    },
+    
+    show: function() {
+        //this.render(); //.show();
+        //this.$el.popup("open").popup({transition:"none"});
+        $("#confirm-dialog").popup("open").popup({transition:"none"});
+    },
+    
+    onOK: function(evt) {
+        this.$el.popup("close"); //hide();
+    }
+});

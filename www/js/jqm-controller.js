@@ -108,7 +108,12 @@
             var path = list[i];
             app.storage.delete(path);
         }
+        app.view.reset();
         //console.log("resetAll");
+        app.view.confirm.setText("Reset All","Reset Complete");
+        //app.view.confirm.show();
+        setTimeout(app.view.confirm.show.bind(app.view.confirm),20);
+        //window.requestAnimationFrame(function() {app.view.confirm.show()});
     };
     
     controller.prototype.onFormCancel = function (  ) {
@@ -193,6 +198,8 @@
         //TODO: Move this into the view
             app.view.getFormList().enhanceWithin();
             app.view.$newFormList.listview('refresh');
+            app.view.confirm.setText("Load","Load Complete");
+            app.view.confirm.show();
         }
     };
     
@@ -208,6 +215,8 @@
       
       // put the list of forms into the page
       app.view.insertForms(app.xformHandler.getAllForms());
+        app.view.confirm.setText("Load","Load Complete");
+        app.view.confirm.show();
     }
     
     controller.prototype.cbFormSendComplete = function(status,model) {
