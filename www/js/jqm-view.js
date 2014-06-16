@@ -375,7 +375,28 @@
     };
     
     view.prototype.reset = function() {
+        // Delete new form list
+        while (this.newFormArray.length) {
+            var element = this.newFormArray.pop();
+            element.remove();
+        }
         
+        // Delete saved form list
+        while (this.savedFormArray.length) {
+            var element = this.savedFormArray.pop();
+            element.remove();
+        }
+        
+        // Delete load forms list
+        while (this.loadFormArray.length) {
+            var element = this.loadFormArray.pop();
+            element.remove();
+        }
+         
+        // reset UI lists
+        this.$loadFormList.enhanceWithin();
+        this.$newFormList.listview();
+        this.$savedFormList.listview();       
     };
     
     // bind the plugin to jQuery
