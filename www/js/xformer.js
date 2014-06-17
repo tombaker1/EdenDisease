@@ -1,3 +1,22 @@
+//  Copyright (c) 2014 Thomas Baker
+//  
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//  
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//  
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 
 ;(function ( $, window, document, undefined ) {
     
@@ -201,10 +220,10 @@
     
     xformer.prototype.cbSendResponse = function (reply) {
         //console.log("cbReadFormList done");
+        console.log("cbSendResponse " + xhr.readyState +
+                    " type " + xhr.responseType +
+                    " length " + xhr.responseText.length);
         if (xhr.readyState != 4) {
-            //alert("Error sending model");
-            //reqCompleteCB(false);
-            console.log("cbSendResponse " + xhr.readyState);
             return;
         }
         clearTimeout(reqTimer);
@@ -213,6 +232,7 @@
             reqState.callback(false);
             return;
         }
+        //localStorage.setItem("test",xhr.responseText);
         reqState.callback(true,reqState.data);
     }
     var cbReqTimeout = function() {
@@ -261,20 +281,16 @@
         
         // Fill field
         for (var key in model.attributes) {
-            var value = encodeURIComponent(model.get(key));
-            pairs.push(encodeURIComponent(key) + "=" + value);
-            
+            // Don't send any meta data that begins with '_'
+            if (key[0] != '_') {
+                var value = encodeURIComponent(model.get(key));
+                pairs.push(encodeURIComponent(key) + "=" + value);
+            }
         }
         urlData = pairs.join('&').replace(/%20/g, '+');        
-        // We setup our request
         xhr.onreadystatechange=this.cbSendResponse.bind(this);
-        xhr.open('POST', model.urlRoot);
-      
-        // We add the required HTTP header to handle a form data POST request
+        xhr.open('urlencoded-post', model.urlRoot);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        //xhr.setRequestHeader('Content-Length', urlData.length);
-      
-        // And finally, We send our data.
         try {
             xhr.send(urlData);
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);

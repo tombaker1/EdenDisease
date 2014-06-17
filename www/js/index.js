@@ -1,7 +1,29 @@
+//  Copyright (c) 2014 Thomas Baker
+//  
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//  
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//  
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+
+
 var app = {
     xformHandler: null,
     uiController: null,
     view: null,
+    storage: null,
     state: {
         settings: {
                 source: 1
@@ -17,7 +39,7 @@ var app = {
             this.state.offline = true;
         }
         else {
-            console.log("running mobile");
+            //console.log("running mobile");
             $("#content-messages").html("mobile<br>");
             
             // if mobile then make it remote
@@ -26,10 +48,13 @@ var app = {
         }
         this.bind();
         //$(".page").each(function(){$(this).pageControl();});
+        this.storage.init();
         this.getState();
         this.xformHandler = $.xformer();
-        this.view = $.jqmView();
-        this.uiController = $.jqmController({state: this.state});
+        this.view = $.jqmView;
+        this.view.init();
+        this.uiController = $.jqmController;
+        this.uiController.init({state: this.state});
         
         // set version
         $("#version").html("Version: " + config.version);
@@ -58,13 +83,5 @@ var app = {
         // so we need to call app.report(), and not this.report()
         //app.report('deviceready');
         console.log("deviceready");
-    }/*,
-    
-    report: function(id) { 
-        console.log("report:" + id);
-        // hide the .pending <p> and show the .complete <p>
-        document.querySelector('#' + id + ' .pending').className += ' hide';
-        var completeElem = document.querySelector('#' + id + ' .complete');
-        completeElem.className = completeElem.className.split('hide').join('');
-    }*/
+    }
 };
