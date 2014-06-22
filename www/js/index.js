@@ -50,10 +50,10 @@ var app = {
         //$(".page").each(function(){$(this).pageControl();});
         this.storage.init();
         this.getState();
-        this.xformHandler = $.xformer();
-        this.view = $.jqmView;
+        //this.xformHandler = $.xformer();
+        //this.view = $.jqmView;
         this.view.init();
-        this.uiController = $.jqmController;
+        //this.uiController = $.jqmController;
         this.uiController.init({state: this.state});
         
         // set version

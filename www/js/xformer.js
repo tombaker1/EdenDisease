@@ -21,9 +21,9 @@
 ;(function ( $, window, document, undefined ) {
     
     // Create the defaults once
-    var pluginName = 'xformer',
-        defaults = {
-        };
+    //var pluginName = 'xformer',
+    //    defaults = {
+    //    };
     
     // create the form list item
     var formType = Backbone.Model.extend({
@@ -55,11 +55,11 @@
     };
 
     // The actual plugin constructor
-    function xformer( options ) {
-        this.options = $.extend( {}, defaults, options) ;
+    function xformer(  ) {
+        //this.options = $.extend( {}, defaults, options) ;
         
-        this._defaults = defaults;
-        this._name = pluginName;
+        //this._defaults = defaults;
+        //this._name = pluginName;
        
         this.init();
     };
@@ -302,8 +302,9 @@
     };
     
     // bind the plugin to jQuery     
-    $.xformer = function(options) {
-        return new xformer( this, options );
-    }
+    //$.xformer = function(options) {
+    //    return new xformer( this, options );
+    //}
+    app.xformHandler = new xformer();
 
 })( jQuery, window, document );

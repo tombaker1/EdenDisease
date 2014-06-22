@@ -310,6 +310,6 @@
     var localController = new controller();
     
     // bind the plugin to jQuery     
-    $.jqmController = localController; 
+    app.uiController = localController; 
 
 })( jQuery, window, document );

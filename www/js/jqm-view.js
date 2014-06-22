@@ -399,9 +399,24 @@
         this.$savedFormList.listview();       
     };
     
+    view.prototype.username = function(name) {
+        var $user = $('#username');
+        if (name) {
+            $user.html(name);
+        }
+        else {
+            name = $user.html();
+        }
+        return name;
+    };
+    
+    view.prototype.password = function(pwd) {
+    };
+    
     // bind the plugin to jQuery
     var localView = new view();
     
-    $.jqmView = localView; 
+    //$.jqmView = localView;
+    app.view = localView;
 
 })( jQuery, window, document );
