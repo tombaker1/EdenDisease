@@ -43,6 +43,14 @@
         $("#reset-dialog input[value='ok']").on("click",this.onResetOK.bind(this));
         $("#reset-dialog input[value='cancel']").on("click",this.onResetCancel.bind(this));
         
+        // Intitialize controls
+        this.serverURL(app.state.settings.serverURL);
+        this.username(app.state.settings.username);
+        this.password(app.state.settings.password);
+        $("#serverURL").change(this.onServerURLChange.bind(this));
+        $("#username").change(this.onUsernameChange.bind(this));
+        $("#password").change(this.onPasswordChange.bind(this));
+        
         // Initialize jqm
         $("div.page").each(function(index){
             $(this).page();
@@ -399,9 +407,12 @@
         this.$savedFormList.listview();       
     };
     
+    view.prototype.serverURL = function(url) {
+    };
+    
     view.prototype.username = function(name) {
         var $user = $('#username');
-        if (name) {
+        if (typeof name != 'undefined') {
             $user.html(name);
         }
         else {
@@ -411,6 +422,27 @@
     };
     
     view.prototype.password = function(pwd) {
+    };
+    
+    view.prototype.onServerURLChange = function(evt) {
+        console.log("input serverURL " + evt.target.value);
+        // Don't do this, change settings model instead
+        //this.username(evt.target.value);
+        
+    };
+    
+    view.prototype.onUsernameChange = function(evt) {
+        console.log("input username " + evt.target.value);
+        // Don't do this, change settings model instead
+        //this.username(evt.target.value);
+        
+    };
+    
+    view.prototype.onPasswordChange = function(evt) {
+        console.log("input password " + evt.target.value);
+        // Don't do this, change settings model instead
+        //this.username(evt.target.value);
+        
     };
     
     // bind the plugin to jQuery

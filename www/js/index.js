@@ -26,7 +26,10 @@ var app = {
     storage: null,
     state: {
         settings: {
-                source: 1
+            source: 1,
+            serverURL: "",
+            username: "",
+            password: ""
             },
         offline: false
     },
@@ -44,16 +47,14 @@ var app = {
             
             // if mobile then make it remote
             this.state.settings.source = 2;
-            this.state.offline = false
+            this.state.offline = false;
         }
+        this.testmodule.init();
+        this.testmodule.doSomething();
         this.bind();
-        //$(".page").each(function(){$(this).pageControl();});
         this.storage.init();
         this.getState();
-        //this.xformHandler = $.xformer();
-        //this.view = $.jqmView;
         this.view.init();
-        //this.uiController = $.jqmController;
         this.uiController.init({state: this.state});
         
         // set version
@@ -85,3 +86,15 @@ var app = {
         console.log("deviceready");
     }
 };
+
+app.testmodule = (function() {
+    var localVariable = 42;
+    var my = {};
+    my.init = function() {
+        console.log("testmodule init ");
+    };
+    my.doSomething = function() {
+        console.log("The answer is " + localVariable);
+    };
+    return my;
+}());
