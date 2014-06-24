@@ -27,9 +27,10 @@ var app = {
     state: {
         settings: {
             source: 1,
-            serverURL: "",
-            username: "",
-            password: ""
+            //serverURL: "",
+            //username: "",
+            //password: ""
+            serverInfo: null
             },
         offline: false
     },
@@ -53,6 +54,7 @@ var app = {
         this.testmodule.doSomething();
         this.bind();
         this.storage.init();
+        this.state.settings.serverInfo = new userInfo();
         this.getState();
         this.view.init();
         this.uiController.init({state: this.state});
@@ -63,6 +65,7 @@ var app = {
     
     getState: function() {
         // ToDo - read from local storage
+        this.state.settings.serverInfo.fetch();
     },
     
     bind: function() {

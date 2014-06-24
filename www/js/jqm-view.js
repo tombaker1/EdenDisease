@@ -44,9 +44,9 @@
         $("#reset-dialog input[value='cancel']").on("click",this.onResetCancel.bind(this));
         
         // Intitialize controls
-        this.serverURL(app.state.settings.serverURL);
-        this.username(app.state.settings.username);
-        this.password(app.state.settings.password);
+        $('#serverURL').val(app.state.settings.serverInfo.get("url"));
+        $('#username').val(app.state.settings.serverInfo.get("username"));
+        $('#password').val(app.state.settings.serverInfo.get("password"));
         $("#serverURL").change(this.onServerURLChange.bind(this));
         $("#username").change(this.onUsernameChange.bind(this));
         $("#password").change(this.onPasswordChange.bind(this));
@@ -411,12 +411,12 @@
     };
     
     view.prototype.username = function(name) {
-        var $user = $('#username');
+        var $input = $('#username');
         if (typeof name != 'undefined') {
-            $user.html(name);
+            $input.val(name);
         }
         else {
-            name = $user.html();
+            name = $input.val();
         }
         return name;
     };
@@ -428,20 +428,25 @@
         console.log("input serverURL " + evt.target.value);
         // Don't do this, change settings model instead
         //this.username(evt.target.value);
+        app.state.settings.serverInfo.set("url",evt.target.value);
+        app.state.settings.serverInfo.sync("create");
         
     };
     
     view.prototype.onUsernameChange = function(evt) {
         console.log("input username " + evt.target.value);
-        // Don't do this, change settings model instead
+        // Don't do this, change settings model instea
         //this.username(evt.target.value);
-        
+        app.state.settings.serverInfo.set("username",evt.target.value);
+        app.state.settings.serverInfo.sync("create");
     };
     
     view.prototype.onPasswordChange = function(evt) {
         console.log("input password " + evt.target.value);
         // Don't do this, change settings model instead
         //this.username(evt.target.value);
+        app.state.settings.serverInfo.set("password",evt.target.value);
+        app.state.settings.serverInfo.sync("create");
         
     };
     

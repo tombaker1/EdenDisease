@@ -57,7 +57,11 @@ Backbone.sync = function(method, model, options) {
     case 'read':
         console.log('read');
         var path = "data-" + model.getKey();
-        model = JSON.parse(localStorage.getItem(path));
+        var data = localStorage.getItem(path);
+        if (data) {
+            model = JSON.parse(localStorage.getItem(data));
+        }
+        
     break;
   }
 };
@@ -66,4 +70,44 @@ Backbone.sync = function(method, model, options) {
     };
 
 
+
+app.localSync = function(method, model, options) {
+    options || (options = {});
+    var path = model.getKey();
+    
+    switch (method) {
+    case 'create':
+        console.log("create");
+        //var path = "data-" + model.getKey();
+        localStorage.setItem(path,JSON.stringify(model));
+        //app.uiController.cbFormSendComplete(false,model);
+        //localStorage.setItem(path,JSON.stringify(model));
+    break;
+
+    case 'update':
+        console.log('update');
+        //var path = "data-" + model.getKey();
+        localStorage.setItem(path,JSON.stringify(model));
+    break;
+
+    case 'delete':
+        console.log('delete');
+        if (options["local"]) {
+            //var path = "data-" + model.getKey();
+            localStorage.removeItem(path);
+        }
+    break;
+
+    case 'read':
+        console.log('read');
+        var data = localStorage.getItem(path);
+        if (data) {
+            model.set(JSON.parse(data));
+        }
+        
+    break;
+  }
+};
+
 })( jQuery, window, document );
+

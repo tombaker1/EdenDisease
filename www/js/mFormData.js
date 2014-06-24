@@ -40,7 +40,7 @@ var mFormData = Backbone.Model.extend({
     },
     
     getKey: function() {
-        return this.get("_name") + '-' + this.get("_timestamp");
+        return "data-" + this.get("_name") + '-' + this.get("_timestamp");
     },
     name: function(_name) {
         if (_name) {
