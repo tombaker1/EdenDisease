@@ -426,27 +426,21 @@
     
     view.prototype.onServerURLChange = function(evt) {
         console.log("input serverURL " + evt.target.value);
-        // Don't do this, change settings model instead
-        //this.username(evt.target.value);
         app.state.settings.serverInfo.set("url",evt.target.value);
-        app.state.settings.serverInfo.sync("create");
+        //app.state.settings.serverInfo.sync("create");
         
     };
     
     view.prototype.onUsernameChange = function(evt) {
         console.log("input username " + evt.target.value);
-        // Don't do this, change settings model instea
-        //this.username(evt.target.value);
         app.state.settings.serverInfo.set("username",evt.target.value);
-        app.state.settings.serverInfo.sync("create");
+        //app.state.settings.serverInfo.sync("create");
     };
     
     view.prototype.onPasswordChange = function(evt) {
         console.log("input password " + evt.target.value);
-        // Don't do this, change settings model instead
-        //this.username(evt.target.value);
         app.state.settings.serverInfo.set("password",evt.target.value);
-        app.state.settings.serverInfo.sync("create");
+        //app.state.settings.serverInfo.sync("create");
         
     };
     

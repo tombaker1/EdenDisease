@@ -31,6 +31,13 @@ var userInfo = Backbone.Model.extend({
     
     initialize: function(options) {
         //this.sync = app.localSync;
+        this.bind("change",function() { this.sync("update")});
+        
+        // bootstrap storage if it doesn't exist yet
+        //this.sync("read","username");
+        //if (typeof data === unknown) {
+        //    this.sync("create");
+        //}
     },
     
     getKey: function() {
