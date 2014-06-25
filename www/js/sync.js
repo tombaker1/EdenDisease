@@ -75,35 +75,27 @@ app.localSync = function(method, model, options) {
     options || (options = {});
     var path = model.getKey();
     
+    // use app.storage 
     switch (method) {
     case 'create':
-        console.log("create");
-        //var path = "data-" + model.getKey();
-        //localStorage.setItem(path,JSON.stringify(model));
         app.storage.write(path,JSON.stringify(model));
-        //app.uiController.cbFormSendComplete(false,model);
-        //localStorage.setItem(path,JSON.stringify(model));
     break;
 
     case 'update':
         console.log('update');
-        //var path = "data-" + model.getKey();
-        //localStorage.setItem(path,JSON.stringify(model));
         app.storage.write(path,JSON.stringify(model));
     break;
 
     case 'delete':
         console.log('delete');
         if (options["local"]) {
-            //var path = "data-" + model.getKey();
-            //localStorage.removeItem(path);
             app.storage.delete(path);
         }
     break;
 
     case 'read':
         console.log('read');
-        var data = app.storage.read(path); //localStorage.getItem(path);
+        var data = app.storage.read(path); 
         if (data) {
             model.set(JSON.parse(data));
         }
