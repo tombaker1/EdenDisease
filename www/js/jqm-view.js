@@ -251,7 +251,7 @@
         for (var i = 0; i < forms.length; i++) {
           var $form = forms.at(i);
           if (this.$checkboxList[i].checked && !$form.loaded) {
-            var name = this.$checkboxList[i].attributes["name"].textContent;
+            var name = this.$checkboxList[i].attributes["name"].value;
             loadList.unshift(name);
           }
         }

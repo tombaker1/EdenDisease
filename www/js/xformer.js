@@ -143,6 +143,7 @@
             var fieldItems = $(element).children();
             
             // 
+            var requiredList = [];
             for (var j = 0; j < fieldItems.length; j++) {
                 // get model element
                 var key = fieldItems[j].nodeName;
@@ -166,9 +167,13 @@
                 var attributeList = {};
                 for (var k = 0; k < attributes.length; k++) {
                     var name = attributes[k].nodeName;
-                    var value = attributes[k].nodeValue;
+                    var value = attributes[k].value;
                     field[name] = value;
-                    //console.log('\t' + name + ':' + value);
+                    
+                    // Check for requirements
+                    if ((name==="required") && (value ==="true()")) {
+                        requiredList.push(key);
+                    }
                 }
                                 
                 // add to array
@@ -185,13 +190,15 @@
         // parse the body
         fields['xml'] = rawXML;
         fields['$xml'] = $xml;
+        //fields['required'] = requiredList;
         //formList[reqIndex].model = modelPrototype;
         //formList[reqIndex].loaded = true;
         //formList[reqIndex].form = fields;
         //var model = formList.at(reqIndex);
         this.getFormByName(formName).set({"data":modelPrototype,
                                   "loaded":true,
-                                  "form":fields});
+                                  "form":fields,
+                                  "required":requiredList});
         return reqState.data;
     };
     
