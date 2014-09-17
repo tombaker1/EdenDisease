@@ -40,7 +40,8 @@ var app = {
             console.log("running in browser");
             $("#content-messages").html("browser<br>");
             window.cordova = window.cordova_webapp;
-            this.state.offline = true;
+            this.state.offline = false;
+            this.state.settings.source = 2;
         }
         else {
             //console.log("running mobile");

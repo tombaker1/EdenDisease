@@ -148,7 +148,7 @@
             url = config.defaults.formPath + config.defaults.formList;
         }
         else {
-            url = config.defaults.url + config.defaults.formList;
+            url = config.defaults.url + "/xforms/" + config.defaults.formList;
             //console.log("init: request " + url)
         }
         app.xformHandler.requestFormList(url,cbFormListComplete);
@@ -243,6 +243,7 @@
         model.name(form.get("name"));
         model.timestamp(Date.now());
         model.urlRoot = form.get("url");
+        model._formId = form.get("formId");
         form.set("current",model);
         //var pageID = pageURL.hash.replace( /#/, "" );
         app.view.showForm(form,model,$page);

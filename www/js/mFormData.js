@@ -24,7 +24,8 @@ var mFormData = Backbone.Model.extend({
     defaults: {
         _name:"",
         _timestamp:0,
-        _submitted:false
+        _submitted:false,
+        _formId: ""
      },
     initialize: function(options) {
         //this._name = "";
@@ -40,7 +41,7 @@ var mFormData = Backbone.Model.extend({
     },
     
     getKey: function() {
-        return "data-" + this.get("_name") + '-' + this.get("_timestamp");
+        return this.get("_name") + '-' + this.get("_timestamp");
     },
     name: function(_name) {
         if (_name) {
@@ -67,7 +68,8 @@ var mActiveFormList = Backbone.Collection.extend({
     model:mFormData,
     restore: function(modelList) {
         while (modelList.length) {
-            var key = modelList.pop();                var fields = key.split('-');
+            var key = modelList.pop();
+            var fields = key.split('-');
             var formName = fields[1];
             var form = app.xformHandler.getFormByName(formName);
             var timestamp = fields[2];

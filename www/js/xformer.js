@@ -138,7 +138,7 @@
         var modelPrototype = {};
         for (var i = 0; i < instance.length; i++) {
             var element = $(instance[i]).children()[0];
-            var elementName = element.nodeName;
+            elementName = element.nodeName;
             //console.log("element name " + elementName);
             var fieldItems = $(element).children();
             
@@ -190,6 +190,7 @@
         // parse the body
         fields['xml'] = rawXML;
         fields['$xml'] = $xml;
+        fields['formId'] = elementName;
         //fields['required'] = requiredList;
         //formList[reqIndex].model = modelPrototype;
         //formList[reqIndex].loaded = true;
@@ -198,7 +199,8 @@
         this.getFormByName(formName).set({"data":modelPrototype,
                                   "loaded":true,
                                   "form":fields,
-                                  "required":requiredList});
+                                  "required":requiredList,
+                                  "formId":elementName});
         return reqState.data;
     };
     
@@ -242,10 +244,16 @@
         //localStorage.setItem("test",xhr.responseText);
         reqState.callback(true,reqState.data);
     }
+    
     var cbReqTimeout = function() {
-        xhr.abort();
-        alert("URL could not be found");
-        reqState.callback(false,reqState.data);            
+        if (!config.debug){
+            xhr.abort();
+            alert("URL could not be found");
+            reqState.callback(false,reqState.data);
+        }
+        else {
+            console.log("Debug enabled, xmlHttpRequest timeout ignored");
+        }   
 
     };
 
@@ -255,8 +263,12 @@
         reqState.data = url;
         xhr.onload = this.cbReadFormList.bind(this);
         xhr.open("get", url, true);
+        //xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+        //xhr.setRequestHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+        //xhr.setRequestHeader("Access-Control-Allow-Methods", "GET, PUT, POST");
         xhr.send();
         reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
+        
     };
 
     xformer.prototype.requestForm = function (name, cb) {
@@ -277,7 +289,29 @@
             reqState.callback(false,reqState.data);            
         }
     };
-
+    
+    
+    makedata = function(xmlfile) {
+        var boundary = '---------------------------';
+        boundary += Math.floor(Math.random()*32768);
+        boundary += Math.floor(Math.random()*32768);
+        boundary += Math.floor(Math.random()*32768);
+        xhr.setRequestHeader("Content-Type", 'multipart/form-data; boundary=' + boundary);
+        var body = '';
+        body += '--' + boundary + '\r\n' + 'Content-Disposition: form-data; name="';
+        body += "xml_submission_file";
+        body += '"\r\n';
+        //body += '"\r\n\r\n';
+        body += 'filename="Presence_2010-08-07_18-42-09.xml"' + '\r\n'; 
+       body += 'Content-Type: text/xml' + '\r\n'; 
+       body += 'Content-Transfer-Encoding: binary' + '\r\n'; 
+        body += '\r\n'
+        body += xmlfile;
+        body += '\r\n'
+        body += '--' + boundary + '--';
+        return body;
+    };
+    
     xformer.prototype.sendModel = function (model, cb, options) {
         reqState.type = "send-form";
         reqState.callback = cb;
@@ -287,28 +321,60 @@
         var pairs = [];
         
         // Fill field
+        var formData = new FormData();
         for (var key in model.attributes) {
             // Don't send any meta data that begins with '_'
             if (key[0] != '_') {
                 var value = encodeURIComponent(model.get(key));
                 pairs.push(encodeURIComponent(key) + "=" + value);
+                formData.append(key,value);
             }
         }
-        urlData = pairs.join('&').replace(/%20/g, '+');        
+        urlData = pairs.join('&').replace(/%20/g, '+');
+        
+        // create url to send to
+        var urlSubmit = config.defaults.url + "/xforms/submission/" + model._formId;
+        var xmlDocument = "<?xml version='1.0'?><uploadDocument><name>Nobody knows</name></uploadDocument>";
+        //formData.append('xml_submission_file', 'pr_image');
+        formData.append('data',xmlDocument)
+        /*
+        $.ajax({
+            url: urlSubmit,
+            type: "POST",
+            contentType: "application/xml",
+            processData: false,
+            data: xmlDocument
+        });
+        */
+
+        // send
+        var username = app.state.settings.serverInfo.get("username");
+        var password = app.state.settings.serverInfo.get("password");
         xhr.onreadystatechange=this.cbSendResponse.bind(this);
-        xhr.open('urlencoded-post', model.urlRoot);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.open('POST', urlSubmit, true, username, password); // urlencoded-post
+        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+        //xhr.setRequestHeader('xml_submission_file', 'pr_image'); 
+        //xhr.setRequestHeader('Content-Disposition', 'form-data');
+        //xhr.setRequestHeader('Content-Disposition', 'xml_submission_file');
+        //xhr.setRequestHeader('Content-Disposition', 'fname="xml_submission_file"');
         try {
-            xhr.send(urlData);
+            //xhr.send(urlData);
+            var boundary = "";
+            var dataToSend = makedata(xmlDocument);
+            //xhr.setRequestHeader('Content-length', dataToSend.length);
+            xhr.send(dataToSend);
+            //xhr.send(xmlDocument);
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         }
         catch (err) {
             alert("send error");
             reqState.callback(false,reqState.data);
         }
+       
     };
+
     
-    // bind the plugin to jQuery     
+    // bind the plugin to jQuery
     //$.xformer = function(options) {
     //    return new xformer( this, options );
     //}

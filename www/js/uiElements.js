@@ -115,7 +115,9 @@ var formPage = Backbone.View.extend({
     template: _.template("<div data-role='header' data-add-back-btn='false' data-position='fixed'>" +
                             "<h1><%= name %></h1>" +
                         "</div>" +
+                        "<form enctype='multipart/form-data' method='post' name='xml_submission_file'>" +
                          "<div id='page-form-content' data-role='content'></div>" +
+                         "</form>" +
                          "<div class='page-form-footer' data-role='footer' data-position='fixed' style='text-align:center'>" + 
                             "<a class='footer-button' id='cancel' data-role='button' data-inline='true' href='#nav-cancel' style='display:inline-table'>Cancel</a>" +
                             "<a class='footer-button' id='save'   data-role='button' data-inline='true'    style='display:inline-table'>Save</a>" +
