@@ -291,7 +291,7 @@
     };
     
     
-    makedata = function(xmlfile) {
+    makedata = function(model, xmlfile) {
         var boundary = '---------------------------';
         boundary += Math.floor(Math.random()*32768);
         boundary += Math.floor(Math.random()*32768);
@@ -302,7 +302,18 @@
         body += "xml_submission_file";
         body += '"\r\n';
         //body += '"\r\n\r\n';
-        body += 'filename="Presence_2010-08-07_18-42-09.xml"' + '\r\n'; 
+        var modelTime = new Date();
+        modelTime.setTime(model.timestamp());
+        var filename = "model_"+model.get("_name")+"_"+
+                        modelTime.getFullYear()+"-"+
+                        modelTime.getMonth()+"-"+
+                        modelTime.getDay()+
+                        "_"+
+                        modelTime.getHours()+"-"+
+                        modelTime.getMinutes()+"-"+
+                        modelTime.getSeconds()+".xml";
+        
+        body += 'filename="' + filename + '"' + '\r\n'; 
        body += 'Content-Type: text/xml' + '\r\n'; 
        body += 'Content-Transfer-Encoding: binary' + '\r\n'; 
         body += '\r\n'
@@ -321,20 +332,23 @@
         var pairs = [];
         
         // Fill field
+        var xmlDocument = "<?xml version='1.0'?>\r\n";
         var formData = new FormData();
         for (var key in model.attributes) {
             // Don't send any meta data that begins with '_'
             if (key[0] != '_') {
                 var value = encodeURIComponent(model.get(key));
+                xmlDocument += "<" + key + ">" + value + "</" + key + ">\r\n";
                 pairs.push(encodeURIComponent(key) + "=" + value);
                 formData.append(key,value);
             }
         }
         urlData = pairs.join('&').replace(/%20/g, '+');
+        xmlDocument += "</xml>";
         
         // create url to send to
         var urlSubmit = config.defaults.url + "/xforms/submission/" + model._formId;
-        var xmlDocument = "<?xml version='1.0'?><uploadDocument><name>Nobody knows</name></uploadDocument>";
+        //var xmlDocument = "<?xml version='1.0'?><uploadDocument><name>Nobody knows</name></uploadDocument></xml>";
         //formData.append('xml_submission_file', 'pr_image');
         formData.append('data',xmlDocument)
         /*
@@ -360,7 +374,7 @@
         try {
             //xhr.send(urlData);
             var boundary = "";
-            var dataToSend = makedata(xmlDocument);
+            var dataToSend = makedata(model,xmlDocument);
             //xhr.setRequestHeader('Content-length', dataToSend.length);
             xhr.send(dataToSend);
             //xhr.send(xmlDocument);
