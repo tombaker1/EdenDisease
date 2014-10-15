@@ -2,8 +2,8 @@ var config = {
     developerMode: true,
     debug: true,
     defaults: {
-        //url: "http://demo.eden.sahanafoundation.org/eden/xforms/",
-        url: "http://tom-XPS:8000/eden",
+        //url: "http://demo.eden.sahanafoundation.org/eden",
+        url: "http://localhost:8000/eden",
         formPath: "res/xml/",
         formList: "formList.xml"
     },
