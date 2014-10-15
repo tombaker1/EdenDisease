@@ -290,6 +290,28 @@
         }
     };
     
+    xformer.prototype.cbSendModel = function (reply) {
+        clearTimeout(reqTimer);
+        //console.log("cbReadFormList done");
+        if (xhr.readyState != 4) {
+            alert("Error loading form");
+            reqState.callback(false,reqState.data);
+            return;
+        }
+        if (xhr.status != 200) {
+            alert("Server error for form " + reqState.data);
+            reqState.callback(false,reqState.data);
+            return;
+        }
+        
+        var rawText = reply.target.responseText;
+        //this.parseForm(rawXML,reqState.data);
+
+        //model.set("loaded",true);
+        //model.set("form",fields);
+        // notify the controller that the load is complete
+        reqState.callback(true,reqState.data);
+    }; 
     
     makedata = function(model, xmlfile) {
         var boundary = '---------------------------';
@@ -298,9 +320,9 @@
         boundary += Math.floor(Math.random()*32768);
         xhr.setRequestHeader("Content-Type", 'multipart/form-data; boundary=' + boundary);
         var body = '';
-        body += '--' + boundary + '\r\n' + 'Content-Disposition: form-data; name="';
-        body += "xml_submission_file";
-        body += '"\r\n';
+        body += '--' + boundary + '\r\n' + 'Content-Disposition: form-data; name="xml_submission_file";';
+        //body += "xml_submission_file";
+        //body += '";\r\n';
         //body += '"\r\n\r\n';
         var modelTime = new Date();
         modelTime.setTime(model.timestamp());
@@ -315,7 +337,7 @@
         
         body += 'filename="' + filename + '"' + '\r\n'; 
        body += 'Content-Type: text/xml' + '\r\n'; 
-       body += 'Content-Transfer-Encoding: binary' + '\r\n'; 
+       body += 'Content-Transfer-Encoding: UTF-8' + '\r\n'; 
         body += '\r\n'
         body += xmlfile;
         body += '\r\n'
@@ -327,12 +349,13 @@
         reqState.type = "send-form";
         reqState.callback = cb;
         reqState.data = model;
-        xhr.onload = null;
+        xhr.onload = this.cbSendModel.bind(this);
         var urlData = "";
         var pairs = [];
         
         // Fill field
-        var xmlDocument = "<?xml version='1.0'?>\r\n";
+        var xmlDocument = '<?xml version="1.0"  encoding="UTF-8"?>\r\n';
+        xmlDocument += '<' + model._formId + '>\r\n';
         var formData = new FormData();
         for (var key in model.attributes) {
             // Don't send any meta data that begins with '_'
@@ -344,7 +367,7 @@
             }
         }
         urlData = pairs.join('&').replace(/%20/g, '+');
-        xmlDocument += "</xml>";
+        xmlDocument += '</' + model._formId + '>\r\n';
         
         // create url to send to
         var urlSubmit = config.defaults.url + "/xforms/submission/" + model._formId;
@@ -364,9 +387,12 @@
         // send
         var username = app.state.settings.serverInfo.get("username");
         var password = app.state.settings.serverInfo.get("password");
+        var authentication = 'Basic ' + window.btoa(username + ':' + password);
+        var atest = window.btoa("Aladdin:open sesame")
         xhr.onreadystatechange=this.cbSendResponse.bind(this);
-        xhr.open('POST', urlSubmit, true, username, password); // urlencoded-post
-        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+        xhr.open('POST', urlSubmit, true) //, username, password); // urlencoded-post
+        xhr.setRequestHeader('Authorization', authentication);
+        //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
         //xhr.setRequestHeader('xml_submission_file', 'pr_image'); 
         //xhr.setRequestHeader('Content-Disposition', 'form-data');
         //xhr.setRequestHeader('Content-Disposition', 'xml_submission_file');
