@@ -321,9 +321,7 @@
         xhr.setRequestHeader("Content-Type", 'multipart/form-data; boundary=' + boundary);
         var body = '';
         body += '--' + boundary + '\r\n' + 'Content-Disposition: form-data; name="xml_submission_file";';
-        //body += "xml_submission_file";
-        //body += '";\r\n';
-        //body += '"\r\n\r\n';
+
         var modelTime = new Date();
         modelTime.setTime(model.timestamp());
         var filename = "model_"+model.get("_name")+"_"+
@@ -336,8 +334,8 @@
                         modelTime.getSeconds()+".xml";
         
         body += 'filename="' + filename + '"' + '\r\n'; 
-       body += 'Content-Type: text/xml' + '\r\n'; 
-       body += 'Content-Transfer-Encoding: UTF-8' + '\r\n'; 
+        body += 'Content-Type: text/xml' + '\r\n'; 
+        body += 'Content-Transfer-Encoding: UTF-8' + '\r\n'; 
         body += '\r\n'
         body += xmlfile;
         body += '\r\n'
@@ -356,14 +354,12 @@
         // Fill field
         var xmlDocument = '<?xml version="1.0"  encoding="UTF-8"?>\r\n';
         xmlDocument += '<' + model._formId + '>\r\n';
-        var formData = new FormData();
         for (var key in model.attributes) {
             // Don't send any meta data that begins with '_'
             if (key[0] != '_') {
                 var value = encodeURIComponent(model.get(key));
                 xmlDocument += "<" + key + ">" + value + "</" + key + ">\r\n";
                 pairs.push(encodeURIComponent(key) + "=" + value);
-                formData.append(key,value);
             }
         }
         urlData = pairs.join('&').replace(/%20/g, '+');
@@ -371,18 +367,6 @@
         
         // create url to send to
         var urlSubmit = config.defaults.url + "/xforms/submission/" + model._formId;
-        //var xmlDocument = "<?xml version='1.0'?><uploadDocument><name>Nobody knows</name></uploadDocument></xml>";
-        //formData.append('xml_submission_file', 'pr_image');
-        formData.append('data',xmlDocument)
-        /*
-        $.ajax({
-            url: urlSubmit,
-            type: "POST",
-            contentType: "application/xml",
-            processData: false,
-            data: xmlDocument
-        });
-        */
 
         // send
         var username = app.state.settings.serverInfo.get("username");
@@ -392,18 +376,9 @@
         xhr.onreadystatechange=this.cbSendResponse.bind(this);
         xhr.open('POST', urlSubmit, true) //, username, password); // urlencoded-post
         xhr.setRequestHeader('Authorization', authentication);
-        //xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-        //xhr.setRequestHeader('xml_submission_file', 'pr_image'); 
-        //xhr.setRequestHeader('Content-Disposition', 'form-data');
-        //xhr.setRequestHeader('Content-Disposition', 'xml_submission_file');
-        //xhr.setRequestHeader('Content-Disposition', 'fname="xml_submission_file"');
         try {
-            //xhr.send(urlData);
-            var boundary = "";
             var dataToSend = makedata(model,xmlDocument);
-            //xhr.setRequestHeader('Content-length', dataToSend.length);
             xhr.send(dataToSend);
-            //xhr.send(xmlDocument);
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         }
         catch (err) {
@@ -413,11 +388,6 @@
        
     };
 
-    
-    // bind the plugin to jQuery
-    //$.xformer = function(options) {
-    //    return new xformer( this, options );
-    //}
     app.xformHandler = new xformer();
 
 })( jQuery, window, document );

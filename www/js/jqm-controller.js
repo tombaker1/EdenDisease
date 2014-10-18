@@ -138,19 +138,28 @@
     controller.prototype.onFormSubmit = function ( evt,model ) {
         //console.log("onFormSubmit");
         model.submit();
-        //model.sync('create',model,{local:false});
         
     };
-    controller.prototype.loadFormList = function (  ) {
-        // Load the form list
+    
+    controller.prototype.getHostURL = function (  ) {
         var url = "";
-        if (this.state.settings.source === 1) {
+        var serverUrl = app.state.settings.serverInfo.get("url");
+        if (serverUrl && serverUrl.length) {
+            url = serverUrl  + "/xforms/" + config.defaults.formList;
+        }
+        else if (this.state.settings.source === 1) {
             url = config.defaults.formPath + config.defaults.formList;
         }
         else {
             url = config.defaults.url + "/xforms/" + config.defaults.formList;
-            //console.log("init: request " + url)
         }
+        return url;
+
+    };
+    
+    controller.prototype.loadFormList = function (  ) {
+        // Load the form list
+        var url = this.getHostURL();
         app.xformHandler.requestFormList(url,cbFormListComplete);
     };
     
@@ -291,7 +300,7 @@
     
     };
     
-    /*controller.prototype.*/ var postLocation = function(latitude,longitude) {
+    var postLocation = function(latitude,longitude) {
         var msg = $("#content-messages").html();
         msg += "latitude: " + latitude + "<br>";
         msg += "longitude: " + longitude + "<br>";
