@@ -90,10 +90,16 @@ var app = {
     reset: function() {
         this.uiController.onReset();
         this.view.reset();
-        //console.log("resetAll");
         this.view.confirm.setText("Reset All","Reset Complete");
-        //app.view.confirm.show();
         setTimeout(this.view.confirm.show.bind(this.view.confirm),20);
+        
+        // clear settings
+        var serverInfo = this.state.settings.serverInfo;
+        serverInfo.set("url",config.defaults.url);
+        serverInfo.set({"username":"","password":""});
+        $('#serverURL').val(app.state.settings.serverInfo.get("url"));
+        $('#username').val(app.state.settings.serverInfo.get("username"));
+        $('#password').val(app.state.settings.serverInfo.get("password"));
     },
     
     deviceready: function() {
