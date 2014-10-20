@@ -66,7 +66,11 @@ var app = {
     
     getState: function() {
         // ToDo - read from local storage
-        this.state.settings.serverInfo.fetch();
+        var serverInfo = this.state.settings.serverInfo;
+        serverInfo.fetch();
+        if (!serverInfo.get("url")) {
+            serverInfo.set("url",config.defaults.url);
+        }
     },
     
     bind: function() {
@@ -81,6 +85,15 @@ var app = {
     
     onReset: function() {
         this.uiController.resetAll();
+    },
+    
+    reset: function() {
+        this.uiController.onReset();
+        this.view.reset();
+        //console.log("resetAll");
+        this.view.confirm.setText("Reset All","Reset Complete");
+        //app.view.confirm.show();
+        setTimeout(this.view.confirm.show.bind(this.view.confirm),20);
     },
     
     deviceready: function() {

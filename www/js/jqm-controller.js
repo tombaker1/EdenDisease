@@ -108,11 +108,6 @@
             var path = list[i];
             app.storage.delete(path);
         }
-        app.view.reset();
-        //console.log("resetAll");
-        app.view.confirm.setText("Reset All","Reset Complete");
-        //app.view.confirm.show();
-        setTimeout(app.view.confirm.show.bind(app.view.confirm),20);
         //window.requestAnimationFrame(function() {app.view.confirm.show()});
     };
     
@@ -144,14 +139,11 @@
     controller.prototype.getHostURL = function (  ) {
         var url = "";
         var serverUrl = app.state.settings.serverInfo.get("url");
-        if (serverUrl && serverUrl.length) {
-            url = serverUrl  + "/xforms/" + config.defaults.formList;
-        }
-        else if (this.state.settings.source === 1) {
-            url = config.defaults.formPath + config.defaults.formList;
+        if (this.state.settings.source === 1) {
+            url = serverUrl + config.defaults.formList;
         }
         else {
-            url = config.defaults.url + "/xforms/" + config.defaults.formList;
+            url = serverUrl + "/xforms/" + config.defaults.formList;
         }
         return url;
 

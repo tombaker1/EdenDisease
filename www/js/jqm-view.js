@@ -374,7 +374,8 @@
     view.prototype.onResetOK = function (event) {
         //console.log("onResetOK");
         $("#reset-dialog").popup("close");
-        app.uiController.onReset();
+        //app.uiController.onReset();
+        app.reset();
     };
     
     view.prototype.onResetCancel = function (event) {
@@ -403,8 +404,9 @@
          
         // reset UI lists
         this.$loadFormList.enhanceWithin();
-        this.$newFormList.listview();
-        this.$savedFormList.listview();       
+        this.$loadFormList.controlgroup("refresh");
+        this.$newFormList.listview("refresh");
+        this.$savedFormList.listview("refresh");       
     };
     
     view.prototype.serverURL = function(url) {

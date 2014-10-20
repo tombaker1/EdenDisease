@@ -58,7 +58,7 @@ var savedFormItem = Backbone.View.extend({
 
 var loadFormListItem = Backbone.View.extend({
     tagName: "label",
-    template: _.template("<input type='checkbox' id='formlist-<%= name %>' name='<%= name %>'><%= name %>"),
+    template: _.template("<input type='checkbox' id='formlist-<%= name %>' name='<%= name %>'/><%= name %>"),
     defaults: {
         index: 0,
         name: ""
