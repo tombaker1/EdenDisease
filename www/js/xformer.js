@@ -226,7 +226,7 @@
         // notify the controller that the load is complete
         reqState.callback(true,reqState.data);
     }; 
-    
+    /*
     xformer.prototype.cbSendResponse = function (reply) {
         //console.log("cbReadFormList done");
         console.log("cbSendResponse " + xhr.readyState +
@@ -244,7 +244,7 @@
         //localStorage.setItem("test",xhr.responseText);
         reqState.callback(true,reqState.data);
     }
-    
+    */
     var cbReqTimeout = function() {
         if (!config.debug){
             xhr.abort();
@@ -298,7 +298,7 @@
             reqState.callback(false,reqState.data);
             return;
         }
-        if (xhr.status != 200) {
+        if ((xhr.status != 200) && (xhr.status != 201)){
             alert("Server error for form " + reqState.data);
             reqState.callback(false,reqState.data);
             return;
@@ -366,14 +366,15 @@
         xmlDocument += '</' + model._formId + '>\r\n';
         
         // create url to send to
-        var urlSubmit = config.defaults.url + "/xforms/submission/" + model._formId;
+        var serverUrl = app.state.settings.serverInfo.get("url");
+        var urlSubmit = serverUrl + "/xforms/submission/" + model._formId;
 
         // send
         var username = app.state.settings.serverInfo.get("username");
         var password = app.state.settings.serverInfo.get("password");
         var authentication = 'Basic ' + window.btoa(username + ':' + password);
         var atest = window.btoa("Aladdin:open sesame")
-        xhr.onreadystatechange=this.cbSendResponse.bind(this);
+        //xhr.onreadystatechange=this.cbSendModel.bind(this);
         xhr.open('POST', urlSubmit, true) //, username, password); // urlencoded-post
         xhr.setRequestHeader('Authorization', authentication);
         try {
