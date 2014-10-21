@@ -19,12 +19,7 @@
 //  THE SOFTWARE.
 
 ;(function ( $, window, document, undefined ) {
-    
-    // Create the defaults once
-    //var pluginName = 'xformer',
-    //    defaults = {
-    //    };
-    
+        
     // create the form list item
     var formType = Backbone.Model.extend({
         defaults: {
@@ -43,9 +38,6 @@
     // create the query state
     var xhr = null,
         reqTimer = null,
-        //reqIndex = 0,
-        //reqName = "",
-        //reqCompleteCB = null,
         REQ_WAIT_TIME = 4000;
         
     var reqState = {
@@ -56,10 +48,6 @@
 
     // The actual plugin constructor
     function xformer(  ) {
-        //this.options = $.extend( {}, defaults, options) ;
-        
-        //this._defaults = defaults;
-        //this._name = pluginName;
        
         this.init();
     };
@@ -69,7 +57,7 @@
     };
     
     xformer.prototype.getForm = function (i) {
-        return formList.at(i); //[i];
+        return formList.at(i); 
     }
     
     xformer.prototype.getAllForms = function () {
@@ -90,7 +78,7 @@
     };
 
     xformer.prototype.getDoc = function (i) {
-        return formList.at(i); //[i];
+        return formList.at(i); 
     }
     
     xformer.prototype.cbReadFormList = function (reply) {
@@ -120,8 +108,6 @@
             var $item = $(forms[i]);
             var name = $item[0].textContent; //.html();
             var url = $item.attr("url");
-            //formList.push(new formItem(name,url));
-            //var model = new formType({"name":name, "url":url});
             formList.add(new formType({"name":name, "url":url}));
         }
     };
@@ -191,11 +177,7 @@
         fields['xml'] = rawXML;
         fields['$xml'] = $xml;
         fields['formId'] = elementName;
-        //fields['required'] = requiredList;
-        //formList[reqIndex].model = modelPrototype;
-        //formList[reqIndex].loaded = true;
-        //formList[reqIndex].form = fields;
-        //var model = formList.at(reqIndex);
+
         this.getFormByName(formName).set({"data":modelPrototype,
                                   "loaded":true,
                                   "form":fields,
@@ -221,30 +203,9 @@
         var rawXML = reply.target.responseText;
         this.parseForm(rawXML,reqState.data);
 
-        //model.set("loaded",true);
-        //model.set("form",fields);
-        // notify the controller that the load is complete
         reqState.callback(true,reqState.data);
     }; 
-    /*
-    xformer.prototype.cbSendResponse = function (reply) {
-        //console.log("cbReadFormList done");
-        console.log("cbSendResponse " + xhr.readyState +
-                    " type " + xhr.responseType +
-                    " length " + xhr.responseText.length);
-        if (xhr.readyState != 4) {
-            return;
-        }
-        clearTimeout(reqTimer);
-        if (xhr.status != 200) {
-            alert("Server error for send ");
-            reqState.callback(false);
-            return;
-        }
-        //localStorage.setItem("test",xhr.responseText);
-        reqState.callback(true,reqState.data);
-    }
-    */
+    
     var cbReqTimeout = function() {
         if (!config.debug){
             xhr.abort();
@@ -263,9 +224,6 @@
         reqState.data = url;
         xhr.onload = this.cbReadFormList.bind(this);
         xhr.open("get", url, true);
-        //xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-        //xhr.setRequestHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
-        //xhr.setRequestHeader("Access-Control-Allow-Methods", "GET, PUT, POST");
         xhr.send();
         reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         
@@ -275,7 +233,7 @@
         reqState.type = "request-form";
         reqState.callback = cb;
         reqState.data = name;
-        //var item = this.getForm(index);
+
         var url = this.getFormByName(name).get("url");
         reqState.data = name;
         try {
@@ -305,15 +263,12 @@
         }
         
         var rawText = reply.target.responseText;
-        //this.parseForm(rawXML,reqState.data);
 
-        //model.set("loaded",true);
-        //model.set("form",fields);
         // notify the controller that the load is complete
         reqState.callback(true,reqState.data);
     }; 
     
-    makedata = function(model, xmlfile) {
+    xformer.prototype.makedata = function(model, xmlfile) {
         var boundary = '---------------------------';
         boundary += Math.floor(Math.random()*32768);
         boundary += Math.floor(Math.random()*32768);
@@ -347,8 +302,6 @@
         reqState.type = "send-form";
         reqState.callback = cb;
         reqState.data = model;
-        xhr.onload = this.cbSendModel.bind(this);
-        var urlData = "";
         var pairs = [];
         
         // Fill field
@@ -362,7 +315,6 @@
                 pairs.push(encodeURIComponent(key) + "=" + value);
             }
         }
-        urlData = pairs.join('&').replace(/%20/g, '+');
         xmlDocument += '</' + model._formId + '>\r\n';
         
         // create url to send to
@@ -373,12 +325,14 @@
         var username = app.state.settings.serverInfo.get("username");
         var password = app.state.settings.serverInfo.get("password");
         var authentication = 'Basic ' + window.btoa(username + ':' + password);
-        var atest = window.btoa("Aladdin:open sesame")
+        
+        // Set headers
+        xhr.onload = this.cbSendModel.bind(this);
         //xhr.onreadystatechange=this.cbSendModel.bind(this);
-        xhr.open('POST', urlSubmit, true) //, username, password); // urlencoded-post
+        xhr.open('POST', urlSubmit, true);
         xhr.setRequestHeader('Authorization', authentication);
+        var dataToSend = this.makedata(model,xmlDocument);
         try {
-            var dataToSend = makedata(model,xmlDocument);
             xhr.send(dataToSend);
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         }
