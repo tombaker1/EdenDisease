@@ -95,11 +95,11 @@ var app = {
         
         // clear settings
         var serverInfo = this.state.settings.serverInfo;
-        serverInfo.set("url",config.defaults.url);
-        serverInfo.set({"username":"","password":""});
-        $('#serverURL').val(app.state.settings.serverInfo.get("url"));
-        $('#username').val(app.state.settings.serverInfo.get("username"));
-        $('#password').val(app.state.settings.serverInfo.get("password"));
+        //serverInfo.set("url",config.defaults.url);
+        //serverInfo.set({"username":"","password":""});
+        //$('#serverURL').val(app.state.settings.serverInfo.get("url"));
+        //$('#username').val(app.state.settings.serverInfo.get("username"));
+        //$('#password').val(app.state.settings.serverInfo.get("password"));
     },
     
     deviceready: function() {
