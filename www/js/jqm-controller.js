@@ -31,6 +31,7 @@
         
         this._defaults = defaults;
         this._name = pluginName;
+        this._diseaseCase = null;
        
         //view.bind("form-cancel",this.onFormCancel.bind(this));
         $(this).bind("form-cancel",this.onFormCancel.bind(this));
@@ -57,11 +58,13 @@
         $("#debug-button").click(this.onDebug.bind(this));
         
         // Load the saved data or initialize data
-        var formListXml = app.storage.read("form-list");
-        if (formListXml) {
-            app.xformHandler.parseFormList(formListXml);
+        var rawData = app.storage.read("disease-case");
+        if (rawData) {
+            this._diseaseCase = JSON.parse(rawData);
+            //app.commHandler.parseFormList(formListXml);
             // put the list of forms into the page
-            app.view.insertForms(app.xformHandler.getAllForms());
+            /*
+            app.view.insertForms(app.commHandler.getAllForms());
             
             // Parse all keys
             var savedData = [];
@@ -72,8 +75,8 @@
                     var xml = app.storage.read(key);
                     //console.log("loading form " + key + " length " + xml.length);
                     var formName = key.split('-')[2];
-                    var index = app.xformHandler.parseForm(xml,formName);
-                    var form = app.xformHandler.getFormByName(formName);
+                    var index = app.commHandler.parseForm(xml,formName);
+                    var form = app.commHandler.getFormByName(formName);
                     app.view.createForm({model:form,index:index});
 
                     // Uncheck and disable checkbox
@@ -84,6 +87,7 @@
                 else if (key.indexOf("data-") >= 0) {
                     savedData.unshift(key);
                 }
+                
             }
             
             //read the list into the collection 
@@ -92,6 +96,7 @@
             // update view lists
             app.view.getFormList().enhanceWithin();
             app.view.$newFormList.listview('refresh');
+            */
         }
       
         
@@ -137,13 +142,14 @@
     };
     
     controller.prototype.getHostURL = function (  ) {
+        // TODO: this doesn't apply anymore
         var url = "";
         var serverUrl = app.state.settings.serverInfo.get("url");
         if (this.state.settings.source === 1) {
-            url = serverUrl + config.defaults.formList;
+            url = serverUrl; // + config.defaults.formList;
         }
         else {
-            url = serverUrl + "/xforms/" + config.defaults.formList;
+            url = serverUrl; // + "/xforms/" + config.defaults.formList;
         }
         return url;
 
@@ -151,8 +157,8 @@
     
     controller.prototype.loadFormList = function (  ) {
         // Load the form list
-        var url = this.getHostURL();
-        app.xformHandler.requestFormList(url,cbFormListComplete);
+        var url = this.getHostURL() + config.defaults.casePath;
+        app.commHandler.requestFormList(url,cbDiseaseCase);
     };
     
     controller.prototype.onDebug = function ( event ) {
@@ -162,11 +168,11 @@
 
     controller.prototype.onLoadFormList = function ( event ) {
         //console.log("onLoadFormList");
-        var forms = app.xformHandler.getAllForms();
+        var forms = app.commHandler.getAllForms();
         this.loadList = app.view.getSelectedForms(forms);
         if (this.loadList.length) {
             var name = this.loadList.pop();
-            app.xformHandler.requestForm(name,this.cbFormLoadComplete.bind(this));
+            app.commHandler.requestForm(name,this.cbFormLoadComplete.bind(this));
         }
     };
 
@@ -176,7 +182,7 @@
         // only do this if the form loaded successfully
         if (status) {
             // Create page
-            var form = app.xformHandler.getFormByName(name);
+            var form = app.commHandler.getFormByName(name);
             app.view.createForm({model:form,name:name});
             
             // Save xml to local storage
@@ -192,7 +198,7 @@
         // get next page
         if (this.loadList.length) {
             var nextName = this.loadList.pop();
-            app.xformHandler.requestForm(nextName,
+            app.commHandler.requestForm(nextName,
                                      this.cbFormLoadComplete.bind(this));
         } 
         else {
@@ -204,18 +210,21 @@
         }
     };
     
-    var cbFormListComplete = function(success, xmlFile) {
+    var cbDiseaseCase = function(success, rawData) {
       
-      if (!success) {
-        return;
-      }
-      // Save the form to local memory
-      var filename = "form-list";
-      //localStorage.setItem(filename,xmlFile);
-      app.storage.write(filename,xmlFile);
+        if (!success) {
+            // TODO: print an error message here
+            return;
+        }
+        // Save the form to local memory
+        var filename = "disease-case";
+        //localStorage.setItem(filename,xmlFile);
+        app.storage.write(filename,rawData);
+        var objData = JSON.parse(rawData);
       
-      // put the list of forms into the page
-      app.view.insertForms(app.xformHandler.getAllForms());
+        // put the list of forms into the page
+        // TODO: parse the forms here
+        //app.view.insertForms(app.commHandler.getAllForms());
         app.view.confirm.setText("Load","Load Complete");
         app.view.confirm.show();
     }
@@ -251,7 +260,7 @@
     }
      
     controller.prototype.editForm = function(model) {
-        var form = app.xformHandler.getFormByName(model.name());
+        var form = app.commHandler.getFormByName(model.name());
         var $page = $("#page-form-" + form.get("name"));
         //var model = new formData(form.get("data"));
         //model._name = form.get("name");

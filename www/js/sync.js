@@ -35,7 +35,7 @@ Backbone.sync = function(method, model, options) {
         }
         else {
             var controller = app.uiController;
-            app.xformHandler.sendModel(model,controller.cbFormSendComplete.bind(controller), options);
+            app.commHandler.sendModel(model,controller.cbFormSendComplete.bind(controller), options);
         }
         //localStorage.setItem(path,JSON.stringify(model));
     break;

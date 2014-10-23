@@ -20,7 +20,7 @@
 
 
 var app = {
-    xformHandler: null,
+    commHandler: null,
     uiController: null,
     view: null,
     storage: null,

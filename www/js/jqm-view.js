@@ -359,7 +359,7 @@
     };
     
     view.prototype.showNewForm = function (index,model) {
-        var $form = app.xformHandler.getForm(index);
+        var $form = app.commHandler.getForm(index);
         var $page = $( "#page-form-"+index );
         $form.set("current",model);
         this.showForm($form,model,$page);
