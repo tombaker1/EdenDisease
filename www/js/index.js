@@ -27,9 +27,6 @@ var app = {
     state: {
         settings: {
             source: 1,
-            //serverURL: "",
-            //username: "",
-            //password: ""
             serverInfo: null
             },
         offline: false
@@ -77,10 +74,16 @@ var app = {
         document.addEventListener('deviceready', this.deviceready, false);
         $("#reset-button").on("click",this.onReset.bind(this));
         $("#load-form-list-button").on("click",this.onLoad.bind(this));
+        $("#store-form-button").on("click",this.onStore.bind(this));
     },
     
     onLoad: function() {
         this.uiController.loadFormList();
+    },
+    
+    onStore: function() {
+        var serverURL = this.state.settings.serverInfo.get("url");
+        this.commHandler.sendForm(serverURL);  
     },
     
     onReset: function() {
