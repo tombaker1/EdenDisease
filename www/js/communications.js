@@ -218,9 +218,9 @@
         }
         
         var rawXML = reply.target.responseText;
-        this.parseForm(rawXML,reqState.data);
+        //this.parseForm(rawXML,reqState.data);
 
-        reqState.callback(true,reqState.data);
+        reqState.callback(true,rawXML);
     }; 
     
     var cbReqTimeout = function() {
@@ -247,13 +247,11 @@
         
     };
 
-    xformer.prototype.requestForm = function (name, cb) {
+    xformer.prototype.requestForm = function (url, cb) {
         reqState.type = "request-form";
         reqState.callback = cb;
-        reqState.data = name;
+        reqState.data = "load-form";
 
-        var url = this.getFormByName(name).get("url");
-        reqState.data = name;
         try {
             xhr.onload = this.cbReadForm.bind(this);
             xhr.open("get", url, true);

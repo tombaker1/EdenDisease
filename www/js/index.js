@@ -78,7 +78,7 @@ var app = {
     },
     
     onLoad: function() {
-        this.uiController.loadFormList();
+        this.uiController.loadForm();
     },
     
     onStore: function() {

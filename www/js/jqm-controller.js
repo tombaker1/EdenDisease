@@ -166,32 +166,44 @@
 
     };
 
-    controller.prototype.onLoadFormList = function ( event ) {
-        //console.log("onLoadFormList");
+    controller.prototype.loadForm = function ( event ) {
+        console.log("loadForm");
+        var url = app.uiController.getHostURL() + config.defaults.casePath;
+        app.commHandler.requestForm(url,this.cbFormLoadComplete.bind(this));
+        /*
         var forms = app.commHandler.getAllForms();
         this.loadList = app.view.getSelectedForms(forms);
         if (this.loadList.length) {
             var name = this.loadList.pop();
             app.commHandler.requestForm(name,this.cbFormLoadComplete.bind(this));
         }
+        */
     };
 
-    controller.prototype.cbFormLoadComplete = function(status,name) {
-        //console.log("cbFormLoadComplete");
+    controller.prototype.parseForm = function(obj) {
+        console.log("\tparseForm");
+    };
+    
+    controller.prototype.cbFormLoadComplete = function(status,rawData) {
+        console.log("cbFormLoadComplete");
         
+
         // only do this if the form loaded successfully
         if (status) {
             // Create page
-            var form = app.commHandler.getFormByName(name);
-            app.view.createForm({model:form,name:name});
+            var obj = JSON.parse(rawData);
+            this.parseForm(obj);
+            //var form = app.commHandler.getFormByName(name);
+            //app.view.createForm({model:form,name:name});
             
             // Save xml to local storage
-            var formName = "form-xml-"+form.get("name");
-            localStorage.setItem(formName,form.get("form")["xml"]);
+            var formName = "form-raw"; //+form.get("name");
+            localStorage.setItem(formName,rawData);
             
         }
         
-        // success or failure you want to disable the item in the list
+        /*
+         *        // success or failure you want to disable the item in the list
         // Uncheck and disable checkbox
         app.view.setFormListItem({name:name,checked:false,disabled:true});
         
@@ -208,6 +220,7 @@
             app.view.confirm.setText("Load","Load Complete");
             app.view.confirm.show();
         }
+        */
     };
     
     var cbDiseaseCase = function(success, rawData) {
