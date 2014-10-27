@@ -21,19 +21,6 @@
 ;(function ( $, window, document, undefined ) {
         
     // create the form list item
-    var formType = Backbone.Model.extend({
-        defaults: {
-            url: "",
-            name: "",
-            loaded: false,
-            form: null,
-            data: null
-        },
-        initialize: function() {
-            //console.log("new formType name:" + this.get("name"));
-        }
-    });
-    var formList = new Backbone.Collection;
     var diseaseCase = null;
     
     // create the query state

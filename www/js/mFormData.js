@@ -18,6 +18,20 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+var formType = Backbone.Model.extend({
+    defaults: {
+        url: "",
+        name: "",
+        loaded: false,
+        form: null,
+        data: null
+    },
+    initialize: function() {
+        //console.log("new formType name:" + this.get("name"));
+    }
+});
+var formList = new Backbone.Collection;
+
 
 // create the form list item
 var mFormData = Backbone.Model.extend({

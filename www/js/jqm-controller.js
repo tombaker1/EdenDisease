@@ -189,21 +189,12 @@
             var childRecords = null;
             //var subName = "";
             if (recordName.indexOf("$_") === 0) {
-                //subName = recordName.substr(2);
-                //if (Array.isArray(child)) {
                 childRecords = [];
-                    for (var i = 0; i < child.length; i++) {
-                        var item = this.parseRecord(child[i]);
-                        childRecords.push(item);
-                    }
+                for (var i = 0; i < child.length; i++) {
+                    var item = this.parseRecord(child[i]);
+                    childRecords.push(item);
+                }
                     
-                //}
-                //else {
-                //    var item = this.parseRecord(child);
-                //    childRecords.push(item);
-                //}
-                //var reference = this.parseRecord(child);
-                //references[subName] = childRecords;
             }
             else if (recordName === "field") {
                 //field = parseRecord(child);
@@ -249,13 +240,8 @@
                             }
                         }
                     }
-                    //var label = item["@label"];
-                    //var childData = {};
-                    //itemData["label"] = item.label
                     childRecords[name] = value;
-                    //subName = "field";
                 }
-                //references['field'] = field;
             }
             else {
                 childRecords = child;
@@ -271,21 +257,12 @@
         var obj = this._diseaseCase;
         
         // Parse the object into the components
-        /*
-        var caseData = {};
-        var references = [];
-        var caseRecord = obj["$_disease_case"];
-        if (!caseRecord) {
-            alert("Incorrect data format from server");
-            return;
-        }
-        */
         var results = this.parseRecord(obj);
-        var modelData = results["$_disease_case"]["field"];
-        //var references = results[1];
+        var modelData = results["$_disease_case"][0]["field"];
         
         // create model
-        var model = new mFormData(modelData);
+        var model = new formType({"name":"disease_case","form":modelData,"data":results});
+        formList.add(model);
         
         // Recursivly add form data to model
         
