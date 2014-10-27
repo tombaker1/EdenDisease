@@ -54,13 +54,14 @@
         }
         this.getLocation();
         
-        $("#load-form-button").click(this.onLoadFormList.bind(this));
+        //$("#load-form-button").click(this.onLoadFormList.bind(this));
         $("#debug-button").click(this.onDebug.bind(this));
         
         // Load the saved data or initialize data
-        var rawData = app.storage.read("disease-case");
+        var rawData = app.storage.read("form-raw");
         if (rawData) {
             this._diseaseCase = JSON.parse(rawData);
+            this.parseForm();
             //app.commHandler.parseFormList(formListXml);
             // put the list of forms into the page
             /*
@@ -179,9 +180,105 @@
         }
         */
     };
+    
+    controller.prototype.parseRecord = function(record) {
+        var field = {};
+        var references = {};
+        for (var recordName in record) {
+            var child = record[recordName];
+            var childRecords = [];
+            if (recordName.indexOf("$_") === 0) {
+                var subName = recordName.substr(2);
+                //if (Array.isArray(child)) {
+                    for (var i = 0; i < child.length; i++) {
+                        var item = this.parseRecord(child[i]);
+                        childRecords.push(item);
+                    }
+                    
+                //}
+                //else {
+                //    var item = this.parseRecord(child);
+                //    childRecords.push(item);
+                //}
+                //var reference = this.parseRecord(child);
+                references[subName] = childRecords;
+            }
+            else if (recordName === "field") {
+                //field = parseRecord(child);
+                for (var i = 0; i < child.length; i++) {
+                    var item = child[i];
+                    var name = item["@name"];
+                    var value = null;
+                    var type = item["@type"];
+                    if (type.indexOf("reference") === 0) {
+                        // If there is a selection then the default value will be an integer
+                        if (item["select"]) {
+                            value = "";
+                        }
+                        
+                    }
+                    else {
+                        // show the type so we can find the initial value
+                        switch (type) {
+                            case "string": {
+                                value = "";
+                                break;
+                            }
+                            case "date": {
+                                value = "";
+                                break;
+                            }
+                            case "datetime": {
+                                value = "";
+                                break;
+                            }
+                            case "text": {
+                                value = "";
+                                break;
+                            }
+                            case "integer": {
+                                value = 0;
+                                break;
+                            }
+                            default: {
+                                value = "unknown";
+                                break;
+                            }
+                        }
+                    }
+                    //var label = item["@label"];
+                    //var childData = {};
+                    //itemData["label"] = item.label
+                    field[name] = value;
+                }
+            }
+        }
+        
+        return [field,references];
+    };
 
-    controller.prototype.parseForm = function(obj) {
+    controller.prototype.parseForm = function() {
         console.log("\tparseForm");
+        var obj = this._diseaseCase;
+        
+        // Parse the object into the components
+        var caseData = {};
+        var references = [];
+        var caseRecord = obj["$_disease_case"];
+        if (!caseRecord) {
+            alert("Incorrect data format from server");
+            return;
+        }
+        var results = this.parseRecord(caseRecord[0]);
+        var caseData = results[0];
+        var references = results[1];
+        
+        // create model
+        //var model = new mFormData();
+        
+        // Recursivly add form data to model
+        
+        // Store model
     };
     
     controller.prototype.cbFormLoadComplete = function(status,rawData) {
@@ -190,9 +287,10 @@
 
         // only do this if the form loaded successfully
         if (status) {
-            // Create page
-            var obj = JSON.parse(rawData);
-            this.parseForm(obj);
+            
+            // Set model
+            this._diseaseCase = JSON.parse(rawData);
+            this.parseForm();
             //var form = app.commHandler.getFormByName(name);
             //app.view.createForm({model:form,name:name});
             
