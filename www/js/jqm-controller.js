@@ -182,14 +182,16 @@
     };
     
     controller.prototype.parseRecord = function(record) {
-        var field = {};
+        //var field = {};
         var references = {};
         for (var recordName in record) {
             var child = record[recordName];
-            var childRecords = [];
+            var childRecords = null;
+            //var subName = "";
             if (recordName.indexOf("$_") === 0) {
-                var subName = recordName.substr(2);
+                //subName = recordName.substr(2);
                 //if (Array.isArray(child)) {
+                childRecords = [];
                     for (var i = 0; i < child.length; i++) {
                         var item = this.parseRecord(child[i]);
                         childRecords.push(item);
@@ -201,10 +203,11 @@
                 //    childRecords.push(item);
                 //}
                 //var reference = this.parseRecord(child);
-                references[subName] = childRecords;
+                //references[subName] = childRecords;
             }
             else if (recordName === "field") {
                 //field = parseRecord(child);
+                childRecords = {};
                 for (var i = 0; i < child.length; i++) {
                     var item = child[i];
                     var name = item["@name"];
@@ -249,12 +252,18 @@
                     //var label = item["@label"];
                     //var childData = {};
                     //itemData["label"] = item.label
-                    field[name] = value;
+                    childRecords[name] = value;
+                    //subName = "field";
                 }
+                //references['field'] = field;
             }
+            else {
+                childRecords = child;
+            }
+            references[recordName] = childRecords;
         }
         
-        return [field,references];
+        return references;
     };
 
     controller.prototype.parseForm = function() {
@@ -262,6 +271,7 @@
         var obj = this._diseaseCase;
         
         // Parse the object into the components
+        /*
         var caseData = {};
         var references = [];
         var caseRecord = obj["$_disease_case"];
@@ -269,12 +279,13 @@
             alert("Incorrect data format from server");
             return;
         }
-        var results = this.parseRecord(caseRecord[0]);
-        var caseData = results[0];
-        var references = results[1];
+        */
+        var results = this.parseRecord(obj);
+        var modelData = results["$_disease_case"]["field"];
+        //var references = results[1];
         
         // create model
-        //var model = new mFormData();
+        var model = new mFormData(modelData);
         
         // Recursivly add form data to model
         
