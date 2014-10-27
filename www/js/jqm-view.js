@@ -186,6 +186,24 @@
         return element;
     };
     
+    view.prototype.updateCaseForm = function (obj) {
+        // Loop through elements filling in data
+        var field = obj["$_disease_case"][0]["field"];
+        for (var i = 0; i < field.length; i++) {
+            // Get fields
+            var item = field[i];
+            var name = item["@name"];
+            var label = item["@label"];
+            
+            // Put name in label
+            // TODO: add required asterisks
+            var id = "#case-" + name;
+             $(id + " label").first().html(label);
+             
+             // Fill in select entrys
+        }
+    };
+    
     view.prototype.createForm = function (options) {
         //console.log("view createForm ");
         

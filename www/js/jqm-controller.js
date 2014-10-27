@@ -264,9 +264,10 @@
         var model = new formType({"name":"disease_case","form":modelData,"data":results});
         formList.add(model);
         
-        // Recursivly add form data to model
+        // Update view
+        app.view.updateCaseForm(obj);
         
-        // Store model
+        return model;
     };
     
     controller.prototype.cbFormLoadComplete = function(status,rawData) {
@@ -278,7 +279,7 @@
             
             // Set model
             this._diseaseCase = JSON.parse(rawData);
-            this.parseForm();
+            var model = this.parseForm();
             //var form = app.commHandler.getFormByName(name);
             //app.view.createForm({model:form,name:name});
             
