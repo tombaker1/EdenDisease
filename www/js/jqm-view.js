@@ -200,6 +200,9 @@
             var id = "#case-" + name;
             var container = $(id);
             var r = container.attr("required");
+            if (item["@type"] === "date") {
+                label += " (YYYY-MM-DD)";
+            }
             if (container.attr("required")) {
                 label += '<bold style="color:red">*</bold>';
             }
@@ -346,10 +349,12 @@
         }
     };
 
-    view.prototype.showForm = function($form,model,$page) {
+    view.prototype.showForm = function(form,model,$page) {
       // Loop through keys finding page elements
-      var formData = $form.get("form");
-      for (var key in $form.get("data")) {
+      var formData = form.get("form");
+      var data = form.get("data");
+      for (var key in data) {
+        /*
         var item = formData[key];
         var name = item.nodeset;
         var value = model.get(key);
@@ -389,8 +394,9 @@
             // other fields
             break;
         }
+        */
       }
-      $.mobile.changePage($page,{transition:"slide"});
+      //$.mobile.changePage($page,{transition:"slide"});
     };
     
     view.prototype.showNewForm = function (index,model) {
