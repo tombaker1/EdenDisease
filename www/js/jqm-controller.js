@@ -263,7 +263,7 @@
         var modelData = results["$_disease_case"][0]["field"];
         
         // create model
-        var model = new formType({"name":"disease_case","form":modelData,"data":results});
+        var model = new formType({"name":"disease_case","form":modelData,"data":results,"obj":obj});
         formList.add(model);
         
         // Update view

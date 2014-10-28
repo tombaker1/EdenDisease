@@ -351,9 +351,54 @@
 
     view.prototype.showForm = function(form,model,$page) {
       // Loop through keys finding page elements
+      var formName = form.get("name");
       var formData = form.get("form");
-      var data = form.get("data");
+      var data = form.get("obj")["$_" + formName][0]["field"];
       for (var key in data) {
+        var item = data[key];
+        var name = item["@name"];
+        var searchString = "#case-" + name;
+        var element = $page.find(searchString).first();
+        var type = item["@type"];
+        var value = model.get(name);
+        
+        if (element.length === 0) {
+            continue;
+        }
+        
+        if (type.indexOf("reference") === 0) {
+            if (item["select"]) {
+                //value = "";
+                var options = item["select"][0]["option"];
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i]["@value"] === value) {
+                        var select = element.find("select").first();
+                        select[0].selectedIndex = i;
+                        select.selectmenu("refresh");
+                    }
+                }
+            }
+        }
+        else {
+            switch (type) {
+                case "string":
+                    //element.html(value);
+                    element.find("input").first().val(value);
+                    break;
+                case "date":
+                    element.find("input").first().val(value);
+                    break;
+                case "datetime":
+                    element.find("input").first().val(value);
+                    break;
+                case "text":
+                    element.find("input").first().val(value);
+                    break;
+                default:
+                    break;
+            }
+        }
+        
         /*
         var item = formData[key];
         var name = item.nodeset;
