@@ -198,9 +198,26 @@
             // Put name in label
             // TODO: add required asterisks
             var id = "#case-" + name;
-             $(id + " label").first().html(label);
+            var container = $(id);
+            var r = container.attr("required");
+            if (container.attr("required")) {
+                label += '<bold style="color:red">*</bold>';
+            }
+            container.find("label").first().html(label);
              
              // Fill in select entrys
+             var select = item["select"];
+             if (select) {
+                var selectOptions = "";
+                var options = select[0]["option"];
+                for (var j = 0; j < options.length; j++) {
+                    var opt = options[j];
+                    var value = opt["@value"];
+                    var optionLabel = opt["$"] || "";
+                    selectOptions += '<option value = "' + value + '">' + optionLabel + '</option>';
+                }
+                container.find("select").first().html(selectOptions);
+             }
         }
     };
     
