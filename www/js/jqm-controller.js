@@ -34,10 +34,13 @@
         this._diseaseCase = null;
        
         //view.bind("form-cancel",this.onFormCancel.bind(this));
-        $(this).bind("cancel",this.onFormCancel.bind(this));
-        $(this).bind("save",this.onFormSave.bind(this));
-        $(this).bind("submit",this.onFormSubmit.bind(this));
+        //$(this).bind("cancel",this.onFormCancel.bind(this));
+        //$(this).bind("save",this.onFormSave.bind(this));
+        //$(this).bind("submit",this.onFormSubmit.bind(this));
         $(this).bind("reset-all",this.onReset.bind(this));
+        $("#cancel").onclick = this.onFormCancel.bind(this);
+        $("#save").click(this.onFormSave.bind(this));
+        $(this).bind("submit",this.onFormSubmit.bind(this));
 
         //this.init(options);
         $(document).bind( "pagebeforechange", pageChange );
@@ -118,14 +121,14 @@
     };
     
     controller.prototype.onFormCancel = function (  ) {
-        //console.log("onFormCancel");
+        console.log("onFormCancel");
     };
     
     controller.prototype.onFormSave = function ( evt,model) {
         //console.log("onFormSave");
         //app.view.getModelData(pageView);
         //var a = _.contains(activeForms,model);
-        /*
+
         if (!activeForms.contains(model)) {
             activeForms.add(model);
             app.view.newSavedFormItem({model:model});
@@ -135,7 +138,7 @@
             model.sync('update',model,{local:true});
 
         }
-        */
+
     };
     
     controller.prototype.onFormSubmit = function ( evt,model ) {
@@ -391,24 +394,29 @@
         var pageURL = $.mobile.path.parseUrl( data.toPage );
         var pageselector = pageURL.hash.replace( /\?.*$/, "" );
 
-        if (pageselector.indexOf("#nav-") >= 0) {
-            event.preventDefault();
-            return;            
-        }
+        //if (pageselector.indexOf("#nav-") >= 0) {
+            
+            //event.preventDefault();
+            //return;            
+        //}
         
         switch (pageselector) {
             case "#page-new-form":
                 app.uiController.newForm();
                 return;
                 
-          case "#page-formlist":
-            requestFormList(defaultURL);
+            case "#page-formlist":
+                requestFormList(defaultURL);
             break;
-          case "#load-form":
-            var index = pageURL.hash.replace( /.*index=/, "" );
-            //console.log("loading form #" + index);
-            requestForm(index);
+            case "#load-form":
+                var index = pageURL.hash.replace( /.*index=/, "" );
+              //console.log("loading form #" + index);
+                requestForm(index);
             break;
+            case '#nav-return':
+                parent.history.back();
+            break;
+                
           default:
             return;
         }
