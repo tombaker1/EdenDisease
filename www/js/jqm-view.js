@@ -311,10 +311,69 @@
         $element.checkboxradio('refresh');
     };
     
-    view.prototype.getModelData = function(page) {
-        var form = page.model;
-        var formData = form.get("form");
-        var model = form.get("current");
+    view.prototype.getModelData = function(page,model) {
+        //var form = page.model;
+        //var formData = form.get("form");
+        //var model = form.get("current");
+        var form = app.uiController.getFormByName("disease_case");
+      var formName = form.get("name");
+      var formData = form.get("form");
+      var data = form.get("obj")["$_" + formName][0]["field"];
+      for (var key in data) {
+        var item = data[key];
+        var name = item["@name"];
+        var searchString = "#case-" + name;
+        var element = page.find(searchString).first();
+        var type = item["@type"];
+        var value = null;
+        
+        if (element.length === 0) {
+            continue;
+        }
+        
+        if (type.indexOf("reference") === 0) {
+            if (item["select"]) {
+                //value = "";
+                //var options = item["select"][0]["option"];
+                //for (var i = 0; i < options.length; i++) {
+                    var select = element.find("select").first();
+                    value = select[0].selectedIndex;
+                    model.set(name,value);
+                    /*
+                    if (options[i]["@value"] === value) {
+                        var select = element.find("select").first();
+                        select[0].selectedIndex = i;
+                        select.selectmenu("refresh");
+                    }
+                    */
+                //}
+            }
+        }
+        else {
+            switch (type) {
+                case "string":
+                    //element.html(value);
+                    value = element.find("input").first().val();
+                    model.set(name,value);
+                    break;
+                case "date":
+                    value = element.find("input").first().val();
+                    model.set(name,value);
+                    break;
+                case "datetime":
+                    value = element.find("input").first().val();
+                    model.set(name,value);
+                    break;
+                case "text":
+                    value = element.find("input").first().val();
+                    model.set(name,value);
+                    break;
+                default:
+                    break;
+            }
+        }
+      }
+        /*
         for (var key in form.get("data")) {
             var item = formData[key];
             var name = item.nodeset;
@@ -347,6 +406,7 @@
                 break;
             }
         }
+        */
     };
 
     view.prototype.showForm = function(form,model,$page) {

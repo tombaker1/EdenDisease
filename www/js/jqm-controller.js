@@ -38,9 +38,9 @@
         //$(this).bind("save",this.onFormSave.bind(this));
         //$(this).bind("submit",this.onFormSubmit.bind(this));
         $(this).bind("reset-all",this.onReset.bind(this));
-        $("#cancel").onclick = this.onFormCancel.bind(this);
+        $("#cancel").click(this.onFormCancel.bind(this));
         $("#save").click(this.onFormSave.bind(this));
-        $(this).bind("submit",this.onFormSubmit.bind(this));
+        $("#submit").click(this.onFormSubmit.bind(this));
 
         //this.init(options);
         $(document).bind( "pagebeforechange", pageChange );
@@ -126,8 +126,13 @@
     
     controller.prototype.onFormSave = function ( evt,model) {
         //console.log("onFormSave");
-        //app.view.getModelData(pageView);
         //var a = _.contains(activeForms,model);
+        var page = $("#page-new-form");
+        var form = this.getFormByName("disease_case")
+            if (!model) {
+                model = form.get("current");
+            }
+        app.view.getModelData(page,model);
 
         if (!activeForms.contains(model)) {
             activeForms.add(model);
@@ -143,6 +148,11 @@
     
     controller.prototype.onFormSubmit = function ( evt,model ) {
         //console.log("onFormSubmit");
+        var form = this.getFormByName("disease_case")
+            if (!model) {
+                model = form.get("current");
+            }
+        app.view.getModelData(page,model);
         model.submit();
         
     };
