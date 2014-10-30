@@ -353,19 +353,19 @@
             switch (type) {
                 case "string":
                     //element.html(value);
-                    value = element.find("input").first().val();
+                    value = (element.find("input").first().val()) || "";
                     model.set(name,value);
                     break;
                 case "date":
-                    value = element.find("input").first().val();
+                    value = (element.find("input").first().val()) || "";
                     model.set(name,value);
                     break;
                 case "datetime":
-                    value = element.find("input").first().val();
+                    value = (element.find("input").first().val()) || "";
                     model.set(name,value);
                     break;
                 case "text":
-                    value = element.find("input").first().val();
+                    value = (element.find("input").first().val()) || "";
                     model.set(name,value);
                     break;
                 default:
@@ -373,40 +373,7 @@
             }
         }
       }
-        /*
-        for (var key in form.get("data")) {
-            var item = formData[key];
-            var name = item.nodeset;
-            //var value = model.get(key);
-            var searchString = "[name*='" + name + "']";
-            var element = page.$el.find(searchString);
-            var type = $(element).attr("id");
-            switch (type) {
-                case "select1":
-                    var subItems = $(element).find("input");
-                    for (var subIndex = 0; subIndex < subItems.length; subIndex++) {
-                      //var idSelector = "choice-" + i;
-                      var $subItem = $(subItems[subIndex]);
-                      
-                      if ($subItem[0].checked) {
-                        model.set(key,$subItem.attr("value"));
-                      }
-                    }
-                    break;
-                case "upload":
-                    var value = $(element).find("input")[0].value;
-                    model.set(key,value);
-                    break;
-                case "input":
-                    var value = $(element).find("input")[0].value;
-                    model.set(key,value);
-                    break;
-                default:
-                // other fields
-                break;
-            }
-        }
-        */
+      return obj
     };
 
     view.prototype.showForm = function(form,model,$page) {

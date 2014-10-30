@@ -148,6 +148,7 @@
     
     controller.prototype.onFormSubmit = function ( evt,model ) {
         //console.log("onFormSubmit");
+        var page = $("#page-new-form");
         var form = this.getFormByName("disease_case")
             if (!model) {
                 model = form.get("current");

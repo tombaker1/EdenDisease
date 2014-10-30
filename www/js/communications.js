@@ -271,14 +271,14 @@
         reqState.callback(true,reqState.data);
     }; 
     
-    xformer.prototype.makedata = function(model, xmlfile) {
+    xformer.prototype.makedata = function(model, jsonFile) {
         var boundary = '---------------------------';
         boundary += Math.floor(Math.random()*32768);
         boundary += Math.floor(Math.random()*32768);
         boundary += Math.floor(Math.random()*32768);
         xhr.setRequestHeader("Content-Type", 'multipart/form-data; boundary=' + boundary);
         var body = '';
-        body += '--' + boundary + '\r\n' + 'Content-Disposition: form-data; name="xml_submission_file";';
+        //body += '--' + boundary + '\r\n' + 'Content-Disposition: form-data; name="xml_submission_file";';
 
         var modelTime = new Date();
         modelTime.setTime(model.timestamp());
@@ -289,16 +289,54 @@
                         "_"+
                         modelTime.getHours()+"-"+
                         modelTime.getMinutes()+"-"+
-                        modelTime.getSeconds()+".xml";
+                        modelTime.getSeconds()+".js";
         
-        body += 'filename="' + filename + '"' + '\r\n'; 
-        body += 'Content-Type: text/xml' + '\r\n'; 
-        body += 'Content-Transfer-Encoding: UTF-8' + '\r\n'; 
-        body += '\r\n'
-        body += xmlfile;
-        body += '\r\n'
-        body += '--' + boundary + '--';
+            body += '--' + boundary + '\r\n'
+            body += 'Content-Disposition: form-data; name="json_submission_file";filename="' + filename +'";\r\n';
+            body += 'Content-Type: text/javascript' + '\r\n'; 
+            body += 'Content-Transfer-Encoding: UTF-8' + '\r\n'; 
+            body += '\r\n'
+            body += jsonFile;
+            body += '\r\n'
+            body += '--' + boundary + '--';
         return body;
+    };
+    
+    xformer.prototype.createJSONData = function (model) {
+        var obj = {$_disease_case: []};
+        var c = obj["$_disease_case"];
+        c[0] = {};
+        var f = c[0];
+        
+       var form = app.uiController.getFormByName("disease_case");
+       var defaultForm = form.get("form");
+        
+      var data = form.get("obj")["$_disease_case"][0]["field"];
+      for (var key in data) {
+        var item = data[key];
+        var name = item["@name"];
+        var type = item["@type"];
+        var value = model.get(name);;
+        if (type.indexOf("reference") === 0) {
+            if (item["select"]) {
+                    //value = 
+                    /*
+                    if (options[i]["@value"] === value) {
+                        var select = element.find("select").first();
+                        select[0].selectedIndex = i;
+                        select.selectmenu("refresh");
+                    }
+                    */
+                //}
+            }
+        }
+        else {
+            if (value != defaultForm[name]) {
+                f[name] = value;
+            }
+            
+        }
+      }
     };
     
     xformer.prototype.sendModel = function (model, cb, options) {
@@ -307,7 +345,15 @@
         reqState.data = model;
         var pairs = [];
         
+        var form = app.uiController.getFormByName("disease_case")
+      var formData = form.get("form");
+      //var data = form.get("obj")["$_" + formName][0]["field"];
+      //for (var key in data) {
+      //  var item = data[key];
+      //  var name = item["@name"];
+     // }
         // Fill field
+        /*
         var xmlDocument = '<?xml version="1.0"  encoding="UTF-8"?>\r\n';
         xmlDocument += '<' + model._formId + '>\r\n';
         for (var key in model.attributes) {
@@ -319,6 +365,9 @@
             }
         }
         xmlDocument += '</' + model._formId + '>\r\n';
+        */
+        var data = this.createJSONData(model);
+        
         
         // create url to send to
         var serverUrl = app.state.settings.serverInfo.get("url");
@@ -328,13 +377,14 @@
         var username = app.state.settings.serverInfo.get("username");
         var password = app.state.settings.serverInfo.get("password");
         var authentication = 'Basic ' + window.btoa(username + ':' + password);
+        return;
         
         // Set headers
         xhr.onload = this.cbSendModel.bind(this);
         //xhr.onreadystatechange=this.cbSendModel.bind(this);
         xhr.open('POST', urlSubmit, true);
         xhr.setRequestHeader('Authorization', authentication);
-        var dataToSend = this.makedata(model,xmlDocument);
+        var dataToSend = this.makedata(model,jsonDocument);
         try {
             xhr.send(dataToSend);
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
