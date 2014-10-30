@@ -373,7 +373,6 @@
             }
         }
       }
-      return obj
     };
 
     view.prototype.showForm = function(form,model,$page) {

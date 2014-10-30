@@ -316,18 +316,24 @@
         var item = data[key];
         var name = item["@name"];
         var type = item["@type"];
-        var value = model.get(name);;
+        var value = model.get(name);
         if (type.indexOf("reference") === 0) {
-            if (item["select"]) {
-                    //value = 
-                    /*
-                    if (options[i]["@value"] === value) {
-                        var select = element.find("select").first();
-                        select[0].selectedIndex = i;
-                        select.selectmenu("refresh");
-                    }
-                    */
-                //}
+            if (value != defaultForm[name]) {
+                if (item["select"]) {
+                    var resource = type.split(' ')[1];
+                    var resourceId = "$k_" + name;
+                    var reference = {"@resource":resource,"@uuid":value};
+                    f[resourceId] = reference;
+                        //value = 
+                        /*
+                        if (options[i]["@value"] === value) {
+                            var select = element.find("select").first();
+                            select[0].selectedIndex = i;
+                            select.selectmenu("refresh");
+                        }
+                        */
+                    //}
+                }
             }
         }
         else {
@@ -337,6 +343,7 @@
             
         }
       }
+      return JSON.stringify(obj);
     };
     
     xformer.prototype.sendModel = function (model, cb, options) {
@@ -377,7 +384,6 @@
         var username = app.state.settings.serverInfo.get("username");
         var password = app.state.settings.serverInfo.get("password");
         var authentication = 'Basic ' + window.btoa(username + ':' + password);
-        return;
         
         // Set headers
         xhr.onload = this.cbSendModel.bind(this);
