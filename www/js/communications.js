@@ -268,7 +268,7 @@
         var rawText = reply.target.responseText;
 
         // notify the controller that the load is complete
-        reqState.callback(true,reqState.data);
+        //reqState.callback(true,reqState.data);
     }; 
     
     xformer.prototype.makedata = function(model, jsonFile) {
@@ -323,7 +323,7 @@
                     var resource = type.split(' ')[1];
                     var resourceId = "$k_" + name;
                     var reference = {"@resource":resource,"@uuid":value};
-                    f[resourceId] = reference;
+                    f[name] = value;
                         //value = 
                         /*
                         if (options[i]["@value"] === value) {
@@ -350,7 +350,7 @@
         reqState.type = "send-form";
         reqState.callback = cb;
         reqState.data = model;
-        var pairs = [];
+        //var pairs = [];
         
         var form = app.uiController.getFormByName("disease_case")
       var formData = form.get("form");
@@ -373,12 +373,12 @@
         }
         xmlDocument += '</' + model._formId + '>\r\n';
         */
-        var data = this.createJSONData(model);
+        var jsonDocument = this.createJSONData(model);
         
         
         // create url to send to
-        var serverUrl = app.state.settings.serverInfo.get("url");
-        var urlSubmit = serverUrl + "/xforms/submission/" + model._formId;
+        var serverUrl = app.uiController.getHostURL();
+        var urlSubmit = serverUrl + "/disease/case.s3json";
 
         // send
         var username = app.state.settings.serverInfo.get("username");
@@ -388,11 +388,11 @@
         // Set headers
         xhr.onload = this.cbSendModel.bind(this);
         //xhr.onreadystatechange=this.cbSendModel.bind(this);
-        xhr.open('POST', urlSubmit, true);
+        xhr.open('PUT', urlSubmit, true);
         xhr.setRequestHeader('Authorization', authentication);
-        var dataToSend = this.makedata(model,jsonDocument);
+        //var dataToSend = this.makedata(model,jsonDocument);
         try {
-            xhr.send(dataToSend);
+            xhr.send(jsonDocument);
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         }
         catch (err) {
@@ -401,32 +401,39 @@
         }
        
     };
-
+/*
     var jsonData = '{' +
                     '"$_disease_case": [' +
-                    '{"case_number":"42",' +
-                    '"$k_disease_id":{"@resource":"disease_disease","@tuid":"DISEASE"},' +
+                    '{"case_number":"47",' +
+                    //'"$k_disease_id":{"@resource":"disease_disease","@tuid":"DISEASE"},' +
+                    //'"$k_disease_id":{"@resource":"disease_disease","@uuid":"1"},' +
+                    '"disease_id":"1",' +
                     '"monitoring_level":"QUARANTINE",' +
                     '"illness_state":"SYMPTOMATIC",' +
                     '"diagnosis_status":"CONFIRMED-POS",' +
-                    '"$k_person_id":{"resource":"pr_person","@tuid":"PERSON"}' +
+                    //'"$k_person_id":{"resource":"pr_person","@tuid":"PERSON"}' +
+                    //'"$k_person_id":{"resource":"pr_person","@uuid":"3"}' +
+                    '"person_id":"3"' +
                     '}' +
-                    '],' +
-                    '"$_pr_person":' +
-                    '[' +
-                    '{"@tuid":"PERSON",' +
-                    '"first_name":"John",' +
-                    '"last_name":"Johnson",' +
-                    '"email":"jj@gmail.com"' +
-                    '}' +
-                    '],' +
-                    '"$_disease_disease":' +
-                    '[' +
-                    '{"@tuid":"DISEASE","name":"Ebola Virus Disease"}' +
+                    //'],' +
+                    //'"$_pr_person":' +
+                    //'[' +
+                    //'{"@tuid":"PERSON",' +
+                    ////'"name":"John Johnson"' +
+                    //'"first_name":"John",' +
+                    //'"last_name":"Johnson",' +
+                    //'"email":"jj@gmail.com"' +
+                    //'}' +
+                    //'],' +
+                    //'"$_disease_disease":' +
+                    //'[' +
+                    //'{"@tuid":"DISEASE","name":"Ebola Virus Disease"}' +
                     ']' +
                     '}';
     
-    
+*/
+    var jsonData = '{"$_disease_case":[{"case_number":"51","person_id":"3","disease_id":"1","illness_status":"UNKNOWN","diagnosis_status":"UNKNOWN","monitoring_level":"NONE"}]}';
+
     xformer.prototype.cbSendForm = function (reply) {
         //console.log("cbReadFormList done");
         if (xhr.readyState != 4) {

@@ -337,7 +337,8 @@
                 //var options = item["select"][0]["option"];
                 //for (var i = 0; i < options.length; i++) {
                     var select = element.find("select").first();
-                    value = select[0].selectedIndex;
+                    //var selectIndex = select[0].selectedIndex;
+                    value = select[0]["value"];
                     model.set(name,value);
                     /*
                     if (options[i]["@value"] === value) {
@@ -350,26 +351,34 @@
             }
         }
         else {
+            if (item["select"]) {
+                var select = element.find("select").first();
+                var selectIndex = select[0].selectedIndex;
+                value = select[0]["value"];
+                model.set(name,value);
+            }
+            else {
             switch (type) {
-                case "string":
-                    //element.html(value);
-                    value = (element.find("input").first().val()) || "";
-                    model.set(name,value);
-                    break;
-                case "date":
-                    value = (element.find("input").first().val()) || "";
-                    model.set(name,value);
-                    break;
-                case "datetime":
-                    value = (element.find("input").first().val()) || "";
-                    model.set(name,value);
-                    break;
-                case "text":
-                    value = (element.find("input").first().val()) || "";
-                    model.set(name,value);
-                    break;
-                default:
-                    break;
+                    case "string":
+                        //TODO: if there is a select then get the string from the select value
+                        value = (element.find("input").first().val()) || "";
+                        model.set(name,value);
+                        break;
+                    case "date":
+                        value = (element.find("input").first().val()) || "";
+                        model.set(name,value);
+                        break;
+                    case "datetime":
+                        value = (element.find("input").first().val()) || "";
+                        model.set(name,value);
+                        break;
+                    case "text":
+                        value = (element.find("input").first().val()) || "";
+                        model.set(name,value);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
       }
