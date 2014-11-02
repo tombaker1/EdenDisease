@@ -67,15 +67,16 @@
             this.parseForm();
             //app.commHandler.parseFormList(formListXml);
             // put the list of forms into the page
-            /*
-            app.view.insertForms(app.commHandler.getAllForms());
+
+            //app.view.insertForms(app.commHandler.getAllForms());
             
             // Parse all keys
+
             var savedData = [];
             var storageList = app.storage.list();
             for (var i = 0; i < storageList.length; i++) {
                 var key = storageList[i];
-                if (key.indexOf("form-xml") >= 0) {
+                            /*if (key.indexOf("form-xml") >= 0) {
                     var xml = app.storage.read(key);
                     //console.log("loading form " + key + " length " + xml.length);
                     var formName = key.split('-')[2];
@@ -88,19 +89,21 @@
                                              checked:false,
                                              disabled:true});
                 }
-                else if (key.indexOf("data-") >= 0) {
+                else             */
+                if (key.indexOf("data-") >= 0) {
                     savedData.unshift(key);
                 }
                 
             }
+
             
             //read the list into the collection 
             activeForms.restore(savedData);
             
             // update view lists
             app.view.getFormList().enhanceWithin();
-            app.view.$newFormList.listview('refresh');
-            */
+            //app.view.$newFormList.listview('refresh');
+
         }
       
         

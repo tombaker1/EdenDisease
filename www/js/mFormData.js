@@ -85,7 +85,7 @@ var mActiveFormList = Backbone.Collection.extend({
             var key = modelList.pop();
             var fields = key.split('-');
             var formName = fields[1];
-            var form = app.commHandler.getFormByName(formName);
+            var form = app.uiController.getFormByName("disease_case");
             var timestamp = fields[2];
             var storageData = app.storage.read(key);
             var data = JSON.parse(storageData);
@@ -93,7 +93,7 @@ var mActiveFormList = Backbone.Collection.extend({
             //model.name(formName);
             //model.timestamp(+timestamp);
             //model.submitted(data["_submitted"]);
-            model.urlRoot = form.get("url");
+            //model.urlRoot = form.get("url");
             this.add(model);
             app.view.newSavedFormItem({model:model});
         }
