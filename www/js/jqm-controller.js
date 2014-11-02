@@ -390,6 +390,18 @@
     }
     
     controller.prototype.editForm = function(model) {
+        var form = this.getFormByName("disease_case");
+        var $page = $("#page-new-form");
+        //var model = new mFormData(form.get("form"));
+        //model.name(form.get("name"));
+        //model.timestamp(Date.now());
+        //model.urlRoot = form.get("url");
+        //model._formId = form.get("formId");
+        form.set("current",model);
+        //var pageID = pageURL.hash.replace( /#/, "" );
+        app.view.showForm(form,model,$page);
+        $.mobile.changePage($page,{transition:"slide"});
+        /*
         var form = app.commHandler.getFormByName(model.name());
         var $page = $("#page-form-" + form.get("name"));
         //var model = new formData(form.get("data"));
@@ -398,6 +410,7 @@
         form.set("current",model);
         //var pageID = pageURL.hash.replace( /#/, "" );
         app.view.showForm(form,model,$page);
+        */
     }
    
     // handle the jqm page change to make sure dynamic content is handled
