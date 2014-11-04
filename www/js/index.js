@@ -51,11 +51,13 @@ var app = {
         this.testmodule.init();
         this.testmodule.doSomething();
         this.bind();
+        /*
         this.storage.init();
         this.state.settings.serverInfo = new userInfo();
         this.getState();
         this.view.init();
         this.uiController.init({state: this.state});
+        */
         
         // set version
         $("#version").html("Version: " + config.version);
@@ -72,9 +74,15 @@ var app = {
     
     bind: function() {
         document.addEventListener('deviceready', this.deviceready, false);
+        window.addEventListener('hashchange',this.onHashChange.bind(this),false)
         $("#reset-button").on("click",this.onReset.bind(this));
         $("#load-form-list-button").on("click",this.onLoad.bind(this));
         $("#debug-button").on("click",this.onDebug.bind(this));
+    },
+    
+    onHashChange: function(evt) {
+        console.log("onHashChange to: " + evt.newURL);
+        evt.preventDefault();
     },
     
     onLoad: function() {

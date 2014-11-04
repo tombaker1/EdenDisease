@@ -8,5 +8,5 @@ var config = {
         //formPath: "res/xml/",
         //formList: "formList.xml"
     },
-    version: "0.1.0"
+    version: "0.2.0"
 };
