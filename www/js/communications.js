@@ -239,9 +239,15 @@
         reqState.callback = cb;
         reqState.data = "load-form";
 
+        // send
+        var username = app.state.settings.serverInfo.get("username");
+        var password = app.state.settings.serverInfo.get("password");
+        var authentication = 'Basic ' + window.btoa(username + ':' + password);
+
         try {
             xhr.onload = this.cbReadForm.bind(this);
             xhr.open("get", url, true);
+            xhr.setRequestHeader('Authorization', authentication);
             xhr.send();
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         }
@@ -352,8 +358,8 @@
         reqState.data = model;
         //var pairs = [];
         
-        var form = app.uiController.getFormByName("disease_case")
-      var formData = form.get("form");
+        //var form = app.uiController.getFormByName("disease_case")
+      //var formData = form.get("form");
       //var data = form.get("obj")["$_" + formName][0]["field"];
       //for (var key in data) {
       //  var item = data[key];
@@ -432,7 +438,15 @@
                     '}';
     
 */
-    var jsonData = '{"$_disease_case":[{"case_number":"51","person_id":"3","disease_id":"1","illness_status":"UNKNOWN","diagnosis_status":"UNKNOWN","monitoring_level":"NONE"}]}';
+    //var jsonData = '{"$_disease_case":[{"case_number":"51","person_id":"3","disease_id":"1","illness_status":"UNKNOWN","diagnosis_status":"UNKNOWN","monitoring_level":"NONE"}]}';
+    var jsonData = '--------12345678\r\n' +
+                    'Content-Disposition: form-data; name="email"\r\n' +
+                    '\r\n' +
+                    'tombaker1@gmail.com\r\n' +
+                    '--------12345678\r\n' +
+                    'Content-Disposition: form-data; name="password"\r\n' +
+                    '\r\n' +
+                    'eden\r\n';
 
     xformer.prototype.cbSendForm = function (reply) {
         //console.log("cbReadFormList done");
@@ -464,24 +478,16 @@
             //var xmlData = '<?xml version="1.0"?><pr_image><profile>1</profile><image>image</image><url>url</url><type>1</type><description>ddd</description></pr_image>';
             var data = jsonData;
             ///data += '';
-            var body = '';
-            body += '--' + boundary + '\r\n'
-            body += 'Content-Disposition: form-data; name="json_submission_file";filename="xml_file.js";\r\n';
-            body += 'Content-Type: text/javascript' + '\r\n'; 
-            body += 'Content-Transfer-Encoding: UTF-8' + '\r\n'; 
-            body += '\r\n'
-            body += data;
-            body += '\r\n'
-            body += '--' + boundary + '--';
         
-            var url = hostURL + "/disease/case.s3json";
+            var url = hostURL + "/default/user/login";
+            //var url = hostURL + "/disease/case.s3json";
             //var url = "http://tom-xps:8000/eden/disease/case.s3json";
             //http://ebola.sahanafoundation.org/eden/disease/disease.s3json
             //http://ebola.sahanafoundation.org/eden/disease/case.s3json
-            xhr.open('PUT', url, true) //, username, password); // urlencoded-post
+            xhr.open('POST', url, true) //, username, password); // urlencoded-post
             xhr.onload = this.cbSendForm.bind(this);
-            xhr.setRequestHeader('Authorization', authentication);
-            //xhr.setRequestHeader("Content-Type", 'multipart/form-data; boundary=' + boundary);
+            //xhr.setRequestHeader('Authorization', authentication);
+            xhr.setRequestHeader("Content-Type", 'multipart/form-data; boundary=' + boundary);
             //xhr.send(body);
             xhr.send(jsonData);
 /*

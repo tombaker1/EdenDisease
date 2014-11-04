@@ -74,14 +74,14 @@ var app = {
         document.addEventListener('deviceready', this.deviceready, false);
         $("#reset-button").on("click",this.onReset.bind(this));
         $("#load-form-list-button").on("click",this.onLoad.bind(this));
-        $("#store-form-button").on("click",this.onStore.bind(this));
+        $("#debug-button").on("click",this.onDebug.bind(this));
     },
     
     onLoad: function() {
         this.uiController.loadForm();
     },
     
-    onStore: function() {
+    onDebug: function() {
         var serverURL = this.state.settings.serverInfo.get("url");
         this.commHandler.sendForm(serverURL);  
     },
