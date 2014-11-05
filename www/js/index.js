@@ -51,13 +51,13 @@ var app = {
         this.testmodule.init();
         this.testmodule.doSomething();
         this.bind();
-        /*
+
         this.storage.init();
         this.state.settings.serverInfo = new userInfo();
         this.getState();
         this.view.init();
         this.uiController.init({state: this.state});
-        */
+
         
         // set version
         $("#version").html("Version: " + config.version);
@@ -81,7 +81,9 @@ var app = {
     },
     
     onHashChange: function(evt) {
-        console.log("onHashChange to: " + evt.newURL);
+        console.log("onHashChange to: " + location.hash);
+        var newPage = location.hash;
+        this.uiController.changePage(newPage);
         evt.preventDefault();
     },
     
