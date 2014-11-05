@@ -23,6 +23,8 @@
 
     function view(  ) {
         //this.init();
+        this.pageSet = {};          // Collection of all active pages
+        this.pageStack = [];        // Page navigation stack
         this.loadFormArray = [];
         this.savedFormArray = [];
         this.newFormArray = [];
@@ -52,15 +54,43 @@
         $("#password").change(this.onPasswordChange.bind(this));
         
         // Initialize jqm
-        $("div.page").each(function(index){
-            $(this).page();
-            });
-        $("div.popup").each(function(index){
-            $(this).popup(); 
-            });
+        //$("div.page").each(function(index){
+        //    $(this).page();
+        //    });
+        //$("div.popup").each(function(index){
+        //    $(this).popup(); 
+       //     });
+        
+        this.addPage("page-home");
+        this.addPage("page-settings");
+        this.pageStack.push($("page-home"));
         //this.$loadFormList.enhanceWithin();
         //this.$newFormList.listview();
         //this.$savedFormList.listview();
+    };
+    
+    view.prototype.addPage = function ( pageName, pageElement ) {
+        if (!pageElement) {
+            pageElement = $('#' + pageName).first();
+        }
+        if (pageElement) {
+            this.pageSet[pageName] = pageElement;
+        }
+    };
+    
+    view.prototype.showPage = function ( pageName ) {
+        var element = this.pageSet[pageName];
+        if (element) {
+            var currentVisiblePage = this.pageStack[pageStack.length-1];
+            this.pageStack.push(element);
+            element.addClass("se-page-visible");
+            currentVisiblePage.addClass("se-page-left");
+            currentVisiblePage.addClass("se-page-visible");            
+            
+        }
+    };
+    
+    view.prototype.popPage = function (  ) {
     };
     
     view.prototype.newSavedFormItem = function ( options ) {

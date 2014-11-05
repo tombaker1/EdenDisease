@@ -399,6 +399,13 @@
    
     controller.prototype.changePage = function( pageHash) {
         console.log(pageHash);
+        var pageName = pageHash.substring(1);
+        if (pageName === "page-back") {
+            app.view.popPage();
+        }
+        else {
+            app.view.showPage(pageName);
+        }
     }
     
     // handle the jqm page change to make sure dynamic content is handled

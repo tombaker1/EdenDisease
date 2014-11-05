@@ -26,53 +26,63 @@
 <link href="lib/themes/default/style.css" rel="stylesheet" type="text/css" />
 		
 		
-		<script type="text/javascript" src="cordova.js"></script>
-		<script type="text/javascript" src="cordova_webapp.js"></script>
-		<script type="text/javascript" src="lib/jquery/jquery-2.1.0.min.js"></script>
-		<script type="text/javascript" src="lib/underscore-1.6.0/underscore-min.js"></script>
-		<script type="text/javascript" src="lib/backbone-1.1.2/backbone.js"></script>
-		<!-- script type="text/javascript" src="lib/foundation/foundation.min.js"></script -->
-		<!-- link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.2.min.css"></link -->
-		<!-- script type="text/javascript" src="lib/jquery/jquery.mobile-1.4.2.min.js"></script -->
-		<link rel="stylesheet" href="css/index.css"></link>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="cordova_webapp.js"></script>
+    <script type="text/javascript" src="lib/jquery/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="lib/underscore-1.6.0/underscore-min.js"></script>
+    <script type="text/javascript" src="lib/backbone-1.1.2/backbone.js"></script>
+    <!-- script type="text/javascript" src="lib/foundation/foundation.min.js"></script -->
+    <!-- link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.2.min.css"></link -->
+    <!-- script type="text/javascript" src="lib/jquery/jquery.mobile-1.4.2.min.js"></script -->
+    <link rel="stylesheet" href="css/index.css"></link>
 	</head>
 	<body>
 		<!-- Application pages -->
-		<div id="page-home" class="se-page">
+		<div id="page-home" class="se-page se-page-visible">
 			<!-- div data-role="header" data-add-back-btn="true"><h1>Sahana Ebola Response</h1></div -->
-		<div class='row'>
-				<nav class="top-bar" data-topbar role="navigation">
-				<section class="top-bar-section">
-				  <!-- Right Nav Section -->
-				  <ul class="right">
-					<li class="active"><a href="#page-settings">Settings</a></li>
-					<!-- li class="has-dropdown">
-					  <a href="#">Menu</a>
-					  <ul class="dropdown">
-						<li><a href="#">Settings</a></li>
-						<li class="active"><a href="#">Active link in dropdown</a></li>
-					  </ul>
-					</li -->
-				  </ul>
-				</section>
-				</nav>
+            <div class='row'>
+                <nav class="top-bar" data-topbar role="navigation">
+                    <section class="top-bar-section">
+                    <!-- Right Nav Section -->
+                        <ul class="right">
+                            <li class="active"><a href="#page-settings">Settings</a></li>
+                        </ul>
+                    </section>
+                </nav>
+            </div>
+            
+                    
+            <h1>Sahana Ebola Response Demo</h1>
+            <div>
+                <ul id="menu" class="stack button-group">
+                    <li><a id="link-button" href="#page-cases"  class="button">Cases</a></li>
+                    <li><a id="link-button" href="#page-people"  class="button">Contact Persons</a></li>
+                    <li><a id="link-button" href="#page-monitoring"  class="button">Contact Monitoring</a></li>
+                    <li><a id="link-button" href="#page-saved-forms"  class="button">Saved Forms</a></li>
+                    <li><a id="link-button" href="#page-settings"  class="button">Settings</a></li>
+                </ul>
+            </div>
+            <div data-role="footer"  data-position="fixed"><h4></h4></div>
 		</div>
-				<h1>Sahana Ebola Response Demo</h1>
-			<div>
-				<ul id="menu" class="stack button-group">
-					<li><a id="link-button" href="#page-cases"  class="button">Cases</a></li>
-					<li><a id="link-button" href="#page-people"  class="button">Contact Persons</a></li>
-					<li><a id="link-button" href="#page-monitoring"  class="button">Contact Monitoring</a></li>
-					<li><a id="link-button" href="#page-saved-forms"  class="button">Saved Forms</a></li>
-					<li><a id="link-button" href="#page-settings"  class="button">Settings</a></li>
-				</ul>
-			</div>
-			<div data-role="footer"  data-position="fixed"><h4></h4></div>
-		</div> 
-		
+        
+        <!-- Settings page TODO should this by dynamic??? -->
+		<div id="page-settings" class="se-page" style="visibility: hidden">
+            <div class='row'>
+                <nav class="top-bar" data-topbar role="navigation">
+                    <section class="top-bar-section">
+                    <!-- Right Nav Section -->
+                        <ul class="left">
+                            <li class="active"><a href="#page-back">Back</a></li>
+                    </section>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- dynamic page container -->
+        <div id="dyamic-pages">
+        </div>
 
-		<!-- script type="text/javascript" src="lib/foundation/foundation/foundation.js"></script -->
-		<!-- script type="text/javascript" src="lib/foundation/foundation/foundation.topbar.js"></script -->
+
 		<script type="text/javascript" src="lib/foundation/foundation.min.js"></script>
 		<script type="text/javascript" src="js/models.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
@@ -85,9 +95,9 @@
 		<script type="text/javascript" src="js/storage.js"></script>
 		<script type="text/javascript" src="config.js"></script>
 		<script type="text/javascript">
-				$(document).foundation();
+			$(document).foundation();
 			window.onload = function() {
-			app.initialize();
+                app.initialize();
 			}
 		</script>
 	</body>

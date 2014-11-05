@@ -13,3 +13,15 @@ display: inline-table;
 display: inline-table;
 }
 
+.se-page {
+    top: 0;
+    left: 100%;
+}
+
+.se-page-visible {
+    left: 0;
+}
+
+.se-page-left {
+    left: -100%;
+}
