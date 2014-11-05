@@ -397,7 +397,7 @@
         app.view.showForm(form,model,$page);
     }
    
-    var changePage = function( pageHash) {
+    controller.prototype.changePage = function( pageHash) {
         console.log(pageHash);
     }
     

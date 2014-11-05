@@ -33,11 +33,11 @@
     view.prototype.init = function ( options ) {
         //console.log("jqm-view init");
         
-        this.$loadFormList = $("#form-list-data");
-        this.$savedFormList = $("#form-saved-list");
-        this.$newFormList = $("#form-items");
-        this.formList = this.$loadFormList[0];
-        this.confirm = new confirmDialog();
+        //this.$loadFormList = $("#form-list-data");
+        //this.$savedFormList = $("#form-saved-list");
+        //this.$newFormList = $("#form-items");
+        //this.formList = this.$loadFormList[0];
+        //this.confirm = new confirmDialog();
 
         // Set events
         $("#reset-dialog input[value='ok']").on("click",this.onResetOK.bind(this));
@@ -58,9 +58,9 @@
         $("div.popup").each(function(index){
             $(this).popup(); 
             });
-        this.$loadFormList.enhanceWithin();
-        this.$newFormList.listview();
-        this.$savedFormList.listview();
+        //this.$loadFormList.enhanceWithin();
+        //this.$newFormList.listview();
+        //this.$savedFormList.listview();
     };
     
     view.prototype.newSavedFormItem = function ( options ) {
