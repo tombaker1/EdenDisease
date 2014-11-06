@@ -397,9 +397,9 @@
         app.view.showForm(form,model,$page);
     }
    
-    controller.prototype.changePage = function( pageHash) {
-        console.log(pageHash);
-        var pageName = pageHash.substring(1);
+    controller.prototype.changePage = function( pageName) {
+        console.log(pageName);
+        //var pageName = pageHash.substring(1);
         if (pageName === "page-back") {
             app.view.popPage();
         }

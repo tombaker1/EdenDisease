@@ -94,6 +94,9 @@ var app = {
     
     onTest: function(evt) {
         evt.preventDefault();
+        var element = evt.currentTarget;
+        var newPage = $(element).attr("link");
+        this.uiController.changePage(newPage);
     },
     
     onLoad: function() {
