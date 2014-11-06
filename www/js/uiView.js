@@ -18,10 +18,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-
 ;(function ( $, window, document, undefined ) {
 
-    function view(  ) {
+    function view() {
         //this.init();
         this.pageSet = {};          // Collection of all active pages
         this.pageStack = [];        // Page navigation stack
@@ -63,7 +62,7 @@
         
         this.addPage("page-home");
         this.addPage("page-settings");
-        this.pageStack.push($("page-home"));
+        this.pageStack.push($("#page-home"));
         //this.$loadFormList.enhanceWithin();
         //this.$newFormList.listview();
         //this.$savedFormList.listview();
@@ -81,16 +80,24 @@
     view.prototype.showPage = function ( pageName ) {
         var element = this.pageSet[pageName];
         if (element) {
-            var currentVisiblePage = this.pageStack[pageStack.length-1];
+            var currentVisiblePage = this.pageStack[this.pageStack.length-1];
             this.pageStack.push(element);
-            element.addClass("se-page-visible");
+            currentVisiblePage.removeClass("se-page-visible");            
             currentVisiblePage.addClass("se-page-left");
-            currentVisiblePage.addClass("se-page-visible");            
-            
+            element.addClass("se-page-visible");
+           
         }
     };
     
     view.prototype.popPage = function (  ) {
+        if (this.pageStack.length >= 1) {
+            var element = this.pageStack.pop();
+            var newActive = this.pageStack[this.pageStack.length-1];
+            element.removeClass("se-page-visible");
+            newActive.removeClass("se-page-left");
+            newActive.addClass("se-page-visible");            
+        }
+        
     };
     
     view.prototype.newSavedFormItem = function ( options ) {

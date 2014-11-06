@@ -14,14 +14,33 @@ display: inline-table;
 }
 
 .se-page {
+    position: absolute;
     top: 0;
     left: 100%;
+    width: 100%;
+    height: 100%;
+    transition-property: left;
+    transition: 0.5s;
+    -moz-transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
 }
 
 .se-page-visible {
     left: 0;
+    transition-property: left;
+    transition: left 0.5s;
+    -moz-transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
 }
 
 .se-page-left {
+    position: absolute;
     left: -100%;
+    transition-property: left;
+    transition: 0.5s;
+    -moz-transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
 }
