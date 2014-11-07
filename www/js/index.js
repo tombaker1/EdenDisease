@@ -74,12 +74,14 @@ var app = {
     
     bind: function() {
         document.addEventListener('deviceready', this.deviceready, false);
-        window.addEventListener('hashchange',this.onHashChange.bind(this),false);
-        window.addEventListener('onbeforeunload',this.onTest.bind(this),false);
-        window.addEventListener('onclick',this.onTest.bind(this),false);
-        var el = document.getElementById("link-button2");
-        el.onclick = this.onTest.bind(this);
-        $("#link-button").on("click",this.onTest.bind(this));
+        //window.addEventListener('hashchange',this.onHashChange.bind(this),false);
+        //window.addEventListener('onbeforeunload',this.onTest.bind(this),false);
+        //window.addEventListener('onclick',this.onTest.bind(this),false);
+        //var el = document.getElementById("link-button2");
+        //el.onclick = this.onTest.bind(this);
+        $("#link-button").click(this.onTest.bind(this));
+        $("#link-button2").click(this.onTest.bind(this));
+        $("#link-button3").click(this.onTest.bind(this));
         $("#reset-button").on("click",this.onReset.bind(this));
         $("#load-form-list-button").on("click",this.onLoad.bind(this));
         $("#debug-button").on("click",this.onDebug.bind(this));
@@ -96,6 +98,7 @@ var app = {
         evt.preventDefault();
         var element = evt.currentTarget;
         var newPage = $(element).attr("link");
+        console.log("go to page "+newPage);
         this.uiController.changePage(newPage);
     },
     

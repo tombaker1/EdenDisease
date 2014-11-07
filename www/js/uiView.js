@@ -60,20 +60,24 @@
         //    $(this).popup(); 
        //     });
         
-        this.addPage("page-home");
-        this.addPage("page-settings");
-        this.pageStack.push($("#page-home"));
+        var pages = $("div[id^='page-']");
+        for (i = 0; i < pages.length; i++) {
+            var el = pages[i];
+            var name = $( pages[i] ).attr("id");
+            this.addPage(name, new pageView({"name":name}));
+        }
+        //this.showPage("page-home");
+        //this.homePage = new pageView({"name":"page-home"}));
+        //this.addPage("page-settings",new new pageView({"name":name}));
+        this.pageStack.push(this.pageSet["page-home"]);
         //this.$loadFormList.enhanceWithin();
         //this.$newFormList.listview();
         //this.$savedFormList.listview();
     };
     
-    view.prototype.addPage = function ( pageName, pageElement ) {
-        if (!pageElement) {
-            pageElement = $('#' + pageName).first();
-        }
-        if (pageElement) {
-            this.pageSet[pageName] = pageElement;
+    view.prototype.addPage = function ( name, page ) {
+        if (page) {
+            this.pageSet[name] = page;
         }
     };
     
@@ -82,9 +86,11 @@
         if (element) {
             var currentVisiblePage = this.pageStack[this.pageStack.length-1];
             this.pageStack.push(element);
-            currentVisiblePage.removeClass("se-page-visible");            
-            currentVisiblePage.addClass("se-page-left");
-            element.addClass("se-page-visible");
+            element.$el.addClass("se-page-visible");
+            if (currentVisiblePage) {
+                currentVisiblePage.$el.removeClass("se-page-visible");            
+                currentVisiblePage.$el.addClass("se-page-left");
+            }
            
         }
     };
@@ -93,9 +99,9 @@
         if (this.pageStack.length >= 1) {
             var element = this.pageStack.pop();
             var newActive = this.pageStack[this.pageStack.length-1];
-            element.removeClass("se-page-visible");
-            newActive.removeClass("se-page-left");
-            newActive.addClass("se-page-visible");            
+            element.$el.removeClass("se-page-visible");
+            newActive.$el.removeClass("se-page-left");
+            newActive.$el.addClass("se-page-visible");            
         }
         
     };
