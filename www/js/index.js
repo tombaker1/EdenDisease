@@ -79,9 +79,9 @@ var app = {
         //window.addEventListener('onclick',this.onTest.bind(this),false);
         //var el = document.getElementById("link-button2");
         //el.onclick = this.onTest.bind(this);
-        $("#link-button").click(this.onTest.bind(this));
-        $("#link-button2").click(this.onTest.bind(this));
-        $("#link-button3").click(this.onTest.bind(this));
+        //$("#link-button").click(this.onTest.bind(this));
+        //$("#link-button2").click(this.onTest.bind(this));
+        //$("#link-button3").click(this.onTest.bind(this));
         $("#reset-button").on("click",this.onReset.bind(this));
         $("#load-form-list-button").on("click",this.onLoad.bind(this));
         $("#debug-button").on("click",this.onDebug.bind(this));

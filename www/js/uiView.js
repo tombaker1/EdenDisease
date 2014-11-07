@@ -52,6 +52,11 @@
         $("#username").change(this.onUsernameChange.bind(this));
         $("#password").change(this.onPasswordChange.bind(this));
         
+        _.extend(this, Backbone.Events);
+        this.on("navigate", function(path) {
+            console.log("navigate caught " + path);
+        });
+        
         // Initialize jqm
         //$("div.page").each(function(index){
         //    $(this).page();

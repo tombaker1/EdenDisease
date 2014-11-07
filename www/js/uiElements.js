@@ -120,7 +120,7 @@ var pageView = Backbone.View.extend({
                          "</div>"
                         ),
     events: {
-        //"click #cancel": "onCancel",
+        "click #link-button": "navigate" //,
         //"click #save":    "onSave",
         //"click #submit":  "onSubmit"
     },
@@ -141,7 +141,17 @@ var pageView = Backbone.View.extend({
             this.setElement(element.get());
         }
         
+        var buttons = this.$el.find("#link-button");
+        //this.listenTo(buttons
      },
+    
+    navigate: function(event) {
+        var target = event.currentTarget;
+        var path = $(target).attr("link");
+        this.trigger("navigate",path);
+        console.log("navigate " + path);
+    },
+    
     render: function() {
         //var str = this.template({index:this.index,name:this.model.get("name")});
         //var name = this.model.get("name");
