@@ -148,7 +148,8 @@ var pageView = Backbone.View.extend({
     navigate: function(event) {
         var target = event.currentTarget;
         var path = $(target).attr("link");
-        this.trigger("navigate",path);
+        //this.trigger("navigate",path);
+        app.view.changePage(path);
         console.log("navigate " + path);
     },
     
@@ -181,6 +182,7 @@ var pageView = Backbone.View.extend({
     }*/
 });
 
+var mainPage
 
 var formPage = Backbone.View.extend({
     tagName: "div",

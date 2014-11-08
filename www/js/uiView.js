@@ -53,9 +53,7 @@
         $("#password").change(this.onPasswordChange.bind(this));
         
         _.extend(this, Backbone.Events);
-        this.on("navigate", function(path) {
-            console.log("navigate caught " + path);
-        });
+        this.on("navigate", this.changePage.bind(this));
         
         // Initialize jqm
         //$("div.page").each(function(index){
@@ -83,6 +81,16 @@
     view.prototype.addPage = function ( name, page ) {
         if (page) {
             this.pageSet[name] = page;
+        }
+    };
+    
+    view.prototype.changePage = function ( pageName ) {
+        console.log("view changePage to " + pageName);
+        if (pageName === "page-back") {
+            this.popPage();
+        }
+        else {
+            this.showPage(pageName);
         }
     };
     
