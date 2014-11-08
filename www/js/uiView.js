@@ -61,8 +61,8 @@
         for (i = 0; i < pages.length; i++) {
             var el = pages[i];
             var name = $( pages[i] ).attr("id");
-            var page
-            this.addPage(name, new pageView({"name":name}));
+            var page = new pageView({"name":name});
+            this.addPage(name, page);
         }
         this.pageStack.push(this.pageSet["page-home"]);
     };
@@ -70,6 +70,7 @@
     view.prototype.addPage = function ( name, page ) {
         if (page) {
             this.pageSet[name] = page;
+            page.on("navigate",this.changePage.bind(this));
         }
     };
     

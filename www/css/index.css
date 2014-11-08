@@ -44,3 +44,37 @@ display: inline-table;
     -webkit-transition-duration: 0.5s;
     -o-transition-duration: 0.5s;
 }
+
+.se-list-menu li {
+    list-style-type: none;
+    border-top: 2px solid #000;
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    border-bottom: 2px solid #000;
+    position: relative;
+}
+
+.se-list-menu li a {
+    display: block;
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+.se-list-menu li a .chevron {
+width: 20px;
+height: 20px;
+-webkit-transform: rotate(45deg);
+transform: rotate(45deg);
+display: block;
+float: right;
+padding: 0px;
+margin: 0px;
+margin-top: -10px;
+border-top: 5px solid #000;
+border-right: 5px solid #000;
+position: absolute;
+top: 50%;
+right: 5%;
+}
