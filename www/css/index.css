@@ -62,19 +62,24 @@ display: inline-table;
     padding-top: 15px;
 }
 
-.se-list-menu li a .chevron {
-width: 20px;
-height: 20px;
--webkit-transform: rotate(45deg);
-transform: rotate(45deg);
-display: block;
-float: right;
-padding: 0px;
-margin: 0px;
-margin-top: -10px;
-border-top: 5px solid #000;
-border-right: 5px solid #000;
-position: absolute;
-top: 50%;
-right: 5%;
+/* Chevron at end of line */
+.se-list-menu > li > a::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    display: block;
+    float: right;
+
+    padding: 0px;
+    margin: 0px;
+    margin-top: -10px;
+    border-top: 5px solid #000;
+    border-right: 5px solid #000;
+    position: absolute;
+    top: 50%;
+    right: 5%;
+
 }
+
