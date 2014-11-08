@@ -103,17 +103,6 @@
                 }
             }
         }
-        /*
-        var xmlDoc = $.parseXML(rawXml);
-        var $xml = $( xmlDoc );
-        forms = $xml.find( "form" );
-        for (var i = 0; i < forms.length; i++) {
-            var $item = $(forms[i]);
-            var name = $item[0].textContent; //.html();
-            var url = $item.attr("url");
-            formList.add(new formType({"name":name, "url":url}));
-        }
-        */
     };
     
     xformer.prototype.parseForm = function (rawXML,formName) {

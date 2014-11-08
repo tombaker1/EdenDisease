@@ -52,30 +52,19 @@
         $("#username").change(this.onUsernameChange.bind(this));
         $("#password").change(this.onPasswordChange.bind(this));
         
+        // Connect to Backbone View events
         _.extend(this, Backbone.Events);
         this.on("navigate", this.changePage.bind(this));
         
-        // Initialize jqm
-        //$("div.page").each(function(index){
-        //    $(this).page();
-        //    });
-        //$("div.popup").each(function(index){
-        //    $(this).popup(); 
-       //     });
-        
+        // Add all of the static pages
         var pages = $("div[id^='page-']");
         for (i = 0; i < pages.length; i++) {
             var el = pages[i];
             var name = $( pages[i] ).attr("id");
+            var page
             this.addPage(name, new pageView({"name":name}));
         }
-        //this.showPage("page-home");
-        //this.homePage = new pageView({"name":"page-home"}));
-        //this.addPage("page-settings",new new pageView({"name":name}));
         this.pageStack.push(this.pageSet["page-home"]);
-        //this.$loadFormList.enhanceWithin();
-        //this.$newFormList.listview();
-        //this.$savedFormList.listview();
     };
     
     view.prototype.addPage = function ( name, page ) {

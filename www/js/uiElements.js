@@ -111,18 +111,16 @@ var newFormListItem = Backbone.View.extend({
 });
 
 var pageView = Backbone.View.extend({
-    tagName: "div",
-    template: _.template("<div data-role='header' data-add-back-btn='false' data-position='fixed'>" +
-                            "<div class='row'>" +
-                            "<nav class='top-bar' data-topbar role='navigation'>" +
-                            "</nav>" +
-                         "</div>" +
-                         "</div>"
-                        ),
+    //tagName: "div",
+    //template: _.template("<div data-role='header' data-add-back-btn='false' data-position='fixed'>" +
+    //                        "<div class='row'>" +
+    //                        "<nav class='top-bar' data-topbar role='navigation'>" +
+    //                        "</nav>" +
+    //                     "</div>" +
+    //                     "</div>"
+    //                    ),
     events: {
-        "click #link-button": "navigate" //,
-        //"click #save":    "onSave",
-        //"click #submit":  "onSubmit"
+        "click #link-button": "navigate" 
     },
     
     initialize: function(options) {
@@ -156,33 +154,14 @@ var pageView = Backbone.View.extend({
     render: function() {
         //var str = this.template({index:this.index,name:this.model.get("name")});
         //var name = this.model.get("name");
-        this.$el.attr({"id":name,
-                       "class":"se-page",
-                      "data-role":"page"});
-        return this.$el.html(this.template({index:this.index,name:this.model.get("name")}));
+        //this.$el.attr({"id":name,
+        //               "class":"se-page",
+         //             "data-role":"page"});
+        return this.$el; //.html(this.template({index:this.index,name:this.model.get("name")}));
     },
-    //activate
-    /*,
-    onCancel: function() {
-        //console.log("cancel button");
-        app.view.getModelData(this);
-        parent.history.back();
-        $(app.uiController).trigger("form-cancel",this.model.get("current"));
-    },
-    onSave: function() {
-        //console.log("save button");
-        app.view.getModelData(this);
-        $(app.uiController).trigger("form-save",this.model.get("current"));
-    },
-    onSubmit: function() {
-        //console.log("submit button");
-        app.view.getModelData(this);
-        parent.history.back();
-        $(app.uiController).trigger("form-submit",this.model.get("current"));
-    }*/
 });
 
-var mainPage
+//var mainPage
 
 var formPage = Backbone.View.extend({
     tagName: "div",

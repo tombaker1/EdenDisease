@@ -33,10 +33,6 @@
         this._name = pluginName;
         this._diseaseCase = null;
        
-        //view.bind("form-cancel",this.onFormCancel.bind(this));
-        //$(this).bind("cancel",this.onFormCancel.bind(this));
-        //$(this).bind("save",this.onFormSave.bind(this));
-        //$(this).bind("submit",this.onFormSubmit.bind(this));
         $(this).bind("reset-all",this.onReset.bind(this));
         $("#cancel").click(this.onFormCancel.bind(this));
         $("#save").click(this.onFormSave.bind(this));
@@ -397,46 +393,6 @@
         app.view.showForm(form,model,$page);
     }
    
-    // handle the jqm page change to make sure dynamic content is handled
-    var pageChange = function( event, data) {
-         //console.log("changePage " + data.toPage)
-      if ( typeof data.toPage === "string" ) {
-    
-        var pageURL = $.mobile.path.parseUrl( data.toPage );
-        var pageselector = pageURL.hash.replace( /\?.*$/, "" );
-
-        //if (pageselector.indexOf("#nav-") >= 0) {
-            
-            //event.preventDefault();
-            //return;            
-        //}
-        
-        switch (pageselector) {
-            case "#page-new-form":
-                app.uiController.newForm();
-                return;
-                
-            case "#page-formlist":
-                requestFormList(defaultURL);
-            break;
-            case "#load-form":
-                var index = pageURL.hash.replace( /.*index=/, "" );
-              //console.log("loading form #" + index);
-                requestForm(index);
-            break;
-            case '#nav-return':
-                parent.history.back();
-            break;
-                
-          default:
-            return;
-        }
-          
-        event.preventDefault();
-      }
-    
-    };
-    
     var postLocation = function(latitude,longitude) {
         var msg = $("#content-messages").html();
         msg += "latitude: " + latitude + "<br>";
