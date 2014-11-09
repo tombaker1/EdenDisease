@@ -8,11 +8,14 @@ var config = {
         //formPath: "res/xml/",
         //formList: "formList.xml"
     },
-    pages: {
+    plugins: {
         settings: {
             name: "settings",
-            template: "settings.htm",
-            backButton: true
+            config: {
+                type: "page",
+                template: "settings.htm",
+                backButton: true
+            }
         },
         newCase: {
             name: "new-case",
