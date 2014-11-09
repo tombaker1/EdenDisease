@@ -1,0 +1,43 @@
+<h1>New Case</h1>
+<div data-role="content">
+        <ul id="form-items" data-role="listview" data-inset="true"></ul>
+
+        <div style="color:red">* Required Fields</div>
+
+        <div id="case-case_number"  name="case_number" data-role="fieldcontain">
+                <label></label>
+                <input id='input' type='text' name='case_number'/>
+        </div>
+        <div id="case-person_id"  name="person_id" data-role="fieldcontain" required="true">
+                <label for="select-person_id" class="select"></label>
+                <select name="select-person_id" id="select-person_id"></select>
+        </div>
+        <div id="case-disease_id"  name="disease_id" data-role="fieldcontain" required="true">
+                <label for="select-disease_id" class="select"></label>
+                <select name="select-disease_id" id="select-disease_id"></select>
+        </div>
+        <div id="case-illness_status"  name="illness_status" data-role="fieldcontain" required="true">
+                <label for="select-illness_status" class="select"></label>
+                <select name="select-illness_status" id="select-illness_status"></select>
+        </div>
+        <div id="case-symptom_debut"  name="symptom_debut" data-role="fieldcontain">
+                <label>Sympton Debut:</label>
+                <input id='input' type='text' name='symptom_debut'/>
+        </div>
+        <div id="case-diagnosis_status"  name="diagnosis_status" data-role="fieldcontain" required="true">
+                <label for="select-diagnosis_status" class="select"></label>
+                <select name="select-diagnosis_status" id="select-diagnosis_status"></select>
+        </div>
+        <div id="case-diagnosis_date"  name="diagnosis_date" data-role="fieldcontain">
+                <label>Diagnosis Date:</label>
+                <input id='input' type='text' name='diagnosis_date'/>
+        </div>
+        <div id="case-monitoring_level"  name="monitoring_level" data-role="fieldcontain" required="true">
+                <label for="select-monitoring_level" class="select"></label>
+                <select name="select-monitoring_level" id="select-monitoring_level"></select>
+        </div>
+        <div id="case-monitoring_until"  name="monitoring_until" data-role="fieldcontain">
+                <label>Monitoring required until:</label>
+                <input id='input' type='text' name='monitoring_until'/>
+        </div>
+</div>
