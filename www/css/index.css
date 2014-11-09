@@ -46,6 +46,8 @@ display: inline-table;
 }
 
 .se-list-menu li {
+    background-color: #2ba6cb;
+    color: #ffffff;
     list-style-type: none;
     border-top: 2px solid #000;
     border-left: 2px solid #000;
@@ -55,6 +57,7 @@ display: inline-table;
 }
 
 .se-list-menu li a {
+    color: #ffffff;
     display: block;
     padding-left: 20px;
     padding-right: 30px;

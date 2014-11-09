@@ -51,7 +51,7 @@
                 </nav>
             </div>
             
-                    
+ 
             <h1>Sahana Ebola Response Demo</h1>
             <div>
                 <ul id="menu" class="stack se-list-menu">
@@ -88,7 +88,7 @@
                 </div>
         </div>
             
-        <!-- Cases page TODO should this by dynamic??? -->
+        <!-- New Case page TODO should this by dynamic??? -->
 		<div id="page-new-case" class="se-page">
             <div class='row'>
                 <nav class="top-bar" data-topbar role="navigation">
@@ -97,7 +97,8 @@
                      </section>
                 </nav>
             </div>
-                
+            <div id="content"></div>
+            <!--    
             <h1>New Case</h1>
                 <div data-role="content">
                         <ul id="form-items" data-role="listview" data-inset="true"></ul>
@@ -141,6 +142,7 @@
                                 <input id='input' type='text' name='monitoring_until'/>
                         </div>
                 </div>
+                -->
             <!-- div data-role="footer"  data-position="fixed"><h4></h4></div -->
                 <div class='page-form-footer' data-role='footer' data-position='fixed' style='text-align:center'> 
                    <a class='footer-button' id='cancel' data-role='button' data-inline='true' href='#nav-return' style='display:inline-table'>Cancel</a> 
@@ -164,7 +166,8 @@
                     </section>
                 </nav>
             </div>
-            
+
+            <div id="content"></div>
            <div id="content-settings" data-role="content">
                 <div id="version"></div>
                 <!-- div class="ui-field-contain">
@@ -192,9 +195,14 @@
             </div>
             <!-- div data-role="footer" data-position="fixed"><h4></h4></div -->
         </div>
-        
+
         <!-- dynamic page container -->
-        <div id="dyamic-pages">
+        <div id="dyamic-pages"></div>
+        <div id="dynamic-load">
+            <!-- target="_blank"  -->
+            <textarea id="load-here"></textarea>
+             <iframe name='messageTxt' src='templates/settings.htm'  style='display:none'></iframe>
+            
         </div>
 
 
@@ -212,6 +220,7 @@
 		<script type="text/javascript">
 			window.onload = function() {
                 app.initialize();
+                $("#download-element").click();
 			}
 		</script>
 	</body>
