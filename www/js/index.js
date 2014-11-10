@@ -56,6 +56,7 @@ var app = {
         this.getState();
         this.view.init();
         this.uiController.init({state: this.state});
+        this.pluginManager.init();
         $(document).foundation();
         
         // set version

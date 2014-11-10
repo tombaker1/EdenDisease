@@ -37,9 +37,6 @@
         // Connect to Backbone View events
         _.extend(this, Backbone.Events);
         
-        // get all of the dynamic UI content
-        this.loadHtm();
-
         // Set events
         $("#reset-dialog input[value='ok']").on("click",this.onResetOK.bind(this));
         $("#reset-dialog input[value='cancel']").on("click",this.onResetCancel.bind(this));
@@ -64,27 +61,6 @@
         }
         this.pageStack.push(this.pageSet["page-home"]);
     };
-    view.prototype.dynamicLoad = function(evt) {
-    console.log("loaded");
-        //window.frames.messageTxt.document.body.lastChild.lastChild.data;
-        var newData = $("#new-data");
-    }; 
-
-    view.prototype.loadHtm = function() {
-        
-        // load page content
-        //as you see I have used this very page's url to test and you should replace it
-        var fileUrl = "/templates/settings.htm";
-        var html = "<iframe id='new-data' onload='app.view.dynamicLoad()' src='templates/settings.htm'  style='display:none'></iframe>";
-        $("#load-here").append(html);
-        //jQuery.get(fileUrl).then(function(text, status, xhr){
-           //text argument is what you want
-        //    console.log("load complete " + status);
-        //});
-    };
-    
-    //view.prototype.cbLoadHtmComplete() = function(text, status, xhr) {
-    //};
     
     view.prototype.addPage = function ( name, page ) {
         if (page) {
