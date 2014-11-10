@@ -18,6 +18,23 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+// Plugin config parameters
+//
+// name         - String used for page naming, and data structure keys
+// type         - Type of plugin:
+//                  page    - Backbone view page
+//                  utility - Functional code
+// template     - File path for View templates
+// backButton   - Defines if the header has a back button [true/false], default true
+// script       - Javascript code implementing the plugin
+// style        - Plugin specific CSS code
+//
+// Order of loading files.  These are the values of loadState.
+// 1. Template
+// 2. Style
+// 3. Script
+// 4. Complete
+//
 
 ;(function ( $, window, document, undefined ) {
     
@@ -31,6 +48,10 @@
     //
     pluginManager.prototype.init = function() {
         console.log("pluginManager init");
+        
+        // Connect to Backbone events
+        _.extend(this, Backbone.Events);
+
         this.loadPlugins();
     };
     
@@ -39,8 +60,17 @@
         var pluginConfig = config.plugins;
         for (key in pluginConfig) {
             var pluginSpec = pluginConfig[key];
-            this.plugins[pluginSpec.name] = {config:pluginSpec.config};
+            var pluginData = { config:pluginSpec.config,
+                                rawData: ""
+                             };
+            this.plugins[pluginSpec.name] = pluginData;
+            this.pluginLoadList.push({name: key, loadState: 0});
+            
         }
+        
+        // Initiate the download
+        this.requestData();
+        
         // load page content
         //as you see I have used this very page's url to test and you should replace it
         //var fileUrl = "/templates/settings.htm";
@@ -48,10 +78,66 @@
         //$("#load-here").append(html);
     };
     
-    pluginManager.prototype.cbLoadComplete = function(text, status, xhr) {
+    pluginManager.prototype.requestData = function(text, status, xhr) {
         console.log("pluginManager cbLoadComplete");
+        
+        // First check to see if we are done
+        if (this.pluginLoadList.length <= 0) {
+            console.log("plugin load complete");
+            return;
+        }
+        
+        // Check state of plugin
+        var pluginLoading = this.pluginLoadList[0];
+        var currentPlugin = this.plugins[pluginLoading.name];
+        var done = false;
+        var parent = $("#dynamic-load");
+        while (!done) {
+            pluginLoading.loadState++;
+            switch (pluginLoading.loadState) {
+                    case 1: {
+                        var path = currentPlugin.config["template"];
+                        if (path) {
+                            var elementString = "<iframe id='new-data' onload='app.pluginManager.cbLoadComplete()' src='plugins" +
+                                                path +
+                                                "'  style='display:none'></iframe>";
+                            parent.append(elementString);
+                            done = true;
+                        }
+                    } break;
+                    case 2: {
+                        console.log("pluginManager: style loading not implemented!!!");
+                    } break;
+                    case 3: {
+                        console.log("pluginManager: script loading not implemented!!!");
+                    } break;
+                    case 4: {
+                        this.pluginLoadList.pop();
+                        if (this.pluginLoadList.length) {
+                            pluginLoading = this.pluginLoadList[0];
+                            currentPlugin = this.plugins[pluginLoading.name];
+                        }
+                        else {
+                            done = true;
+                        }
+                    } break;
+            }
+        }
     };
     
+    pluginManager.prototype.cbLoadComplete = function(text, status, xhr) {
+        console.log("pluginManager cbLoadComplete");
+        var iframe = $("#new-data");
+        var doc = iframe.contents();
+        var container = $(doc).find("xmp");
+        var data = container.html();
+    };
+    
+    
+    pluginManager.prototype.getPlugin = function(key) {
+        console.log("pluginManager cbLoadComplete");
+        return this.plugins[key];
+    };
     // bind the plugin to jQuery     
     app.pluginManager = new pluginManager(); 
 

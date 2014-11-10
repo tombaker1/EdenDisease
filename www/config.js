@@ -13,14 +13,17 @@ var config = {
             name: "settings",
             config: {
                 type: "page",
-                template: "settings.htm",
+                template: "/settings/settings.htm",
                 backButton: true
             }
         },
         newCase: {
             name: "new-case",
-            template: "new-cast.htm",
-            backButton: false
+            config: {
+                type: "page",
+                template: "/disease/new-cast.htm",
+                backButton: false
+            }
         }
     },
     version: "0.2.0"
