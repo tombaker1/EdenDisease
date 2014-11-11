@@ -21,7 +21,7 @@ var config = {
             name: "new-case",
             config: {
                 type: "page",
-                template: "/disease/new-cast.htm",
+                template: "/disease/new-case.htm",
                 backButton: false
             }
         }

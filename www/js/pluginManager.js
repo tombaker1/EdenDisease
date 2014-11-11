@@ -70,16 +70,10 @@
         
         // Initiate the download
         this.requestData();
-        
-        // load page content
-        //as you see I have used this very page's url to test and you should replace it
-        //var fileUrl = "/templates/settings.htm";
-        //var html = "<iframe id='new-data' onload='app.view.dynamicLoad()' src='templates/settings.htm'  style='display:none'></iframe>";
-        //$("#load-here").append(html);
     };
     
     pluginManager.prototype.requestData = function(text, status, xhr) {
-        console.log("pluginManager requestData");
+        //console.log("pluginManager requestData");
         
         // First check to see if we are done
         if (this.pluginLoadList.length <= 0) {
@@ -98,7 +92,9 @@
                 case 1: {
                     var path = currentPlugin.config["template"];
                     if (path) {
-                        var elementString = "<iframe id='new-data' onload='app.pluginManager.cbLoadComplete()' src='plugins" +
+                        var elementString = "<iframe id='data-" +
+                                            pluginLoading.name +
+                                            "' onload='app.pluginManager.cbLoadComplete()' src='plugins" +
                                             path +
                                             "'  style='display:none'></iframe>";
                         parent.append(elementString);
@@ -124,7 +120,9 @@
                         currentPlugin = this.plugins[pluginLoading.name];
                     }
                     else {
+                        // All loads are done
                         done = true;
+                        this.trigger("plugin-load-complete");
                     }
                 } break;
             }
@@ -132,7 +130,7 @@
     };
     
     pluginManager.prototype.cbLoadComplete = function(text, status, xhr) {
-        console.log("pluginManager cbLoadComplete");
+        //console.log("pluginManager cbLoadComplete");
 
         // Get the plugin loading info
         var pluginLoading = this.pluginLoadList[0];
@@ -140,10 +138,8 @@
         switch (pluginLoading.loadState) {
             // template
             case 1: {
-                var iframe = $("#new-data");
-                var doc = iframe.contents();
-                var container = $(doc).find("xmp");
-                var data = container.html();
+                var id = "#data-" + pluginLoading.name;
+                var data = $(id).contents().find("xmp").html();
                 currentPlugin.rawData = data;
             } break;
 
