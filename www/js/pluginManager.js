@@ -53,9 +53,23 @@
         _.extend(this, Backbone.Events);
 
         this.loadPlugins();
+        
+        // Initialize all of the plugins
+        //this.createPlugins();
+        this.on("plugin-load-complete",this.createPlugins.bind(this));
     };
     
-    pluginManager.prototype.loadPlugins = function() {
+    pluginManager.prototype.createPlugins = function() {
+        var pluginKey = "settings";
+        var plugin = this.plugins[pluginKey];
+        var template = plugin.rawData;
+        var newPage = new settingsPage({name: "page-settings2"});
+        //var newElement = newPage.render();
+        app.view.addPage(newPage);
+        app.view.changePage("page-settings2");
+    },
+
+        pluginManager.prototype.loadPlugins = function() {
         console.log("pluginManager loadPlugins");
         var pluginConfig = config.plugins;
         for (key in pluginConfig) {
@@ -71,8 +85,8 @@
         // Initiate the download
         this.requestData();
     };
-    
-    pluginManager.prototype.requestData = function(text, status, xhr) {
+        
+    pluginManager.prototype.requestData = function() {
         //console.log("pluginManager requestData");
         
         // First check to see if we are done
@@ -129,7 +143,7 @@
         }
     };
     
-    pluginManager.prototype.cbLoadComplete = function(text, status, xhr) {
+    pluginManager.prototype.cbLoadComplete = function() {
         //console.log("pluginManager cbLoadComplete");
 
         // Get the plugin loading info

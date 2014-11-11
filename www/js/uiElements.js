@@ -157,7 +157,7 @@ var pageView = Backbone.View.extend({
         //               "class":"se-page",
          //             "data-role":"page"});
         return this.$el; //.html(this.template({index:this.index,name:this.model.get("name")}));
-    },
+    }
 });
 
 //var mainPage
