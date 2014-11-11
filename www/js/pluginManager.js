@@ -64,7 +64,7 @@
                                 rawData: ""
                              };
             this.plugins[pluginSpec.name] = pluginData;
-            this.pluginLoadList.push({name: key, loadState: 0});
+            this.pluginLoadList.push({name: pluginSpec.name, loadState: 0});
             
         }
         
@@ -79,7 +79,7 @@
     };
     
     pluginManager.prototype.requestData = function(text, status, xhr) {
-        console.log("pluginManager cbLoadComplete");
+        console.log("pluginManager requestData");
         
         // First check to see if we are done
         if (this.pluginLoadList.length <= 0) {
@@ -95,42 +95,73 @@
         while (!done) {
             pluginLoading.loadState++;
             switch (pluginLoading.loadState) {
-                    case 1: {
-                        var path = currentPlugin.config["template"];
-                        if (path) {
-                            var elementString = "<iframe id='new-data' onload='app.pluginManager.cbLoadComplete()' src='plugins" +
-                                                path +
-                                                "'  style='display:none'></iframe>";
-                            parent.append(elementString);
-                            done = true;
-                        }
-                    } break;
-                    case 2: {
+                case 1: {
+                    var path = currentPlugin.config["template"];
+                    if (path) {
+                        var elementString = "<iframe id='new-data' onload='app.pluginManager.cbLoadComplete()' src='plugins" +
+                                            path +
+                                            "'  style='display:none'></iframe>";
+                        parent.append(elementString);
+                        done = true;
+                    }
+                } break;
+                case 2: {
+                    var path = currentPlugin.config["style"];
+                    if (path) {
                         console.log("pluginManager: style loading not implemented!!!");
-                    } break;
-                    case 3: {
+                    }
+                } break;
+                case 3: {
+                    var path = currentPlugin.config["script"];
+                    if (path) {
                         console.log("pluginManager: script loading not implemented!!!");
-                    } break;
-                    case 4: {
-                        this.pluginLoadList.pop();
-                        if (this.pluginLoadList.length) {
-                            pluginLoading = this.pluginLoadList[0];
-                            currentPlugin = this.plugins[pluginLoading.name];
-                        }
-                        else {
-                            done = true;
-                        }
-                    } break;
+                    }
+                } break;
+                case 4: {
+                    this.pluginLoadList.shift();
+                    if (this.pluginLoadList.length) {
+                        pluginLoading = this.pluginLoadList[0];
+                        currentPlugin = this.plugins[pluginLoading.name];
+                    }
+                    else {
+                        done = true;
+                    }
+                } break;
             }
         }
     };
     
     pluginManager.prototype.cbLoadComplete = function(text, status, xhr) {
         console.log("pluginManager cbLoadComplete");
-        var iframe = $("#new-data");
-        var doc = iframe.contents();
-        var container = $(doc).find("xmp");
-        var data = container.html();
+
+        // Get the plugin loading info
+        var pluginLoading = this.pluginLoadList[0];
+        var currentPlugin = this.plugins[pluginLoading.name];
+        switch (pluginLoading.loadState) {
+            // template
+            case 1: {
+                var iframe = $("#new-data");
+                var doc = iframe.contents();
+                var container = $(doc).find("xmp");
+                var data = container.html();
+                currentPlugin.rawData = data;
+            } break;
+
+            // style
+            case 2: {
+            } break;
+
+            // script
+            case 3: {
+            } break;
+
+
+            case 4: {
+            } break;
+        };
+        
+        // Download the next file
+        this.requestData();
     };
     
     
