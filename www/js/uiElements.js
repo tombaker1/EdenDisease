@@ -111,14 +111,23 @@ var newFormListItem = Backbone.View.extend({
 });
 
 var pageView = Backbone.View.extend({
-    //tagName: "div",
-    //template: _.template("<div data-role='header' data-add-back-btn='false' data-position='fixed'>" +
-    //                        "<div class='row'>" +
-    //                        "<nav class='top-bar' data-topbar role='navigation'>" +
-    //                        "</nav>" +
-    //                     "</div>" +
-    //                     "</div>"
-    //                    ),
+    tagName: "div",
+    className: "se-page",
+    template: _.template("<div class='row'>" +
+                "<nav class='top-bar' data-topbar role='navigation'>" +
+                    "<section class='top-bar-section'>" +
+                    "<!-- Right Nav Section -->" +
+                        "<ul class='left'>" +
+                            "<li class='active'>" +
+                                "<a type='button' id='link-button' link='page-back' class='button'>" +
+                                "Back" +
+                            "</a>" +
+                            "</li>" +
+                       " </ul>" +
+                    "</section>" +
+               "</nav>" +
+            "</div>"
+                    ),
     events: {
         "click #link-button": "navigate" 
     },
@@ -139,7 +148,7 @@ var pageView = Backbone.View.extend({
             this.setElement(element.get());
         }
         
-        var buttons = this.$el.find("#link-button");
+        //var buttons = this.$el.find("#link-button");
         //this.listenTo(buttons
      },
     
@@ -153,10 +162,9 @@ var pageView = Backbone.View.extend({
     render: function() {
         //var str = this.template({index:this.index,name:this.model.get("name")});
         //var name = this.model.get("name");
-        //this.$el.attr({"id":name,
-        //               "class":"se-page",
-         //             "data-role":"page"});
-        return this.$el; //.html(this.template({index:this.index,name:this.model.get("name")}));
+        this.$el.attr({"id":name});
+        this.$el.html(this.template({}));
+        return this;
     }
 });
 

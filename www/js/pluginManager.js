@@ -55,18 +55,18 @@
         this.loadPlugins();
         
         // Initialize all of the plugins
-        //this.createPlugins();
-        this.on("plugin-load-complete",this.createPlugins.bind(this));
+         this.on("plugin-load-complete",this.createPlugins.bind(this));
     };
     
     pluginManager.prototype.createPlugins = function() {
         var pluginKey = "settings";
         var plugin = this.plugins[pluginKey];
         var template = plugin.rawData;
-        var newPage = new settingsPage({name: "page-settings2"});
-        //var newElement = newPage.render();
-        app.view.addPage(newPage);
-        app.view.changePage("page-settings2");
+        var newPage = new settingsPage({name: "page-settings"});
+        newPage.render();
+        $("#dyamic-pages").append(newPage.el);
+        app.view.addPage("page-settings",newPage);
+        //app.view.changePage("page-settings");
     },
 
         pluginManager.prototype.loadPlugins = function() {
