@@ -62,7 +62,7 @@
         var pluginKey = "settings";
         var plugin = this.plugins[pluginKey];
         var template = plugin.rawData;
-        var newPage = new settingsPage({name: "page-settings"});
+        var newPage = new settingsPage({name: "page-settings", content: template});
         newPage.render();
         $("#dyamic-pages").append(newPage.el);
         app.view.addPage("page-settings",newPage);
