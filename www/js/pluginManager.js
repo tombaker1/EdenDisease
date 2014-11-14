@@ -86,7 +86,6 @@
         // Initiate the download
         this.requestData();
     };
-        
     pluginManager.prototype.requestData = function() {
         //console.log("pluginManager requestData");
         
@@ -126,6 +125,18 @@
                     var path = currentPlugin.config["script"];
                     if (path) {
                         console.log("pluginManager: script loading not implemented!!!");
+                        //console.log("pluginManager: script loading not implemented!!!");
+                        var elementString = "<script type='text/javascript'></script>"; // id='script-" +
+                                            //pluginLoading.name +
+                                            //"'  ></script>";
+                        var element = document.createElement('script'); //$(elementString)[0];
+                        element.type = "text/javascript";
+                        element.onload = this.cbLoadComplete.bind(this);
+                        element.src = "plugins" + path;
+                        var p = document.getElementById( "dynamic-load" );
+                        p.appendChild( element );
+                        //parent.append(element);
+                        done = true;
                     }
                 } break;
                 case 4: {
@@ -144,6 +155,9 @@
         }
     };
     
+    var woo = function() {
+        console.log("woo");
+    };
     pluginManager.prototype.cbLoadComplete = function() {
         //console.log("pluginManager cbLoadComplete");
 

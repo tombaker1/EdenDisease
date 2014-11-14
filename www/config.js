@@ -14,6 +14,7 @@ var config = {
             config: {
                 type: "page",
                 template: "/settings/settings.htm",
+                script: "/settings/settings.js",
                 backButton: true
             }
         },
