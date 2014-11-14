@@ -61,8 +61,9 @@
     pluginManager.prototype.createPlugins = function() {
         var pluginKey = "settings";
         var plugin = this.plugins[pluginKey];
+        var pageName = "page-" + pluginKey;
         var template = plugin.rawData;
-        var newPage = new settingsPage({name: "page-settings", content: template});
+        var newPage = new settingsPage({name: pageName, content: template});
         newPage.render();
         $("#dyamic-pages").append(newPage.el);
         app.view.addPage("page-settings",newPage);
