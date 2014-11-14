@@ -111,6 +111,7 @@ var newFormListItem = Backbone.View.extend({
 });
 
 var pageView = Backbone.View.extend({
+    /*
     tagName: "div",
     className: "se-page",
     template: _.template("<div class='row'>" +
@@ -128,6 +129,7 @@ var pageView = Backbone.View.extend({
                "</nav>" +
             "</div>"
                     ),
+                    */
     events: {
         "click #link-button": "navigate" 
     },
