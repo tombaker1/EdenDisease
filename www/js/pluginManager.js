@@ -67,6 +67,17 @@
         newPage.render();
         $("#dyamic-pages").append(newPage.el);
         app.view.addPage("page-settings",newPage);
+        
+         pluginKey = "cases";
+         plugin = this.plugins[pluginKey];
+         pageName = "page-" + pluginKey;
+         template = plugin.rawData;
+         newPage = new casesPage({name: pageName, content: template});
+        newPage.render();
+        $("#dyamic-pages").append(newPage.el);
+        app.view.addPage("page-cases",newPage);
+        
+        
         $(document).foundation();
         this.trigger("plugin-create-complete");
         //app.view.changePage("page-settings");

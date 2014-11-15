@@ -15,6 +15,7 @@ display: inline-table;
 
 .se-page {
     position: absolute;
+    visibility: hidden;
     top: 0;
     left: 100%;
     width: 100%;
@@ -27,6 +28,7 @@ display: inline-table;
 }
 
 .se-page-visible {
+    visibility: visible;
     left: 0;
     transition-property: left;
     transition: left 0.5s;

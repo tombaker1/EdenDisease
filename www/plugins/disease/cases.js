@@ -42,8 +42,8 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     content_template: null,
     events: {
         "click #link-button": "navigate",
-        
-        "click #new-case": "onNewCase"
+
+        "click #add-case": "onNewCase"
     },
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
@@ -71,7 +71,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         if (this.content_template) {
             this.$el.find("#content").append(this.content_template({}));
         }
-        return this; 
+        return this;
     },
 
 
@@ -80,11 +80,6 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         var path = $(target).attr("link");
         this.trigger("navigate", path);
         //console.log("navigate " + path);
-    },
-
-    onLoad: function (event) {
-        console.log("onLoad ");
-        app.onLoad();
     },
 
     onNewCase: function (event) {

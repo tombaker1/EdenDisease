@@ -19,10 +19,11 @@ var config = {
             }
         },
         cases: {
-            name: "new-case",
+            name: "cases",
             config: {
                 type: "page",
                 template: "/disease/cases.htm",
+                script: "/disease/cases.js",
                 backButton: true
             }
         },
