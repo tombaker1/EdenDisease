@@ -68,6 +68,7 @@
         $("#dyamic-pages").append(newPage.el);
         app.view.addPage("page-settings",newPage);
         $(document).foundation();
+        this.trigger("plugin-create-complete");
         //app.view.changePage("page-settings");
     };
 

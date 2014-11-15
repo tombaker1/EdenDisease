@@ -42,12 +42,12 @@
         $("#reset-dialog input[value='cancel']").on("click",this.onResetCancel.bind(this));
         
         // Intitialize controls
-        $('#serverURL').val(app.state.settings.serverInfo.get("url"));
-        $('#username').val(app.state.settings.serverInfo.get("username"));
-        $('#password').val(app.state.settings.serverInfo.get("password"));
-        $("#serverURL").change(this.onServerURLChange.bind(this));
-        $("#username").change(this.onUsernameChange.bind(this));
-        $("#password").change(this.onPasswordChange.bind(this));
+        //$('#serverURL').val(app.state.settings.serverInfo.get("url"));
+        //$('#username').val(app.state.settings.serverInfo.get("username"));
+        //$('#password').val(app.state.settings.serverInfo.get("password"));
+        //$("#serverURL").change(this.onServerURLChange.bind(this));
+        //$("#username").change(this.onUsernameChange.bind(this));
+        //$("#password").change(this.onPasswordChange.bind(this));
         
         this.on("navigate", this.changePage.bind(this));
         
@@ -67,6 +67,10 @@
             this.pageSet[name] = page;
             page.on("navigate",this.changePage.bind(this));
         }
+    };
+    
+    view.prototype.getPage = function ( name) {
+        return this.pageSet[name];
     };
     
     view.prototype.changePage = function ( pageName ) {
@@ -570,7 +574,7 @@
         this.$newFormList.listview("refresh");
         this.$savedFormList.listview("refresh");       
     };
-    
+        /*
     view.prototype.serverURL = function(url) {
     };
     
@@ -587,7 +591,7 @@
     
     view.prototype.password = function(pwd) {
     };
-    
+
     view.prototype.onServerURLChange = function(evt) {
         console.log("input serverURL " + evt.target.value);
         app.state.settings.serverInfo.set("url",evt.target.value);
@@ -607,7 +611,7 @@
         //app.state.settings.serverInfo.sync("create");
         
     };
-    
+    */
     // bind the plugin to jQuery
     var localView = new view();
     

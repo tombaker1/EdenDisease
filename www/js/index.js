@@ -57,10 +57,9 @@ var app = {
         this.view.init();
         this.uiController.init({state: this.state});
         this.pluginManager.init();
+        this.pluginManager.on("plugin-create-complete",this.onDynamicUIComplete.bind(this));
         $(document).foundation();
         
-        // set version
-        $("#version").html("Version: " + config.version);
     },
     
     getState: function() {
@@ -79,6 +78,18 @@ var app = {
         $("#reset-button").on("click",this.onReset.bind(this));
         $("#load-form-list-button").on("click",this.onLoad.bind(this));
         $("#debug-button").on("click",this.onDebug.bind(this));
+    },
+    
+    onDynamicUIComplete: function() {
+        // set version
+        $("#version").html("Version: " + config.version);
+                //$('#serverURL').val(app.state.settings.serverInfo.get("url"));
+        //$('#username').val(app.state.settings.serverInfo.get("username"));
+        //$('#password').val(app.state.settings.serverInfo.get("password"));
+        var settingsPage = this.view.getPage("page-settings");
+        settingsPage.serverURL(app.state.settings.serverInfo.get("url"));
+        settingsPage.username(app.state.settings.serverInfo.get("username"));
+        settingsPage.password(app.state.settings.serverInfo.get("password"));
     },
     
 
