@@ -29,6 +29,7 @@ display: inline-table;
 
 .se-page-visible {
     visibility: visible;
+    overflow-x: hidden;
     left: 0;
     transition-property: left;
     transition: left 0.5s;

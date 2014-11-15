@@ -90,6 +90,13 @@ var app = {
         settingsPage.serverURL(app.state.settings.serverInfo.get("url"));
         settingsPage.username(app.state.settings.serverInfo.get("username"));
         settingsPage.password(app.state.settings.serverInfo.get("password"));
+        
+        document.onTouchMove = function(e) {
+            e.preventDefault();
+        }
+        document.onTouchStart = function(e) {
+            e.preventDefault();
+        }
     },
     
 

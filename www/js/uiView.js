@@ -230,7 +230,7 @@
         element.label = labelString;
         return element;
     };
-    
+    /*
     view.prototype.updateCaseForm = function (obj) {
         // Loop through elements filling in data
         var field = obj["$_disease_case"][0]["field"];
@@ -240,7 +240,7 @@
             var name = item["@name"];
             var label = item["@label"];
             
-            // Put name in label
+            // Put name in label   
             // TODO: add required asterisks
             var id = "#case-" + name;
             var container = $(id);
@@ -323,7 +323,7 @@
         }
         page.$el.page();
     };
-    
+    */
     view.prototype.getSelectedForms = function(forms) {
         var $list = app.view.getFormList();
         this.$checkboxList = $list.find("input");
