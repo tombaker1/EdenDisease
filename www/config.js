@@ -18,6 +18,14 @@ var config = {
                 backButton: true
             }
         },
+        cases: {
+            name: "new-case",
+            config: {
+                type: "page",
+                template: "/disease/cases.htm",
+                backButton: true
+            }
+        },
         newCase: {
             name: "new-case",
             config: {
