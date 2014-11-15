@@ -54,7 +54,7 @@
         this.getLocation();
         
         //$("#load-form-button").click(this.onLoadFormList.bind(this));
-        $("#debug-button").click(this.onDebug.bind(this));
+        //$("#debug-button").click(this.onDebug.bind(this));
         
         // Load the saved data or initialize data
         var rawData = app.storage.read("form-raw");
@@ -277,7 +277,9 @@
         formList.add(model);
         
         // Update view
-        app.view.updateCaseForm(obj);
+        //app.view.updateCaseForm(obj);
+        var page = app.view.getPage("page-new-case");
+        page.update(obj);
         
         return model;
     };
