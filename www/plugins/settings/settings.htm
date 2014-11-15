@@ -1,5 +1,5 @@
 <xmp>
-<div id="content-settings" data-role="content">xxx
+<div id="content-settings" class="filter-form">
     <div id="version"></div>
     <!-- div class="ui-field-contain">
         <fieldset name="form-source" data-role="controlgroup">
@@ -13,9 +13,35 @@
     <div id="server-info">
         <hr>
         <!-- todo put a dropdown of known servers here -->
-        <div class="row">URL: <input id="serverURL" type="text"/></div>
-        <div class="row">User: <input id="username" type="text"/></div>
-        <div class="row">Password: <input id="password" type="password"/></div>
+        <div class="form-row row">
+            <div class="small-12 columns">
+                <label for="serverURL">URL: </label>
+            
+            <div  class="controls">
+                <input id="serverURL" class="string" type="text"/>
+            </div>
+                </div>
+        </div>
+         <div class="form-row row">
+            <div class="small-12 columns">
+                <label for="username">User: </label>
+            
+            <div  class="controls">
+                <input id="username" class="string" type="text"/>
+            </div>
+                </div>
+        </div>
+        <div class="form-row row">
+            <div class="large-12 small-12 columns">
+                <label for="password">Password: </label>
+            
+                <div  class="controls">
+                    <input id="password" class="string" type="password"/>
+                </div>
+            </div>
+        </div>
+       <!-- div class="row">User: <input id="username" type="text"/></div>
+        <div class="row">Password: <input id="password" type="password"/></div -->
         <hr>
     </div>
     <input id="load-form-list-button" type="button" value="Load" data-inline="true">
