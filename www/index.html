@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<meta name = "format-detection" content = "telephone=no"/>
-		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-		<!-- link rel="stylesheet" type="text/css" href="css/index.css" / -->
-		<title>Sahana Ebola Response</title>
-		<!-- Module to load
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+<!-- link rel="stylesheet" type="text/css" href="css/index.css" / -->
+<title>Sahana Ebola Response</title>
+<!-- Module to load
 		-->
-		
+
 <link href="lib/styles/foundation/normalize.css" rel="stylesheet">
 <link href="lib/styles/foundation/foundation.css" rel="stylesheet">
 <script src="lib/modernizr.min.js" type="text/javascript"></script>
@@ -24,71 +24,81 @@
 <link href='lib/ext/resources/css/ext-all-notheme.css' rel='stylesheet' type='text/css' media='screen' charset='utf-8' />
 
 <!-- link href="lib/themes/default/style.css" rel="stylesheet" type="text/css" / -->
-		
-		
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="cordova_webapp.js"></script>
-    <script type="text/javascript" src="lib/jquery/jquery-2.1.0.min.js"></script>
-    <script type="text/javascript" src="lib/underscore-1.6.0/underscore-min.js"></script>
-    <script type="text/javascript" src="lib/backbone-1.1.2/backbone.js"></script>
-    <!-- script type="text/javascript" src="lib/foundation/foundation.min.js"></script -->
-    <!-- link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.2.min.css"></link -->
-    <!-- script type="text/javascript" src="lib/jquery/jquery.mobile-1.4.2.min.js"></script -->
-    <link rel="stylesheet" href="css/index.css"></link>
-	</head>
-	<body>
-		<!-- Application pages -->
-		<div id="page-home" class="se-page se-page-visible">
-			<!-- div data-role="header" data-add-back-btn="true"><h1>Sahana Ebola Response</h1></div -->
-            <div class='row'>
-                <nav class="top-bar" data-topbar role="navigation">
-                    <section class="top-bar-section">
-                    <!-- Right Nav Section -->
-                        <ul class="right">
-                            <li class="active"><a>Settings</a></li>
-                        </ul>
-                    </section>
-                </nav>
-            </div>
-            
- 
-            <h1>Sahana Ebola Response Demo</h1>
-            <div>
-                <ul id="menu" class="stack se-list-menu">
-                    <li><a id="link-button" link="page-cases">Cases <i class="chevron"></i></a></li>
-                    <li><a id="link-button" link="page-people">Contact Persons <i class="chevron"></i></a></li>
-                    <li><a id="link-button" link="page-monitoring">Contact Monitoring <i class="chevron"></i></a></li>
-                    <li><a id="link-button" link="page-saved">Saved Forms <i class="chevron"></i></a></li>
-                    <li><a id="link-button" link="page-settings" >Settings </a></li>
-                </ul>
-            </div>
-            <div data-role="footer"  data-position="fixed"><h4></h4></div>
-		</div>
-                    
 
-        <!-- dynamic page container -->
-        <div id="dyamic-pages"></div>
-        <div id="dynamic-load">   
+
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="cordova_webapp.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="lib/underscore-1.6.0/underscore-min.js"></script>
+<script type="text/javascript" src="lib/backbone-1.1.2/backbone.js"></script>
+<!-- script type="text/javascript" src="lib/foundation/foundation.min.js"></script -->
+<!-- link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.2.min.css"></link -->
+<!-- script type="text/javascript" src="lib/jquery/jquery.mobile-1.4.2.min.js"></script -->
+<link rel="stylesheet" href="css/index.css"></link>
+</head>
+
+<body>
+    <!-- Application pages -->
+    <div id="page-home" class="se-page se-page-visible">
+        <!-- div data-role="header" data-add-back-btn="true"><h1>Sahana Ebola Response</h1></div -->
+        <div class='row'>
+            <nav class="top-bar" data-topbar role="navigation">
+                <section class="top-bar-section">
+                    <!-- Right Nav Section -->
+                    <ul class="right">
+                        <li class="active"><a>Settings</a>
+                        </li>
+                    </ul>
+                </section>
+            </nav>
         </div>
 
 
-		<script type="text/javascript" src="lib/foundation/foundation.min.js"></script>
-		<script type="text/javascript" src="js/models.js"></script>
-		<script type="text/javascript" src="js/index.js"></script>
-		<script type="text/javascript" src="js/communications.js"></script>
-		<script type="text/javascript" src="js/mFormData.js"></script>
-		<script type="text/javascript" src="js/uiElements.js"></script>
-		<script type="text/javascript" src="js/uiView.js"></script>
-		<script type="text/javascript" src="js/uiController.js"></script>
-		<script type="text/javascript" src="js/pluginManager.js"></script>
-		<script type="text/javascript" src="js/sync.js"></script>
-		<script type="text/javascript" src="js/storage.js"></script>
-		<script type="text/javascript" src="config.js"></script>
-		<!-- script type="text/javascript" src="plugins/settings/settings.js"></script -->
-		<script type="text/javascript">
-			window.onload = function() {
-                app.initialize();
-			}
-		</script>
-	</body>
+        <h1>Sahana Ebola Response Demo</h1>
+        <div>
+            <ul id="menu" class="stack se-list-menu">
+                <li><a id="link-button" link="page-cases">Cases <i class="chevron"></i></a>
+                </li>
+                <li><a id="link-button" link="page-people">Contact Persons <i class="chevron"></i></a>
+                </li>
+                <li><a id="link-button" link="page-monitoring">Contact Monitoring <i class="chevron"></i></a>
+                </li>
+                <li><a id="link-button" link="page-saved">Saved Forms <i class="chevron"></i></a>
+                </li>
+                <li><a id="link-button" link="page-settings">Settings </a>
+                </li>
+            </ul>
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <h4></h4>
+        </div>
+    </div>
+
+
+    <!-- dynamic page container -->
+    <div id="dyamic-pages"></div>
+    <div id="dynamic-load">
+    </div>
+
+
+    <script type="text/javascript" src="lib/foundation/foundation.min.js"></script>
+    <script type="text/javascript" src="js/models.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/communications.js"></script>
+    <script type="text/javascript" src="js/mFormData.js"></script>
+    <script type="text/javascript" src="js/uiElements.js"></script>
+    <script type="text/javascript" src="js/uiView.js"></script>
+    <script type="text/javascript" src="js/uiController.js"></script>
+    <script type="text/javascript" src="js/pluginManager.js"></script>
+    <script type="text/javascript" src="js/sync.js"></script>
+    <script type="text/javascript" src="js/storage.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+    <!-- script type="text/javascript" src="plugins/settings/settings.js"></script -->
+    <script type="text/javascript">
+        window.onload = function () {
+            app.initialize();
+        }
+    </script>
+</body>
+
 </html>

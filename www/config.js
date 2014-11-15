@@ -15,6 +15,7 @@ var config = {
                 type: "page",
                 template: "/settings/settings.htm",
                 script: "/settings/settings.js",
+                classname: "settingsPage",
                 backButton: true
             }
         },
@@ -24,6 +25,7 @@ var config = {
                 type: "page",
                 template: "/disease/cases.htm",
                 script: "/disease/cases.js",
+                classname: "casesPage",
                 backButton: true
             }
         },
@@ -32,6 +34,8 @@ var config = {
             config: {
                 type: "page",
                 template: "/disease/new-case.htm",
+                script: "/disease/newCase.js",
+                classname: "newCasePage",
                 backButton: false
             }
         }
