@@ -11,15 +11,16 @@
         </fieldset>
     </div -->
     <div id="server-info">
-        <hr>
+        <fieldset>
+            <legend>Settings</legend>
+        <form>
         <!-- todo put a dropdown of known servers here -->
-        <div class="form-row row">
-            <div class="small-12 columns">
-                <label for="serverURL">URL: </label>
+       <div class="row">
+            <div class="large-12 columns">
+                <label for="serverURL">URL: 
             
-            <div  class="controls">
                 <input id="serverURL" class="string" type="text"/>
-            </div>
+                    </label>
                 </div>
         </div>
          <div class="form-row row">
@@ -40,14 +41,16 @@
                 </div>
             </div>
         </div>
+            </form>
+            </fieldset>
        <!-- div class="row">User: <input id="username" type="text"/></div>
         <div class="row">Password: <input id="password" type="password"/></div -->
-        <hr>
+
     </div>
-    <input id="load-form-list-button" type="button" value="Load" data-inline="true">
-    <input id="reset-button" type="button" value="Reset" data-inline="true">
+    <input id="load-form-list-button" type="button" value="Load" class="button">
+    <input id="reset-button" type="button" value="Reset"  class="button">
     <!-- input id="store-form-button" type="button" value="Store" data-inline="true" -->
-    <input id="debug-button" type="button" value="debug" data-inline="true" style="display: inline;">
+    <input id="debug-button" type="button" value="debug"  class="button">
     <div id="content-messages"></div>
 </div>
     </xmp>

@@ -67,8 +67,9 @@
         newPage.render();
         $("#dyamic-pages").append(newPage.el);
         app.view.addPage("page-settings",newPage);
+        $(document).foundation();
         //app.view.changePage("page-settings");
-    },
+    };
 
         pluginManager.prototype.loadPlugins = function() {
         console.log("pluginManager loadPlugins");
