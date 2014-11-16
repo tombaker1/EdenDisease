@@ -75,16 +75,16 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         }
         return this;
     },
-    
-    update: function(obj) {
-       // Loop through elements filling in data
+
+    update: function (obj) {
+        // Loop through elements filling in data
         var field = obj["$_disease_case"][0]["field"];
         for (var i = 0; i < field.length; i++) {
             // Get fields
             var item = field[i];
             var name = item["@name"];
             var label = item["@label"];
-            
+
             // Put name in label   
             // TODO: add required asterisks
             var id = "#case-" + name;
@@ -97,10 +97,10 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                 label += '<bold style="color:red">*</bold>';
             }
             container.find("label").first().html(label);
-             
-             // Fill in select entrys
-             var select = item["select"];
-             if (select) {
+
+            // Fill in select entrys
+            var select = item["select"];
+            if (select) {
                 var selectOptions = "";
                 var options = select[0]["option"];
                 for (var j = 0; j < options.length; j++) {
@@ -110,18 +110,71 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                     selectOptions += '<option value = "' + value + '">' + optionLabel + '</option>';
                 }
                 container.find("select").first().html(selectOptions);
-             }
+            }
         }
     },
-    create: function(options) {
-       // Add item into new form list
+    showForm: function (form, model) {
+        // Loop through keys finding page elements
+        var formName = form.get("name");
+        var formData = form.get("form");
+        var data = form.get("obj")["$_" + formName][0]["field"];
+        for (var key in data) {
+            var item = data[key];
+            var name = item["@name"];
+            var searchString = "#case-" + name;
+            var element = this.$el.find(searchString).first();
+            var type = item["@type"];
+            var value = model.get(name);
+
+            if (element.length === 0) {
+                continue;
+            }
+
+            if (type.indexOf("reference") === 0) {
+                if (item["select"]) {
+                    //value = "";
+                    var options = item["select"][0]["option"];
+                    for (var i = 0; i < options.length; i++) {
+                        if (options[i]["@value"] === value) {
+                            var select = element.find("select");
+                            select.val(i);
+                            //select[0].selectedIndex = i;
+                            //select.selectmenu("refresh");
+                        }
+                    }
+                }
+            } else {
+                switch (type) {
+                case "string":
+                    //element.html(value);
+                    element.find("input").first().val(value);
+                    break;
+                case "date":
+                    element.find("input").first().val(value);
+                    break;
+                case "datetime":
+                    element.find("input").first().val(value);
+                    break;
+                case "text":
+                    element.find("input").first().val(value);
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+    },
+    create: function (options) {
+        // Add item into new form list
         var model = options["model"];
-        var item =  new newFormListItem({model:model});
+        var item = new newFormListItem({
+            model: model
+        });
         item.index = options["index"]; //this.newFormArray.length;
         item.render();
         this.$newFormList.append(item.$el);
         this.newFormArray.unshift(item);
-        
+
         // create page
         var page = new formPage(options);
         page.index = item.index;
@@ -139,21 +192,21 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             var elementString = "";
             var reference = $(field).attr("ref");
             var label = $(field).find("label")[0];
-            var labelString =  getStringRef($form,label);
+            var labelString = getStringRef($form, label);
             switch (field.nodeName) {
             case "select1":
-                var element = this.parseSelect1(options,reference,field,labelString);
+                var element = this.parseSelect1(options, reference, field, labelString);
                 break;
             case "upload":
-                var element = this.parseUpload(options,reference,field,labelString);
-              break;
+                var element = this.parseUpload(options, reference, field, labelString);
+                break;
             case "input":
                 var element = new formInput(options);
                 element.reference = reference;
                 element.label = labelString;
-              break;
+                break;
             default:
-              console.log("<div>Unimplemented element" + field.nodeName + "</div>");
+                console.log("<div>Unimplemented element" + field.nodeName + "</div>");
             }
 
             // Render new element and add to the page
@@ -163,7 +216,10 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                 $container.append("<hr>");
             }
         }
-        page.$el.page();    },
+        page.$el.page();
+    },
+
+    getModelData: function () {},
 
     navigate: function (event) {
         var target = event.currentTarget;
@@ -174,14 +230,20 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
 
     onCancel: function (event) {
         console.log("onCancel ");
+        //this.getModelData();
+        app.view.changePage("page-back");
     },
 
     onSave: function (event) {
         console.log("onSave ");
+        app.uiController.onFormSave();
+        app.view.changePage("page-back");
     },
 
     onSubmit: function (event) {
         console.log("onSubmit ");
+        app.uiController.onFormSubmit();
+        app.view.changePage("page-back");
     }
 
 });

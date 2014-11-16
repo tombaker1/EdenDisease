@@ -429,7 +429,7 @@
       }
     };
 
-    view.prototype.showForm = function(form,model,$page) {
+    view.prototype.showForm = function(form,model,page) {
       // Loop through keys finding page elements
       var formName = form.get("name");
       var formData = form.get("form");
@@ -438,7 +438,7 @@
         var item = data[key];
         var name = item["@name"];
         var searchString = "#case-" + name;
-        var element = $page.find(searchString).first();
+        var element = page.$el.find(searchString).first();
         var type = item["@type"];
         var value = model.get(name);
         

@@ -43,7 +43,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     events: {
         "click #link-button": "navigate",
 
-        "click #add-case": "onNewCase"
+        "click #new-case": "onNewCase"
     },
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
@@ -84,6 +84,8 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
 
     onNewCase: function (event) {
         console.log("onNewCase ");
+        app.uiController.newForm();
+        this.trigger("navigate","page-new-case");
     }
 
 });

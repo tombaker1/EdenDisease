@@ -372,7 +372,7 @@
     
     controller.prototype.newForm = function() {
         var form = this.getFormByName("disease_case");
-        var $page = $("#page-new-form");
+        //var $page = $("#page-new-form");
         var model = new mFormData(form.get("form"));
         //model.name(form.get("name"));
         model.timestamp(Date.now());
@@ -380,7 +380,8 @@
         //model._formId = form.get("formId");
         form.set("current",model);
         //var pageID = pageURL.hash.replace( /#/, "" );
-        app.view.showForm(form,model,$page);
+        var page = app.view.getPage("page-new-case");
+        page.showForm(form,model);
 
     }
     
