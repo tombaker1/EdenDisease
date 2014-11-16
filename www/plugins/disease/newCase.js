@@ -164,6 +164,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             }
         }
     },
+    /*
     create: function (options) {
         // Add item into new form list
         var model = options["model"];
@@ -218,8 +219,76 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         }
         page.$el.page();
     },
-
-    getModelData: function () {},
+    */
+    getModelData: function (model) {
+        var form = app.uiController.getFormByName("disease_case");
+      var formName = form.get("name");
+      var formData = form.get("form");
+      var data = form.get("obj")["$_" + formName][0]["field"];
+      for (var key in data) {
+        var item = data[key];
+        var name = item["@name"];
+        var searchString = "#case-" + name;
+        var element = this.$el.find(searchString).first();
+        var type = item["@type"];
+        var value = null;
+        
+        if (element.length === 0) {
+            continue;
+        }
+        
+        if (type.indexOf("reference") === 0) {
+            if (item["select"]) {
+                //value = "";
+                //var options = item["select"][0]["option"];
+                //for (var i = 0; i < options.length; i++) {
+                    var select = element.find("select").first();
+                    //var selectIndex = select[0].selectedIndex;
+                    value = select[0]["value"];
+                    model.set(name,value);
+                    /*
+                    if (options[i]["@value"] === value) {
+                        var select = element.find("select").first();
+                        select[0].selectedIndex = i;
+                        select.selectmenu("refresh");
+                    }
+                    */
+                //}
+            }
+        }
+        else {
+            if (item["select"]) {
+                var select = element.find("select").first();
+                //var selectIndex = select[0].selectedIndex;
+                value = select[0]["value"];
+                model.set(name,value);
+            }
+            else {
+            switch (type) {
+                    case "string":
+                        //TODO: if there is a select then get the string from the select value
+                        value = (element.find("input").first().val()) || "";
+                        model.set(name,value);
+                        break;
+                    case "date":
+                        value = (element.find("input").first().val()) || "";
+                        model.set(name,value);
+                        break;
+                    case "datetime":
+                        value = (element.find("input").first().val()) || "";
+                        model.set(name,value);
+                        break;
+                    case "text":
+                        value = (element.find("input").first().val()) || "";
+                        model.set(name,value);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+      }
+    },
 
     navigate: function (event) {
         var target = event.currentTarget;
@@ -236,13 +305,13 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
 
     onSave: function (event) {
         console.log("onSave ");
-        app.uiController.onFormSave();
+        app.uiController.onFormSave(this);
         app.view.changePage("page-back");
     },
 
     onSubmit: function (event) {
         console.log("onSubmit ");
-        app.uiController.onFormSubmit();
+        app.uiController.onFormSubmit(this);
         app.view.changePage("page-back");
     }
 

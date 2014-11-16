@@ -120,20 +120,21 @@
     //    console.log("onFormCancel");
     //};
     
-    controller.prototype.onFormSave = function ( evt,model) {
+    controller.prototype.onFormSave = function ( page ) {
         //console.log("onFormSave");
         //var a = _.contains(activeForms,model);
-        var page = $("#page-new-form");
-        var form = this.getFormByName("disease_case")
+        //var page = $("#page-new-form");
+        var form = this.getFormByName("disease_case");
+        var model = form.get("current");
             if (!model) {
                 model = form.get("current");
             }
-        app.view.getModelData(page,model);
+        page.getModelData(model);
 
         if (!activeForms.contains(model)) {
             activeForms.add(model);
-            app.view.newSavedFormItem({model:model});
             model.sync('create',model,{local:true});
+            app.view.newSavedFormItem({model:model});
         }
         else {
             model.sync('update',model,{local:true});
@@ -142,14 +143,15 @@
 
     };
     
-    controller.prototype.onFormSubmit = function ( evt,model ) {
+    controller.prototype.onFormSubmit = function ( page ) {
         //console.log("onFormSubmit");
-        var page = $("#page-new-form");
-        var form = this.getFormByName("disease_case")
+        //var page = $("#page-new-form");
+        var form = this.getFormByName("disease_case");
+        var model = form.get("current");
             if (!model) {
                 model = form.get("current");
             }
-        app.view.getModelData(page,model);
+        page.getModelData(model);
         model.submit();
         
     };

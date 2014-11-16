@@ -114,9 +114,9 @@
         var item =  new savedFormItem(options);
         item.index = this.savedFormArray.length;
         item.render();
-        this.$savedFormList.append(item.$el);
+        //this.$savedFormList.append(item.$el);  TODO: saved form page not implemented
         this.savedFormArray.unshift(item);
-        this.$savedFormList.listview("refresh");
+        //this.$savedFormList.listview("refresh");TODO: saved form page not implemented
         return true;
     };
     
@@ -134,7 +134,7 @@
         }
         
         item.remove();
-        this.$savedFormList.listview("refresh");
+        //this.$savedFormList.listview("refresh");  TODO: saved form page not implemented
         var index = this.savedFormArray.indexOf(item);
         this.savedFormArray.splice(index,1);
         return true;
@@ -572,7 +572,7 @@
         this.$loadFormList.enhanceWithin();
         this.$loadFormList.controlgroup("refresh");
         this.$newFormList.listview("refresh");
-        this.$savedFormList.listview("refresh");       
+        //this.$savedFormList.listview("refresh");  TODO: saved form page not implemented       
     };
         /*
     view.prototype.serverURL = function(url) {
