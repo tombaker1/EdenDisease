@@ -34,9 +34,9 @@
         this._diseaseCase = null;
        
         $(this).bind("reset-all",this.onReset.bind(this));
-        $("#cancel").click(this.onFormCancel.bind(this));
-        $("#save").click(this.onFormSave.bind(this));
-        $("#submit").click(this.onFormSubmit.bind(this));
+        //$("#cancel").click(this.onFormCancel.bind(this));
+        //$("#save").click(this.onFormSave.bind(this));
+        //$("#submit").click(this.onFormSubmit.bind(this));
 
         //this.init(options);
         //$(document).bind( "pagebeforechange", pageChange );
@@ -116,9 +116,9 @@
         //window.requestAnimationFrame(function() {app.view.confirm.show()});
     };
     
-    controller.prototype.onFormCancel = function (  ) {
-        console.log("onFormCancel");
-    };
+    //controller.prototype.onFormCancel = function (  ) {
+    //    console.log("onFormCancel");
+    //};
     
     controller.prototype.onFormSave = function ( evt,model) {
         //console.log("onFormSave");
