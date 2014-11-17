@@ -89,3 +89,36 @@ display: inline-table;
 
 }
 
+/* Modal dialog */
+.se-modal {
+    position: absolute;
+    visibility: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+	z-index: 99999;
+    transition-property: opacity;
+    transition: 0.5s;
+    -moz-transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+	opacity:0;
+	pointer-events: none;
+}
+
+.se-modal.visible {
+    visibility: visible;
+	opacity:1;
+	pointer-events: auto;
+}
+
+.se-modal > #frame {
+	width: 50%;
+	position: relative;
+	margin: 10% auto;
+	padding: 5px 20px 13px 20px;
+	border-radius: 5px;
+    border: 1px solid #000;
+	background: #ddd;
+}

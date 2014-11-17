@@ -40,7 +40,6 @@
         // Set events
         $("#reset-dialog input[value='ok']").on("click",this.onResetOK.bind(this));
         $("#reset-dialog input[value='cancel']").on("click",this.onResetCancel.bind(this));
-        
         // Intitialize controls
         //$('#serverURL').val(app.state.settings.serverInfo.get("url"));
         //$('#username').val(app.state.settings.serverInfo.get("username"));
@@ -77,6 +76,9 @@
         console.log("view changePage to " + pageName);
         if (pageName === "page-back") {
             this.popPage();
+        }
+        else if (pageName === "page-people") {
+            this.notifyModal("Not Implemented","This page is not implemented yet");
         }
         else {
             this.showPage(pageName);
@@ -522,6 +524,21 @@
         */
       }
       //$.mobile.changePage($page,{transition:"slide"});
+    };
+    
+    view.prototype.notifyModal = function ( title, content ) {
+        var dlg = $("#notify-dialog");
+        var header = dlg.find("#header h2");
+        header.html(title);
+        var contentElement = dlg.find("#content h3");
+        contentElement.html(content);
+        dlg.find("#ok").on("click",this.hideNotifyModal.bind(this));
+        dlg.addClass("visible");
+    };
+
+    view.prototype.hideNotifyModal = function ( ) {
+        var dlg = $("#notify-dialog");
+        dlg.removeClass("visible");
     };
     
     view.prototype.showNewForm = function (index,model) {
