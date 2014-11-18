@@ -73,7 +73,13 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         }
         return this;
     },
+    
+    update: function() {
+        var tableBody = this.$el.find("tbody");
+        var caseList = app.uiController.getData("cases");
+        tableBody.html("");
 
+    },
 
     navigate: function (event) {
         var target = event.currentTarget;

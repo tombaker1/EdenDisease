@@ -32,6 +32,7 @@
         this._defaults = defaults;
         this._name = pluginName;
         this._diseaseCase = null;
+        this._dataTable = {};
        
         $(this).bind("reset-all",this.onReset.bind(this));
         //$("#cancel").click(this.onFormCancel.bind(this));
@@ -99,10 +100,45 @@
             */
         }
       
+        // Update the data tables
+        this.updateData("cases");
         
     };
     
-    controller.prototype.resetAll = function (  ) {
+    controller.prototype.getData = function(tableName) {
+        var table = this._dataTable[tableName];
+        return table;
+    };
+    
+     controller.prototype.setData = function(tableName,tableData) {
+        this._dataTable[tableName] = tableData;
+    };
+    
+    controller.prototype.updateData = function(dataName) {
+        //TODO call comm to get data
+        var path = getHostPath();
+        switch (dataName) {
+                case "cases": {
+                    path += "/disease/case.json";
+                } break;
+                default: {
+                    alert("nope");
+                }
+        }
+        app.commHandler.requestData("cases",path);
+    };
+    
+    controller.prototype.cbUpdateData = function (status, name, dataTable) {
+        //TODO update data
+        if (status) {
+            this.setData(name,dataTable);
+            app.view.getPage("page-cases").update();
+        }
+        else {
+        }
+    };
+    
+   controller.prototype.resetAll = function (  ) {
         app.view.resetDialog();
     };
     
