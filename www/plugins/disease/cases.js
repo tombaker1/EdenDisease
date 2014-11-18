@@ -77,8 +77,33 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     update: function() {
         var tableBody = this.$el.find("tbody");
         var caseList = app.uiController.getData("cases");
-        tableBody.html("");
-
+        var db = app.uiController._diseaseCase;
+        //var nameList = db["$disease_case"][0]["field"]["select"][0]["option"];
+        
+        
+        // create all of the case items
+        var htmlString = "";
+        for (var i = 0; i < caseList.length; i++) {
+            var caseItem = caseList[i];
+            htmlString += "<tr role='row' id='case-" + caseItem["id"] + "'>";
+            htmlString += "<td class='actions'>";
+            htmlString += "<input class='action-button' value='Edit' type='button'>";
+            htmlString += "</td>";
+            htmlString += "<td>" + caseItem["case_number"] + "</td>";
+            htmlString += "<td>" + caseItem["person_id"] + "</td>";
+            htmlString += "</tr>";
+        }
+       tableBody.html(htmlString);
+        this.$el.find("tbody.action-button").on("click",this.onEditCase.bind(this));
+        this.$el.find("tbody > tr").on("click touchend",this.expandCase.bind(this));
+    },
+    
+    onEditCase: function(event) {
+        console.log("edit");
+    },
+    
+    expandCase: function(event) {
+        console.log("expand");
     },
 
     navigate: function (event) {

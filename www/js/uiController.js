@@ -116,7 +116,7 @@
     
     controller.prototype.updateData = function(dataName) {
         //TODO call comm to get data
-        var path = getHostPath();
+        var path = this.getHostURL();
         switch (dataName) {
                 case "cases": {
                     path += "/disease/case.json";
@@ -125,16 +125,18 @@
                     alert("nope");
                 }
         }
-        app.commHandler.requestData("cases",path);
+        app.commHandler.requestData("cases",path,this.cbUpdateData.bind(this));
     };
     
     controller.prototype.cbUpdateData = function (status, name, dataTable) {
         //TODO update data
         if (status) {
-            this.setData(name,dataTable);
+            var data = JSON.parse(dataTable);
+            this.setData(name,data);
             app.view.getPage("page-cases").update();
         }
         else {
+            alert("Communication failure"); //TODO: do the right thing
         }
     };
     

@@ -211,7 +211,36 @@
 
     };
 
-    xformer.prototype.requestFormList = function (url, cb) {
+    xformer.prototype.requestData = function (name, url, cb) {
+        //var formListURL = url;  // don't need to do anything here
+        reqState.type = name;
+        reqState.callback = cb;
+        reqState.data = url;
+        xhr.onload = this.cbRequestData.bind(this);
+        xhr.open("get", url, true);
+        xhr.send();
+        reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
+        
+    };
+
+   xformer.prototype.cbRequestData = function (reply) {
+        clearTimeout(reqTimer);
+        if (xhr.readyState != 4) {
+            alert("What?");
+            return;
+        }
+        if (xhr.status != 200) {
+            alert("Error loading page");
+            return;
+        }
+        
+        var rawData = reply.target.responseText;
+        
+        // return and show the form
+        reqState.callback(true, reqState.type, rawData);
+        
+    };
+        xformer.prototype.requestFormList = function (url, cb) {
         var formListURL = url;  // don't need to do anything here
         reqState.type = "request-form-list";
         reqState.callback = cb;
