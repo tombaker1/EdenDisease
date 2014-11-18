@@ -250,12 +250,13 @@
         clearTimeout(reqTimer);
         //console.log("cbReadFormList done");
         if (xhr.readyState != 4) {
-            alert("Error loading form");
+            //alert("Error loading form");
+            app.view.notifyModal("Submit","Submit complete");
             reqState.callback(false,reqState.data);
             return;
         }
         if ((xhr.status != 200) && (xhr.status != 201)){
-            alert("Server error for form " + reqState.data);
+            //alert("Server error for form " + reqState.data);
             reqState.callback(false,reqState.data);
             return;
         }
@@ -263,7 +264,7 @@
         var rawText = reply.target.responseText;
 
         // notify the controller that the load is complete
-        //reqState.callback(true,reqState.data);
+        reqState.callback(true,reqState.data);
     }; 
     
     xformer.prototype.makedata = function(model, jsonFile) {

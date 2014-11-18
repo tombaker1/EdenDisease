@@ -299,10 +299,14 @@
             //var form = app.commHandler.getFormByName(name);
             //app.view.createForm({model:form,name:name});
             
-            // Save xml to local storage
+            // Save data to local storage
             var formName = "form-raw"; //+form.get("name");
             localStorage.setItem(formName,rawData);
+            app.view.notifyModal("Load","Load Complete.");
             
+        }
+        else {
+            app.view.notifyModal("Load","Load failure.");
         }
         
         /*
@@ -351,11 +355,12 @@
             activeForms.remove(model);
             app.view.removeSavedFormItem({model:model});
             model.sync("delete",model,{local:true});
-            //model.
+            app.view.notifyModal("Submit","Submit complete");
         }
         else {
             //console.log("cbFormSendComplete failure");
             //this.onFormSave(null,model);
+            app.view.notifyModal("Submit","Submit failure. Form saved.");
             if (!activeForms.contains(model)) {
                 activeForms.add(model);
                 app.view.newSavedFormItem({model:model});
