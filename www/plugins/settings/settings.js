@@ -23,19 +23,19 @@ var settingsPage = Backbone.View.extend({ //pageView.extend({
     tagName: "div",
     className: "se-page",
     name: "",
-    template: _.template("<div class='row'>" +
-        "<nav class='top-bar' data-topbar role='navigation'>" +
-        "<section class='top-bar-section'>" +
+    template: _.template("<div class='row top-bar'>" +
+        //"<nav class='top-bar' data-topbar role='navigation'>" +
+        //"<section class='top-bar-section'>" +
         "<!-- Right Nav Section -->" +
         "<ul class='left'>" +
         "<li class='active'>" +
         "<a type='button' id='link-button' link='page-back' class='button'>" +
-        "Back" +
+        "< Back" +
         "</a>" +
         "</li>" +
         " </ul>" +
-        "</section>" +
-        "</nav>" +
+        //"</section>" +
+        //"</nav>" +
         "</div>" +
         "<div id='content'></div>"
     ),

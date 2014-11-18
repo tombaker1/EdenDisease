@@ -40,48 +40,56 @@
 <body>
     <!-- Application pages -->
     <div id="page-home" class="se-page se-page-visible">
+        <div class="row top-bar">
+            <div class="small-4 small-offset-4 columns">
+                <h2>Eden Disease</h2>
+            </div>
+            <div class="small-4 columns">
+                <a href="#" class="top-bar-button right">Settings</a>
+            </div>
+        </div>
+
+
         <!-- div data-role="header" data-add-back-btn="true"><h1>Sahana Ebola Response</h1></div -->
-        <div class='row'>
+        <!-- div class='row top-bar'>
             <nav class="top-bar" data-topbar role="navigation">
                 <section class="top-bar-section">
-                    <!-- Right Nav Section -->
-                    <ul class="right">
+                     <ul class="right">
                         <li class="active"><a>Settings</a>
                         </li>
                     </ul>
                 </section>
-            </nav>
-        </div>
+            </nav -->
 
 
-        <h1>Sahana Ebola Response Demo</h1>
-        <div>
-            <ul id="menu" class="stack se-list-menu">
-                <li><a id="link-button" link="page-cases">Cases <i class="chevron"></i></a>
-                </li>
-                <li><a id="link-button" link="page-people">Contact Persons <i class="chevron"></i></a>
-                </li>
-                <li><a id="link-button" link="page-monitoring">Contact Monitoring <i class="chevron"></i></a>
-                </li>
-                <!-- li><a id="link-button" link="page-saved">Saved Forms <i class="chevron"></i></a>
+    <h1>Sahana Ebola Response Demo</h1>
+    <div>
+        <ul id="menu" class="stack se-list-menu">
+            <li><a id="link-button" link="page-cases">Cases <i class="chevron"></i></a>
+            </li>
+            <li><a id="link-button" link="page-people">Contact Persons <i class="chevron"></i></a>
+            </li>
+            <li><a id="link-button" link="page-monitoring">Contact Monitoring <i class="chevron"></i></a>
+            </li>
+            <!-- li><a id="link-button" link="page-saved">Saved Forms <i class="chevron"></i></a>
                 </li -->
-                <li><a id="link-button" link="page-settings">Settings </a>
-                </li>
-            </ul>
-        </div>
-        <div data-role="footer" data-position="fixed">
-            <h4></h4>
-        </div>
+            <li><a id="link-button" link="page-settings">Settings </a>
+            </li>
+        </ul>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <h4></h4>
+    </div>
     </div>
 
     <!-- Global dialogs -->
     <div id="dialogs">
         <div id="notify-dialog" class="se-modal">
             <div id="frame">
-                <div id="header" class = "row">
+                <div id="header" class="row">
                     <h2>Notice</h2>
                 </div>
-                <div id="content" class = "row">
+                <div id="content" class="row">
                     <h3>
                     Empty Notice
                 </h3>
@@ -89,10 +97,10 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="notify-message" class="se-notify">
             <div id="frame">
-                <div id="content" class = "row">
+                <div id="content" class="row">
                     <h3>Empty Notice</h3>
                 </div>
             </div>

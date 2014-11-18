@@ -20,6 +20,7 @@ display: inline-table;
     left: 100%;
     width: 100%;
     height: 100%;
+    overflow-x: hidden;
     transition-property: left;
     transition: 0.5s;
     -moz-transition-duration: 0.5s;
@@ -122,3 +123,5 @@ display: inline-table;
     border: 1px solid #000;
 	background: #ddd;
 }
+
+
