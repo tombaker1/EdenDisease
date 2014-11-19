@@ -211,11 +211,10 @@
 
     };
 
-    xformer.prototype.requestData = function (name, url, data, cb) {
+    xformer.prototype.requestData = function (url, cb) {
         //var formListURL = url;  // don't need to do anything here
-        reqState.type = name;
+        reqState.type = "data";
         reqState.callback = cb;
-        reqState.data = data;
         xhr.onload = this.cbRequestData.bind(this);
         xhr.open("get", url, true);
         xhr.send();
@@ -237,7 +236,7 @@
         var rawData = reply.target.responseText;
         
         // return and show the form
-        reqState.callback(true, reqState.type, rawData, reqState.data);
+        reqState.callback(true, rawData);
         
     };
         xformer.prototype.requestFormList = function (url, cb) {

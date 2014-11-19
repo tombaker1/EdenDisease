@@ -33,8 +33,15 @@
         this._name = pluginName;
         this._diseaseCase = null;
         this._dataTable = {};
+        this._updateState = {
+            active: false,
+            list: [],
+            name: ""
+        };
        
         $(this).bind("reset-all",this.onReset.bind(this));
+        //$(this).bind("download-complete",this.onDownloadComplete.bind(this));
+                     
         //$("#cancel").click(this.onFormCancel.bind(this));
         //$("#save").click(this.onFormSave.bind(this));
         //$("#submit").click(this.onFormSubmit.bind(this));
@@ -115,18 +122,17 @@
         this._dataTable[tableName] = tableData;
     };
     
-    controller.prototype.updateData = function(dataName) {
-        //TODO call comm to get data
-        if (!dataName || (dataName.length === 0)) {
+    controller.prototype.updateData = function(dataList) {
+        this._updateState.list = this._updateState.list.concat(dataList);
+        this.nextUpdate();
+    };
+    
+    controller.prototype.nextUpdate = function() {
+        if (this._updateState.active || (this._updateState.list.length === 0)) {
             return;
         }
-        var name = dataName;
-        if (Array.isArray(dataName)) {
-            name = dataName.pop();
-        }
-        else {
-            dataName = null;
-        }
+        
+        var name = this._updateState.list[0];
         var path = this.getHostURL();
         switch (name) {
                 case "cases": {
@@ -139,21 +145,24 @@
                     alert("nope");
                 }
         }
-        app.commHandler.requestData(name,path,dataName, this.cbUpdateData.bind(this));
+        this._updateState.active = true;
+        app.commHandler.requestData(path, this.cbUpdateData.bind(this));
     };
     
-    controller.prototype.cbUpdateData = function (status, name, dataTable, dataName) {
+    controller.prototype.cbUpdateData = function (status, dataTable) {
         //TODO update data
+        var name = this._updateState.list.shift();
+            this._updateState.active = false;
         if (status) {
             var data = JSON.parse(dataTable);
             this.setData(name,data);
             if (name === "cases") {
                 app.view.getPage("page-cases").update();
             }
-            this.updateData(dataName);
+            this.nextUpdate();
         }
         else {
-            alert("Communication failure"); //TODO: do the right thing
+            alert("Communication failure " + name); //TODO: do the right thing
         }
     };
     
