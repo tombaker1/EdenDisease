@@ -101,7 +101,8 @@
         }
       
         // Update the data tables
-        this.updateData("cases");
+        this.updateData(["cases","persons"]);
+        //this.updateData("persons");
         
     };
     
@@ -116,24 +117,40 @@
     
     controller.prototype.updateData = function(dataName) {
         //TODO call comm to get data
+        if (!dataName || (dataName.length === 0)) {
+            return;
+        }
+        var name = dataName;
+        if (Array.isArray(dataName)) {
+            name = dataName.pop();
+        }
+        else {
+            dataName = null;
+        }
         var path = this.getHostURL();
-        switch (dataName) {
+        switch (name) {
                 case "cases": {
                     path += "/disease/case.json";
+                } break;
+                case "persons": {
+                    path += "/pr/person.json";
                 } break;
                 default: {
                     alert("nope");
                 }
         }
-        app.commHandler.requestData("cases",path,this.cbUpdateData.bind(this));
+        app.commHandler.requestData(name,path,dataName, this.cbUpdateData.bind(this));
     };
     
-    controller.prototype.cbUpdateData = function (status, name, dataTable) {
+    controller.prototype.cbUpdateData = function (status, name, dataTable, dataName) {
         //TODO update data
         if (status) {
             var data = JSON.parse(dataTable);
             this.setData(name,data);
-            app.view.getPage("page-cases").update();
+            if (name === "cases") {
+                app.view.getPage("page-cases").update();
+            }
+            this.updateData(dataName);
         }
         else {
             alert("Communication failure"); //TODO: do the right thing
