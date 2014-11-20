@@ -136,10 +136,10 @@
         var path = this.getHostURL();
         switch (name) {
                 case "cases": {
-                    path += "/disease/case.json";
+                    path += config.defaults.caseListPath; //"/disease/case.json";
                 } break;
                 case "persons": {
-                    path += "/pr/person.json";
+                    path += config.defaults.personListPath; //"/pr/person.json";
                 } break;
                 default: {
                     alert("nope");
@@ -157,7 +157,7 @@
             var data = JSON.parse(dataTable);
             this.setData(name,data);
             if (name === "cases") {
-                app.view.getPage("page-cases").update();
+                //app.view.getPage("page-cases").update();
             }
             this.nextUpdate();
         }
