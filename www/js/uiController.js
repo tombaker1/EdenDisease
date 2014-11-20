@@ -236,7 +236,7 @@
     
     controller.prototype.loadFormList = function (  ) {
         // Load the form list
-        var url = this.getHostURL() + config.defaults.casePath;
+        var url = this.getHostURL() + config.defaults.caseCreatePath;
         app.commHandler.requestFormList(url,cbDiseaseCase);
     };
     
@@ -247,7 +247,7 @@
 
     controller.prototype.loadForm = function ( event ) {
         console.log("loadForm");
-        var url = app.uiController.getHostURL() + config.defaults.casePath;
+        var url = app.uiController.getHostURL() + config.defaults.caseCreatePath;
         app.commHandler.requestForm(url,this.cbFormLoadComplete.bind(this));
         /*
         var forms = app.commHandler.getAllForms();
