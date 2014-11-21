@@ -20,9 +20,6 @@
 
 ;(function ( $, window, document, undefined ) {
         
-    // create the form list item
-    var diseaseCase = null;
-    
     // create the query state
     var xhr = null,
         reqTimer = null,
@@ -43,145 +40,9 @@
     xformer.prototype.init = function () {
         xhr = new XMLHttpRequest();
     };
-    
-    xformer.prototype.getForm = function (i) {
-        return formList.at(i); 
-    }
-    
-    xformer.prototype.getAllForms = function () {
-        return formList; 
-    }
-    
-    xformer.prototype.numForms = function () {
-        return formList.length;
-    }
-    
-    xformer.prototype.getFormByName = function (name) {
-        for (var i = 0; i < formList.length; i++) {
-            if (name === formList.at(i).get("name")) {
-                return formList.at(i);
-            }
-        }
-        return null;
-    };
 
-    xformer.prototype.getDoc = function (i) {
-        return formList.at(i); 
-    }
-    
-    xformer.prototype.cbReadFormList = function (reply) {
-        clearTimeout(reqTimer);
-        if (xhr.readyState != 4) {
-            alert("What?");
-            return;
-        }
-        if (xhr.status != 200) {
-            alert("Error loading page");
-            return;
-        }
-        
-        var rawData = reply.target.responseText;
-        //var objData = JSON.parse(rawData);
-        
-        //this.parseFormList(rawXml);
-        
-        // return and show the form
-        reqState.callback(true, rawData);
-        
-    };
-    
-    xformer.prototype.parseFormList = function (rawData) {
-        var obj = JSON.parse(rawData);
-        diseaseCase = obj;
-        for (var key in diseaseCase) {
-            console.log(key);
-            var item = obj[key];
-            for (i = 0; i < item.length; i++) {
-                var sub = item[i];
-                for (var key2 in sub) {
-                    console.log('\t'+ key2);
-                }
-            }
-        }
-    };
-    
-    xformer.prototype.parseForm = function (rawXML,formName) {
-        var xmlDoc = $.parseXML(rawXML);
-        var $xml = $( xmlDoc );
-        
-        // Parse the model
-        var $model = $xml.find("model");
-        var instance = $model.find("instance");
-        var elementName = "";
-        var fields = {};
-        var modelPrototype = {};
-        for (var i = 0; i < instance.length; i++) {
-            var element = $(instance[i]).children()[0];
-            elementName = element.nodeName;
-            //console.log("element name " + elementName);
-            var fieldItems = $(element).children();
-            
-            // 
-            var requiredList = [];
-            for (var j = 0; j < fieldItems.length; j++) {
-                // get model element
-                var key = fieldItems[j].nodeName;
-                var value = fieldItems[j].textContent;
-                if (value === undefined) {
-                    value = "";
-                }
-                var field = {};
-                var item = {};
-                field["value"] = value;
-                modelPrototype[key] = value;
-                
-                // find binding
-                var nodeset = '/' + elementName + '/' + key;
-                var searchString = "bind[nodeset*='" + nodeset + "']";
-                var bindElement = $model.find(searchString)[0];
-                var attributes = bindElement.attributes;
-                //console.log("attr " + attributes.length);
-               
-                // add attributes of bind
-                var attributeList = {};
-                for (var k = 0; k < attributes.length; k++) {
-                    var name = attributes[k].nodeName;
-                    var value = attributes[k].value;
-                    field[name] = value;
-                    
-                    // Check for requirements
-                    if ((name==="required") && (value ==="true()")) {
-                        requiredList.push(key);
-                    }
-                }
-                                
-                // add to array
-                fields[key] = field;
-                //console.log(key + ' ' + value);
-            }
-            
-        }
-        // Just get English for now and stuff it in the map
-        var itext = $model.find("itext")[0];
-        var strings = $(itext).find("translation[lang*='eng']")[0];
-        fields["strings"] = strings;
-                
-        // parse the body
-        fields['xml'] = rawXML;
-        fields['$xml'] = $xml;
-        fields['formId'] = elementName;
-
-        this.getFormByName(formName).set({"data":modelPrototype,
-                                  "loaded":true,
-                                  "form":fields,
-                                  "required":requiredList,
-                                  "formId":elementName});
-        return reqState.data;
-    };
-    
     xformer.prototype.cbReadForm = function (reply) {
         clearTimeout(reqTimer);
-        //console.log("cbReadFormList done");
         if (xhr.readyState != 4) {
             alert("Error loading form");
             reqState.callback(false,reqState.data);
@@ -194,7 +55,6 @@
         }
         
         var rawXML = reply.target.responseText;
-        //this.parseForm(rawXML,reqState.data);
 
         reqState.callback(true,rawXML);
     }; 
@@ -237,17 +97,6 @@
         
         // return and show the form
         reqState.callback(true, rawData);
-        
-    };
-        xformer.prototype.requestFormList = function (url, cb) {
-        var formListURL = url;  // don't need to do anything here
-        reqState.type = "request-form-list";
-        reqState.callback = cb;
-        reqState.data = formListURL;
-        xhr.onload = this.cbReadFormList.bind(this);
-        xhr.open("get", formListURL, true);
-        xhr.send();
-        reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         
     };
 
@@ -294,7 +143,7 @@
         // notify the controller that the load is complete
         reqState.callback(true,reqState.data);
     }; 
-    
+    /*
     xformer.prototype.makedata = function(model, jsonFile) {
         var boundary = '---------------------------';
         boundary += Math.floor(Math.random()*32768);
@@ -325,6 +174,7 @@
             body += '--' + boundary + '--';
         return body;
     };
+    */
     
     xformer.prototype.createJSONData = function (model) {
         var obj = {$_disease_case: []};
@@ -348,15 +198,6 @@
                     var resourceId = "$k_" + name;
                     var reference = {"@resource":resource,"@uuid":value};
                     f[name] = value;
-                        //value = 
-                        /*
-                        if (options[i]["@value"] === value) {
-                            var select = element.find("select").first();
-                            select[0].selectedIndex = i;
-                            select.selectmenu("refresh");
-                        }
-                        */
-                    //}
                 }
             }
         }
@@ -374,29 +215,8 @@
         reqState.type = "send-form";
         reqState.callback = cb;
         reqState.data = model;
-        //var pairs = [];
-        
-        //var form = app.uiController.getFormByName("disease_case")
-      //var formData = form.get("form");
-      //var data = form.get("obj")["$_" + formName][0]["field"];
-      //for (var key in data) {
-      //  var item = data[key];
-      //  var name = item["@name"];
-     // }
-        // Fill field
-        /*
-        var xmlDocument = '<?xml version="1.0"  encoding="UTF-8"?>\r\n';
-        xmlDocument += '<' + model._formId + '>\r\n';
-        for (var key in model.attributes) {
-            // Don't send any meta data that begins with '_'
-            if (key[0] != '_') {
-                var value = encodeURIComponent(model.get(key));
-                xmlDocument += "<" + key + ">" + value + "</" + key + ">\r\n";
-                pairs.push(encodeURIComponent(key) + "=" + value);
-            }
-        }
-        xmlDocument += '</' + model._formId + '>\r\n';
-        */
+
+        // Get the JSON data to send
         var jsonDocument = this.createJSONData(model);
         
         
@@ -425,38 +245,7 @@
         }
        
     };
-/*
-    var jsonData = '{' +
-                    '"$_disease_case": [' +
-                    '{"case_number":"47",' +
-                    //'"$k_disease_id":{"@resource":"disease_disease","@tuid":"DISEASE"},' +
-                    //'"$k_disease_id":{"@resource":"disease_disease","@uuid":"1"},' +
-                    '"disease_id":"1",' +
-                    '"monitoring_level":"QUARANTINE",' +
-                    '"illness_state":"SYMPTOMATIC",' +
-                    '"diagnosis_status":"CONFIRMED-POS",' +
-                    //'"$k_person_id":{"resource":"pr_person","@tuid":"PERSON"}' +
-                    //'"$k_person_id":{"resource":"pr_person","@uuid":"3"}' +
-                    '"person_id":"3"' +
-                    '}' +
-                    //'],' +
-                    //'"$_pr_person":' +
-                    //'[' +
-                    //'{"@tuid":"PERSON",' +
-                    ////'"name":"John Johnson"' +
-                    //'"first_name":"John",' +
-                    //'"last_name":"Johnson",' +
-                    //'"email":"jj@gmail.com"' +
-                    //'}' +
-                    //'],' +
-                    //'"$_disease_disease":' +
-                    //'[' +
-                    //'{"@tuid":"DISEASE","name":"Ebola Virus Disease"}' +
-                    ']' +
-                    '}';
-    
-*/
-    //var jsonData = '{"$_disease_case":[{"case_number":"51","person_id":"3","disease_id":"1","illness_status":"UNKNOWN","diagnosis_status":"UNKNOWN","monitoring_level":"NONE"}]}';
+
     var jsonData = '--------12345678\r\n' +
                     'Content-Disposition: form-data; name="email"\r\n' +
                     '\r\n' +
@@ -484,68 +273,19 @@
     };
     
         xformer.prototype.sendForm = function (hostURL) {
-            //reqState.type = "send-form";
-            //reqState.callback = this.cbSendForm.bind(this);
-            //reqState.data = model;
         
             console.log("doSend");
             var username = app.state.settings.serverInfo.get("username");
             var password = app.state.settings.serverInfo.get("password");
             var authentication = 'Basic ' + window.btoa(username + ':' + password);
             var boundary = "--------12345678";
-            //var xmlData = '<?xml version="1.0"?><pr_image><profile>1</profile><image>image</image><url>url</url><type>1</type><description>ddd</description></pr_image>';
             var data = jsonData;
-            ///data += '';
         
             var url = hostURL + "/default/user/login";
-            //var url = hostURL + "/disease/case.s3json";
-            //var url = "http://tom-xps:8000/eden/disease/case.s3json";
-            //http://ebola.sahanafoundation.org/eden/disease/disease.s3json
-            //http://ebola.sahanafoundation.org/eden/disease/case.s3json
             xhr.open('POST', url, true) //, username, password); // urlencoded-post
             xhr.onload = this.cbSendForm.bind(this);
-            //xhr.setRequestHeader('Authorization', authentication);
             xhr.setRequestHeader("Content-Type", 'multipart/form-data; boundary=' + boundary);
-            //xhr.send(body);
             xhr.send(jsonData);
-/*
-        // Fill field
-        var xmlDocument = '<?xml version="1.0"  encoding="UTF-8"?>\r\n';
-        xmlDocument += '<' + model._formId + '>\r\n';
-        for (var key in model.attributes) {
-            // Don't send any meta data that begins with '_'
-            if (key[0] != '_') {
-                var value = encodeURIComponent(model.get(key));
-                xmlDocument += "<" + key + ">" + value + "</" + key + ">\r\n";
-                pairs.push(encodeURIComponent(key) + "=" + value);
-            }
-        }
-        xmlDocument += '</' + model._formId + '>\r\n';
-        
-        // create url to send to
-        var serverUrl = app.state.settings.serverInfo.get("url");
-        var urlSubmit = serverUrl + "/xforms/submission/" + model._formId;
-
-        // send
-        var username = app.state.settings.serverInfo.get("username");
-        var password = app.state.settings.serverInfo.get("password");
-        var authentication = 'Basic ' + window.btoa(username + ':' + password);
-        
-        // Set headers
-        xhr.onload = this.cbSendModel.bind(this);
-        //xhr.onreadystatechange=this.cbSendModel.bind(this);
-        xhr.open('POST', urlSubmit, true);
-        xhr.setRequestHeader('Authorization', authentication);
-        var dataToSend = this.makedata(model,xmlDocument);
-        try {
-            xhr.send(dataToSend);
-            reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
-        }
-        catch (err) {
-            alert("send error");
-            reqState.callback(false,reqState.data);
-        }
-       */
     };
     app.commHandler = new xformer();
 
