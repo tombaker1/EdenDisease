@@ -176,9 +176,6 @@
         }
     };
 
-    var woo = function () {
-        console.log("woo");
-    };
     pluginManager.prototype.cbLoadComplete = function () {
         //console.log("pluginManager cbLoadComplete");
 
