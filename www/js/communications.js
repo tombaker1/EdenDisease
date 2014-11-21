@@ -32,16 +32,16 @@
     };
 
     // The actual plugin constructor
-    function xformer(  ) {
+    function communicator(  ) {
        
         this.init();
     };
     
-    xformer.prototype.init = function () {
+    communicator.prototype.init = function () {
         xhr = new XMLHttpRequest();
     };
 
-    xformer.prototype.cbReadForm = function (reply) {
+    communicator.prototype.cbReadForm = function (reply) {
         clearTimeout(reqTimer);
         if (xhr.readyState != 4) {
             alert("Error loading form");
@@ -71,7 +71,7 @@
 
     };
 
-    xformer.prototype.requestData = function (url, cb) {
+    communicator.prototype.requestData = function (url, cb) {
         //var formListURL = url;  // don't need to do anything here
         reqState.type = "data";
         reqState.callback = cb;
@@ -82,7 +82,7 @@
         
     };
 
-   xformer.prototype.cbRequestData = function (reply) {
+   communicator.prototype.cbRequestData = function (reply) {
         clearTimeout(reqTimer);
         if (xhr.readyState != 4) {
             alert("What?");
@@ -100,7 +100,7 @@
         
     };
 
-    xformer.prototype.requestForm = function (url, cb) {
+    communicator.prototype.requestForm = function (url, cb) {
         reqState.type = "request-form";
         reqState.callback = cb;
         reqState.data = "load-form";
@@ -123,7 +123,7 @@
         }
     };
     
-    xformer.prototype.cbSendModel = function (reply) {
+    communicator.prototype.cbSendModel = function (reply) {
         clearTimeout(reqTimer);
         //console.log("cbReadFormList done");
         if (xhr.readyState != 4) {
@@ -143,40 +143,8 @@
         // notify the controller that the load is complete
         reqState.callback(true,reqState.data);
     }; 
-    /*
-    xformer.prototype.makedata = function(model, jsonFile) {
-        var boundary = '---------------------------';
-        boundary += Math.floor(Math.random()*32768);
-        boundary += Math.floor(Math.random()*32768);
-        boundary += Math.floor(Math.random()*32768);
-        xhr.setRequestHeader("Content-Type", 'multipart/form-data; boundary=' + boundary);
-        var body = '';
-        //body += '--' + boundary + '\r\n' + 'Content-Disposition: form-data; name="xml_submission_file";';
-
-        var modelTime = new Date();
-        modelTime.setTime(model.timestamp());
-        var filename = "model_"+model.get("_name")+"_"+
-                        modelTime.getFullYear()+"-"+
-                        modelTime.getMonth()+"-"+
-                        modelTime.getDay()+
-                        "_"+
-                        modelTime.getHours()+"-"+
-                        modelTime.getMinutes()+"-"+
-                        modelTime.getSeconds()+".js";
-        
-            body += '--' + boundary + '\r\n'
-            body += 'Content-Disposition: form-data; name="json_submission_file";filename="' + filename +'";\r\n';
-            body += 'Content-Type: text/javascript' + '\r\n'; 
-            body += 'Content-Transfer-Encoding: UTF-8' + '\r\n'; 
-            body += '\r\n'
-            body += jsonFile;
-            body += '\r\n'
-            body += '--' + boundary + '--';
-        return body;
-    };
-    */
     
-    xformer.prototype.createJSONData = function (model) {
+    communicator.prototype.createJSONData = function (model) {
         var obj = {$_disease_case: []};
         var c = obj["$_disease_case"];
         c[0] = {};
@@ -211,7 +179,7 @@
       return JSON.stringify(obj);
     };
     
-    xformer.prototype.sendModel = function (model, cb, options) {
+    communicator.prototype.sendModel = function (model, cb, options) {
         reqState.type = "send-form";
         reqState.callback = cb;
         reqState.data = model;
@@ -231,11 +199,9 @@
         
         // Set headers
         xhr.onload = this.cbSendModel.bind(this);
-        //xhr.onreadystatechange=this.cbSendModel.bind(this);
-        xhr.open('PUT', urlSubmit, true);
+         xhr.open('PUT', urlSubmit, true);
         xhr.setRequestHeader('Authorization', authentication);
-        //var dataToSend = this.makedata(model,jsonDocument);
-        try {
+         try {
             xhr.send(jsonDocument);
             reqTimer = setTimeout(cbReqTimeout,REQ_WAIT_TIME);
         }
@@ -255,7 +221,7 @@
                     '\r\n' +
                     'eden\r\n';
 
-    xformer.prototype.cbSendForm = function (reply) {
+    communicator.prototype.cbSendForm = function (reply) {
         //console.log("cbReadFormList done");
         if (xhr.readyState != 4) {
             console.log("Error loading form");
@@ -272,7 +238,7 @@
         console.log("send received");
     };
     
-        xformer.prototype.sendForm = function (hostURL) {
+        communicator.prototype.sendForm = function (hostURL) {
         
             console.log("doSend");
             var username = app.state.settings.serverInfo.get("username");
@@ -287,6 +253,6 @@
             xhr.setRequestHeader("Content-Type", 'multipart/form-data; boundary=' + boundary);
             xhr.send(jsonData);
     };
-    app.commHandler = new xformer();
+    app.commHandler = new communicator();
 
 })( jQuery, window, document );
