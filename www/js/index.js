@@ -47,8 +47,8 @@ var app = {
             this.state.settings.source = 2;
             this.state.offline = false;
         }
-        this.testmodule.init();
-        this.testmodule.doSomething();
+        //this.testmodule.init();
+        //this.testmodule.doSomething();
         this.bind();
 
         this.storage.init();
@@ -73,7 +73,6 @@ var app = {
     
     bind: function() {
         document.addEventListener('deviceready', this.deviceready, false);
-
         
         $("#reset-button").on("click",this.onReset.bind(this));
         $("#load-form-list-button").on("click",this.onLoad.bind(this));
@@ -84,9 +83,6 @@ var app = {
         // set version
         $("#version").html("Version: " + config.version);
          this.uiController.init({state: this.state});
-               //$('#serverURL').val(app.state.settings.serverInfo.get("url"));
-        //$('#username').val(app.state.settings.serverInfo.get("username"));
-        //$('#password').val(app.state.settings.serverInfo.get("password"));
         var settingsPage = this.view.getPage("page-settings");
         settingsPage.serverURL(app.state.settings.serverInfo.get("url"));
         settingsPage.username(app.state.settings.serverInfo.get("username"));
@@ -122,11 +118,6 @@ var app = {
         
         // clear settings
         var serverInfo = this.state.settings.serverInfo;
-        //serverInfo.set("url",config.defaults.url);
-        //serverInfo.set({"username":"","password":""});
-        //$('#serverURL').val(app.state.settings.serverInfo.get("url"));
-        //$('#username').val(app.state.settings.serverInfo.get("username"));
-        //$('#password').val(app.state.settings.serverInfo.get("password"));
     },
     
     deviceready: function() {
@@ -136,7 +127,7 @@ var app = {
         console.log("deviceready");
     }
 };
-
+/*
 app.testmodule = (function() {
     var localVariable = 42;
     var my = {};
@@ -148,3 +139,4 @@ app.testmodule = (function() {
     };
     return my;
 }());
+*/
