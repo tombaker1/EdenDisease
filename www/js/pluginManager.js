@@ -143,8 +143,6 @@
                 {
                     var path = currentPlugin.config["script"];
                     if (path) {
-                        console.log("pluginManager: script loading not implemented!!!");
-                        //console.log("pluginManager: script loading not implemented!!!");
                         var elementString = "<script type='text/javascript'></script>"; // id='script-" +
                         //pluginLoading.name +
                         //"'  ></script>";
