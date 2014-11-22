@@ -78,7 +78,6 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         var tableBody = this.$el.find("tbody");
         var caseList = app.uiController.getData("cases");
         var db = app.uiController._diseaseCase;
-        //var nameList = db["$disease_case"][0]["field"]["select"][0]["option"];
         var n0 = db["$_disease_case"]
         var n1 = n0[0];
         var n2 = n1["field"][1];
@@ -108,7 +107,6 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
             htmlString += "</tr>";
         }
        tableBody.html(htmlString);
-        //this.$el.find("tbody.action-button").on("click",this.onEditCase.bind(this));
         this.$el.find("tbody > tr").on("click touchend",this.expandCase.bind(this));
     },
     

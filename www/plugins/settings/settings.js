@@ -77,7 +77,7 @@ var settingsPage = Backbone.View.extend({ //pageView.extend({
         if (this.content_template) {
             this.$el.find("#content").append(this.content_template({}));
         }
-        return this; //.html(this.template({index:this.index,name:this.model.get("name")}));
+        return this; 
     },
 
     serverURL: function(url) {

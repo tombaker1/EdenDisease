@@ -48,7 +48,6 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         "click #submit": "onSubmit"
     },
     initialize: function (options) {
-        //pageView.prototype.initialize.apply(this,[options]);
         console.log("page initialize ");
 
         var content = options["content"];
@@ -138,9 +137,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                         if (options[i]["@value"] === value) {
                             var select = element.find("select");
                             select.val(i);
-                            //select[0].selectedIndex = i;
-                            //select.selectmenu("refresh");
-                        }
+                         }
                     }
                 }
             } else {
@@ -164,62 +161,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             }
         }
     },
-    /*
-    create: function (options) {
-        // Add item into new form list
-        var model = options["model"];
-        var item = new newFormListItem({
-            model: model
-        });
-        item.index = options["index"]; //this.newFormArray.length;
-        item.render();
-        this.$newFormList.append(item.$el);
-        this.newFormArray.unshift(item);
 
-        // create page
-        var page = new formPage(options);
-        page.index = item.index;
-        page.render();
-        $("body").append(page.$el);
-        var $container = $(page.$el.find("#page-form-content"));
-
-        // Add page content
-        var $form = model.get("form");
-        var $xml = $form["$xml"];
-        var $fields = $xml[0].body.children;
-        for (var i = 0; i < $fields.length; i++) {
-            var field = $fields[i];
-            var element = null;
-            var elementString = "";
-            var reference = $(field).attr("ref");
-            var label = $(field).find("label")[0];
-            var labelString = getStringRef($form, label);
-            switch (field.nodeName) {
-            case "select1":
-                var element = this.parseSelect1(options, reference, field, labelString);
-                break;
-            case "upload":
-                var element = this.parseUpload(options, reference, field, labelString);
-                break;
-            case "input":
-                var element = new formInput(options);
-                element.reference = reference;
-                element.label = labelString;
-                break;
-            default:
-                console.log("<div>Unimplemented element" + field.nodeName + "</div>");
-            }
-
-            // Render new element and add to the page
-            if (element) {
-                element.render();
-                $container.append(element.$el);
-                $container.append("<hr>");
-            }
-        }
-        page.$el.page();
-    },
-    */
     getModelData: function (model) {
         var form = app.uiController.getFormByName("disease_case");
       var formName = form.get("name");
