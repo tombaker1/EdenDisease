@@ -46,9 +46,10 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
             disease: this._caseData["$k_disease_id"]["$"]
         };
         this.$el.html(this.template(templateData));
-        this.$el.attr({
-            "id": this.name
-        });
+        //this.$el.attr({
+            //id": this.name,
+        //    href: "#content-"+this._caseData["case_number"]
+        //});
         return this;
     },
 
@@ -117,19 +118,8 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         var tableBody = this.$el.find("tbody");
         var caseStruct = app.uiController.getData("cases");
         var caseList = caseStruct["$_disease_case"];
-        //return;
-        /*
-        var db = app.uiController._diseaseCase;
-        var n0 = db["$_disease_case"]
-        var n1 = n0[0];
-        var n2 = n1["field"][1];
-        var n3 = n2["select"];
-        var n4 = n3[0];
-        var nameList = n4["option"];
-        */
 
         // create all of the case items
-        //var htmlString = "";
         for (var i = 0; i < caseList.length; i++) {
             var caseItem = caseList[i];
             var caseElement = new casesItemElement({
@@ -138,26 +128,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
             this.caseList.push(caseElement);
             caseElement.render();
             tableBody.append(caseElement.$el);
-            //break;
-            /*
-            htmlString += "<tr role='row' id='case-" + caseItem["id"] + "'>";
-            htmlString += "<td class='actions'>";
-            htmlString += "<input class='action-button' value='Edit' type='button'>";
-            htmlString += "</td>";
-            htmlString += "<td>" + caseItem["case_number"] + "</td>";
-            var id = caseItem["person_id"];
-            var nameString = "<td>Unknown</td>";
-            for (var j = 0; j < nameList.length; j++) {
-                if (nameList[j]["@value"] && (nameList[j]["@value"] === id)) {
-                    nameString = "<td>" + nameList[j]["$"] + "</td>";
-                }
-                    
-            }
-            htmlString += nameString;
-            htmlString += "</tr>";
-            */
         }
-        //tableBody.html(htmlString);
         tableBody.foundation();
         this.$el.find("tbody > tr").on("click touchend", this.expandCase.bind(this));
     },
