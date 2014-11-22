@@ -18,7 +18,6 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-
 var app = {
     commHandler: null,
     uiController: null,
@@ -48,17 +47,19 @@ var app = {
             this.state.settings.source = 2;
             this.state.offline = false;
         }
-        this.testmodule.init();
-        this.testmodule.doSomething();
+        //this.testmodule.init();
+        //this.testmodule.doSomething();
         this.bind();
+
         this.storage.init();
         this.state.settings.serverInfo = new userInfo();
         this.getState();
         this.view.init();
-        this.uiController.init({state: this.state});
+        //this.uiController.init({state: this.state});
+        this.pluginManager.init();
+        this.pluginManager.on("plugin-create-complete",this.onDynamicUIComplete.bind(this));
+        $(document).foundation();
         
-        // set version
-        $("#version").html("Version: " + config.version);
     },
     
     getState: function() {
@@ -72,11 +73,30 @@ var app = {
     
     bind: function() {
         document.addEventListener('deviceready', this.deviceready, false);
+        
         $("#reset-button").on("click",this.onReset.bind(this));
         $("#load-form-list-button").on("click",this.onLoad.bind(this));
         $("#debug-button").on("click",this.onDebug.bind(this));
     },
     
+    onDynamicUIComplete: function() {
+        // set version
+        $("#version").html("Version: " + config.version);
+         this.uiController.init({state: this.state});
+        var settingsPage = this.view.getPage("page-settings");
+        settingsPage.serverURL(app.state.settings.serverInfo.get("url"));
+        settingsPage.username(app.state.settings.serverInfo.get("username"));
+        settingsPage.password(app.state.settings.serverInfo.get("password"));
+        
+        document.onTouchMove = function(e) {
+            e.preventDefault();
+        }
+        document.onTouchStart = function(e) {
+            e.preventDefault();
+        }
+    },
+    
+
     onLoad: function() {
         this.uiController.loadForm();
     },
@@ -98,11 +118,6 @@ var app = {
         
         // clear settings
         var serverInfo = this.state.settings.serverInfo;
-        //serverInfo.set("url",config.defaults.url);
-        //serverInfo.set({"username":"","password":""});
-        //$('#serverURL').val(app.state.settings.serverInfo.get("url"));
-        //$('#username').val(app.state.settings.serverInfo.get("username"));
-        //$('#password').val(app.state.settings.serverInfo.get("password"));
     },
     
     deviceready: function() {
@@ -112,7 +127,7 @@ var app = {
         console.log("deviceready");
     }
 };
-
+/*
 app.testmodule = (function() {
     var localVariable = 42;
     var my = {};
@@ -124,3 +139,4 @@ app.testmodule = (function() {
     };
     return my;
 }());
+*/

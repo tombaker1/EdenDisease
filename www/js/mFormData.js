@@ -42,14 +42,10 @@ var mFormData = Backbone.Model.extend({
         _formId: ""
      },
     initialize: function(options) {
-        //this._name = "";
-        //this._timestamp = 0;
-        //this.submitted = false;
     },
     
     submit: function() {
         console.log("sending model " + this.get("_name"));
-        //this.set("_submitted",true);
         this.submitted(true);
         this.sync('create',this,{local:false});
     },
@@ -57,12 +53,14 @@ var mFormData = Backbone.Model.extend({
     getKey: function() {
         return this.get("_name") + '-' + this.get("_timestamp");
     },
+    
     name: function(_name) {
         if (_name) {
             this.set("_name",_name);
         }
         return this.get("_name");
     },
+    
     timestamp: function(_timestamp) {
         if (_timestamp) {
             this.set("_timestamp",_timestamp);
@@ -90,10 +88,7 @@ var mActiveFormList = Backbone.Collection.extend({
             var storageData = app.storage.read(key);
             var data = JSON.parse(storageData);
             var model = new mFormData(data);
-            //model.name(formName);
-            //model.timestamp(+timestamp);
-            //model.submitted(data["_submitted"]);
-            //model.urlRoot = form.get("url");
+            model.urlRoot = form.get("url");
             this.add(model);
             app.view.newSavedFormItem({model:model});
         }
