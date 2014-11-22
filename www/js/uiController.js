@@ -100,7 +100,7 @@
             var data = JSON.parse(dataTable);
             this.setData(name,data);
             if (name === "cases") {
-                //app.view.getPage("page-cases").update();
+                app.view.getPage("page-cases").update();
             }
             this.nextUpdate();
         }

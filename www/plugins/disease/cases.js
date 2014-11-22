@@ -19,6 +19,44 @@
 //  THE SOFTWARE.
 
 
+var casesItemElement = Backbone.View.extend({ //pageView.extend({
+    tagName: "tr",
+    //className: "accordian",
+    name: "",
+    template: _.template("<td class='actions'><input class='action-button' value='Edit' type='button'></td>" +
+        "<td><%= number %></td> " +
+        "<td><%= name %></td>"
+
+    ),
+    events: {
+        //"click #link-button": "navigate",
+
+        //"click #new-case": "onNewCase"
+    },
+    initialize: function (options) {
+        //pageView.prototype.initialize.apply(this,[options]);
+        console.log("case item initialize ");
+        this._caseData = options["item"];
+
+    },
+    render: function () {
+        var templateData = {
+            name: this._caseData["$k_person_id"]["$"],
+            number: this._caseData["case_number"],
+            disease: this._caseData["$k_disease_id"]["$"]
+        };
+        this.$el.html(this.template(templateData));
+        this.$el.attr({
+            "id": this.name
+        });
+        return this;
+    },
+
+    update: function() {
+        console.log("updating case list item");
+    }
+});
+
 var casesPage = Backbone.View.extend({ //pageView.extend({
     tagName: "div",
     className: "se-page",
@@ -48,6 +86,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
         console.log("page initialize ");
+        this.caseList = [];
 
         var content = options["content"];
         if (content) {
@@ -73,10 +112,13 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         }
         return this;
     },
-    
-    update: function() {
+
+    update: function () {
         var tableBody = this.$el.find("tbody");
-        var caseList = app.uiController.getData("cases");
+        var caseStruct = app.uiController.getData("cases");
+        var caseList = caseStruct["$_disease_case"];
+        //return;
+        /*
         var db = app.uiController._diseaseCase;
         var n0 = db["$_disease_case"]
         var n1 = n0[0];
@@ -84,12 +126,20 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         var n3 = n2["select"];
         var n4 = n3[0];
         var nameList = n4["option"];
-        
-        
+        */
+
         // create all of the case items
-        var htmlString = "";
+        //var htmlString = "";
         for (var i = 0; i < caseList.length; i++) {
             var caseItem = caseList[i];
+            var caseElement = new casesItemElement({
+                item: caseItem
+            });
+            this.caseList.push(caseElement);
+            caseElement.render();
+            tableBody.append(caseElement.$el);
+            //break;
+            /*
             htmlString += "<tr role='row' id='case-" + caseItem["id"] + "'>";
             htmlString += "<td class='actions'>";
             htmlString += "<input class='action-button' value='Edit' type='button'>";
@@ -105,16 +155,18 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
             }
             htmlString += nameString;
             htmlString += "</tr>";
+            */
         }
-       tableBody.html(htmlString);
-        this.$el.find("tbody > tr").on("click touchend",this.expandCase.bind(this));
+        //tableBody.html(htmlString);
+        tableBody.foundation();
+        this.$el.find("tbody > tr").on("click touchend", this.expandCase.bind(this));
     },
-    
-    onEditCase: function(event) {
+
+    onEditCase: function (event) {
         console.log("edit");
     },
-    
-    expandCase: function(event) {
+
+    expandCase: function (event) {
         console.log("expand");
         // TODO: first make sure that you didn't push a button
     },
@@ -129,7 +181,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     onNewCase: function (event) {
         console.log("onNewCase ");
         app.uiController.newForm();
-        this.trigger("navigate","page-new-case");
+        this.trigger("navigate", "page-new-case");
     }
 
 });
