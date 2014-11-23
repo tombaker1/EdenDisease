@@ -32,6 +32,7 @@
             list: [],
             name: ""
         };
+        this._caseList = [];
        
     };
     
@@ -100,12 +101,29 @@
             var data = JSON.parse(dataTable);
             this.setData(name,data);
             if (name === "cases") {
-                app.view.getPage("page-cases").update();
+                //app.view.getPage("page-cases").update();
+                this.updateCaseList();
             }
             this.nextUpdate();
         }
         else {
             alert("Communication failure " + name); //TODO: do the right thing
+        }
+    };
+    
+    controller.prototype.updateCaseList = function() {
+        var page = app.view.getPage("page-cases");
+                var caseStruct = app.uiController.getData("cases");
+        var caseList = caseStruct["$_disease_case"];
+
+        // create all of the case items
+        for (var i = 0; i < caseList.length; i++) {
+            var caseItem = caseList[i];
+            var caseNumber = caseItem["case_number"];
+            var person = caseItem["$k_person_id"]["$"];
+            var disease = caseItem["$k_disease_id"]["$"];
+            var model = new mFormData({name:person,number:caseNumber,disease:disease,rawData:caseItem});
+            page.newCase(model);
         }
     };
     

@@ -41,19 +41,18 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
     },
     render: function () {
         var templateData = {
-            name: this._caseData["$k_person_id"]["$"],
-            number: this._caseData["case_number"],
-            disease: this._caseData["$k_disease_id"]["$"]
+            name: this.model.get("name"),
+            number: this.model.get("number")
         };
         this.$el.html(this.template(templateData));
         //this.$el.attr({
-            //id": this.name,
+        //id": this.name,
         //    href: "#content-"+this._caseData["case_number"]
         //});
         return this;
     },
 
-    update: function() {
+    update: function () {
         console.log("updating case list item");
     }
 });
@@ -114,7 +113,19 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         return this;
     },
 
+    newCase: function (model) {
+        var caseElement = new casesItemElement({model: model});
+        this.caseList.push(caseElement);
+        caseElement.render();
+        var tableBody = this.$el.find("tbody");
+        tableBody.append(caseElement.$el);
+        this.$el.find("tbody > tr").on("click touchend", this.expandCase.bind(this));
+    },
+
     update: function () {
+        // TODO: this is obsolete, it will be needed when the cases are refreshed from the server
+        return;
+        
         var tableBody = this.$el.find("tbody");
         var caseStruct = app.uiController.getData("cases");
         var caseList = caseStruct["$_disease_case"];
