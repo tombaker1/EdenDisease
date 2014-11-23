@@ -121,8 +121,8 @@
             var caseItem = caseList[i];
             var caseNumber = caseItem["case_number"];
             var person = caseItem["$k_person_id"]["$"];
-            var disease = caseItem["$k_disease_id"]["$"];
-            var model = new mFormData({name:person,number:caseNumber,disease:disease,rawData:caseItem});
+            //var disease = caseItem["$k_disease_id"]["$"];
+            var model = new mFormData({index:i,name:person,number:caseNumber,rawData:caseItem});
             page.newCase(model);
         }
     };
