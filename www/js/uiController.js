@@ -120,9 +120,23 @@
         for (var i = 0; i < caseList.length; i++) {
             var caseItem = caseList[i];
             var caseNumber = caseItem["case_number"];
-            var person = caseItem["$k_person_id"]["$"];
+            var personName = caseItem["$k_person_id"]["$"];
             //var disease = caseItem["$k_disease_id"]["$"];
-            var model = new mFormData({index:i,name:person,number:caseNumber,rawData:caseItem});
+            var formOptions = { "case_id":parseInt(caseItem["@id"]),
+                               name: caseItem["$k_person_id"]["$"],
+                               disease: caseItem["$k_disease_id"]["$"],
+                                "case_number":caseItem["case_number"],
+                                "person_id":parseInt(caseItem["$k_person_id"]["@id"]),
+                               "disease_id":parseInt(caseItem["$k_disease_id"]["@id"]),
+                               "illness_status":caseItem["illness_status"]["@value"],
+                               //"symptom_debut":caseItem["symptom_debut"]["@value"],
+                               "diagnosis_status":caseItem["diagnosis_status"]["@value"],
+                               "diagnosis_date":caseItem["diagnosis_date"]["@value"],
+                               "monitoring_level":caseItem["monitoring_level"]["@value"],
+                               //"monitoring_until":caseItem["monitoring_until"]["@value"],
+                               "rawData":caseItem
+            };
+            var model = new mFormData(formOptions);
             page.newCase(model);
         }
     };
@@ -386,7 +400,15 @@
         form.set("current",model);
         app.view.showForm(form,model,$page);
         */
-    }
+    };
+    
+    controller.prototype.editCase = function(model) {
+        var form = this.getFormByName("disease_case");
+        var page = app.view.getPage("page-new-case");
+        form.set("current",model);
+        page.showForm(form,model);
+        app.view.changePage("page-new-case");
+    };
    
     var postLocation = function(latitude,longitude) {
         var msg = $("#content-messages").html();

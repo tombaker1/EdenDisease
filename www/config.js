@@ -5,10 +5,10 @@ var config = {
         //url: "http://demo.eden.sahanafoundation.org/eden",
         url: "http://ebola.sahanafoundation.org/eden",
         caseCreatePath: "/disease/case/create.s3json?options=true&references=true",
-        caseListPath: "/disease/case.s3json",
+        caseListPath: "/disease/case.s3json?show_ids=true",
         personListPath: "/pr/person.s3json",
-        monitoringPath: "/disease/case/10/case_monitoring.s3json",
-        newMontitoringPath: "/disease/case/10/case_monitoring/create.s3json"
+        monitoringPath: "/disease/case/case_monitoring.s3json",
+        newMontitoringPath: "/disease/case/case_monitoring/create.s3json"
         //formPath: "res/xml/",
         //formList: "formList.xml"
     },

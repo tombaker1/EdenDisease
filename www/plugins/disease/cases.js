@@ -31,7 +31,7 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
     events: {
         //"click #link-button": "navigate",
 
-        //"click #new-case": "onNewCase"
+        "click .action-button": "onEdit"
     },
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
@@ -42,7 +42,7 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
     render: function () {
         var templateData = {
             name: this.model.get("name"),
-            number: this.model.get("number")
+            number: this.model.get("case_number")
         };
         this.$el.html(this.template(templateData));
         //this.$el.attr({
@@ -54,6 +54,11 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
 
     update: function () {
         console.log("updating case list item");
+    },
+    
+    onEdit: function() {
+        console.log("casesItemElement onEdit");
+        app.uiController.editCase(this.model);
     }
 });
 
@@ -119,7 +124,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         caseElement.render();
         var tableBody = this.$el.find("tbody");
         tableBody.append(caseElement.$el);
-        this.$el.find("tbody > tr").on("click touchend", this.expandCase.bind(this));
+        //this.$el.find("tbody > tr").on("click touchend", this.expandCase.bind(this));
     },
 
     update: function () {
@@ -151,6 +156,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     expandCase: function (event) {
         console.log("expand");
         // TODO: first make sure that you didn't push a button
+        
     },
 
     navigate: function (event) {

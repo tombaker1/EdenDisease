@@ -29,7 +29,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         "<!-- Right Nav Section -->" +
         "<ul class='left'>" +
         "<li class='active'>" +
-        "<a type='button' id='link-button' link='page-back' class='button'>" +
+        "<a id='link-button' link='page-back' class='action-btn' type='button'>" +
         "Back" +
         "</a>" +
         "</li>" +
@@ -132,24 +132,24 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             if (type.indexOf("reference") === 0) {
                 if (item["select"]) {
                     //value = "";
-                    var options = item["select"][0]["option"];
-                    for (var i = 0; i < options.length; i++) {
-                        if (options[i]["@value"] === value) {
+                    //var options = item["select"][0]["option"];
+                    //for (var i = 0; i < options.length; i++) {
+                        //if (options[i]["@value"] === value) {
                             var select = element.find("select");
-                            select.val(i);
-                        }
-                    }
+                            select.val(value);
+                        //}
+                    //}
                 }
             } else {
                 if (item["select"]) {
                     //value = "";
-                    var options = item["select"][0]["option"];
-                    for (var i = 0; i < options.length; i++) {
-                        if (options[i]["@value"] === value) {
+                    //var options = item["select"][0]["option"];
+                    //for (var i = 0; i < options.length; i++) {
+                        //if (options[i]["@value"] === value) {
                             var select = element.find("select");
-                            select.val(i);
-                        }
-                    }
+                            select.val(value);
+                        //}
+                    //}
                 } else {
                     switch (type) {
                     case "string":
