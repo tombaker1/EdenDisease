@@ -168,7 +168,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
 
     onNewCase: function (event) {
         console.log("onNewCase ");
-        app.uiController.newForm();
+        app.uiController.newCase();
         this.trigger("navigate", "page-new-case");
     }
 

@@ -257,6 +257,22 @@
         var dlg = $("#notify-dialog");
         dlg.removeClass("visible");
     };
+    
+    view.prototype.notifyMessage = function ( title, content ) {
+        var dlg = $("#notify-message");
+        var header = dlg.find("#header h2");
+        header.html(title);
+        var contentElement = dlg.find("#content h3");
+        contentElement.html(content);
+        //dlg.find("#ok").on("click",this.hideNotifyModal.bind(this));
+        dlg.addClass("visible");
+    };
+
+    view.prototype.hideNotifyMessage = function ( ) {
+        var dlg = $("#notify-message");
+        dlg.removeClass("visible");
+    };
+    
     view.prototype.resetDialog = function (event) {
         var dialog = $("#reset-dialog-popup");
         $("#reset-dialog").popup("open").popup({transition:"none"});

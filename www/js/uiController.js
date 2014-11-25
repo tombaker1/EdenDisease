@@ -51,6 +51,9 @@
             this._diseaseCase = JSON.parse(rawData);
             this.parseForm();
         }
+        else {
+            this.updateData("form");
+        }
 
         // Update the data tables
         this.updateData(["cases", "persons"]);
@@ -76,9 +79,16 @@
             return;
         }
 
+        this._updateState.active = true;
         var name = this._updateState.list[0];
         var path = this.getHostURL();
         switch (name) {
+                case "form":
+                {
+                    this.loadForm();
+                    return;
+                } 
+                break;
         case "cases":
             {
                 path += config.defaults.caseListPath; //"/disease/case.json";
@@ -94,7 +104,6 @@
                 alert("nope");
             }
         }
-        this._updateState.active = true;
         app.commHandler.requestData(path, this.cbUpdateData.bind(this));
     };
 
@@ -152,7 +161,7 @@
                 //var model = new mFormData(formOptions);
                 model.set(formOptions);
                 this._caseList[uuid] = model;
-                model._timestamp = timestamp;
+                model.timestamp(timestamp);
                 page.newCase(model);
             }
         }
@@ -232,6 +241,7 @@
     controller.prototype.loadForm = function (event) {
         console.log("loadForm");
         var url = app.uiController.getHostURL() + config.defaults.caseCreatePath;
+        app.view.notifyMessage("Loading...","Loading forms.");
         app.commHandler.requestForm(url, this.cbFormLoadComplete.bind(this));
 
     };
@@ -335,7 +345,8 @@
 
     controller.prototype.cbFormLoadComplete = function (status, rawData) {
         console.log("cbFormLoadComplete");
-
+        
+        app.view.hideNotifyMessage("Loading forms.");
         // only do this if the form loaded successfully
         if (status) {
 
@@ -346,11 +357,14 @@
             // Save data to local storage
             var formName = "form-raw"; //+form.get("name");
             localStorage.setItem(formName, rawData);
-            app.view.notifyModal("Load", "Load Complete.");
+            //app.view.notifyModal("Load", "Load Complete.");
 
         } else {
             app.view.notifyModal("Load", "Load failure.");
         }
+        this._updateState.list.shift();
+        this._updateState.active = false;
+        this.nextUpdate();
 
     };
 
@@ -376,6 +390,8 @@
     controller.prototype.cbFormSendComplete = function (status, model) {
         if (status) {
             //console.log("cbFormSendComplete success");
+            model.needsUpdate(false);
+            /*
             activeForms.remove(model);
             app.view.removeSavedFormItem({
                 model: model
@@ -383,16 +399,19 @@
             model.sync("delete", model, {
                 local: true
             });
+            */
             app.view.notifyModal("Submit", "Submit complete");
         } else {
             //console.log("cbFormSendComplete failure");
-            app.view.notifyModal("Submit", "Submit failure. Form saved.");
+            app.view.notifyModal("Submit", "Submit failure.");
+            /*
             if (!activeForms.contains(model)) {
                 activeForms.add(model);
                 app.view.newSavedFormItem({
                     model: model
                 });
             }
+            */
         }
     };
 
@@ -405,7 +424,7 @@
         return null;
     };
 
-    controller.prototype.newForm = function () {
+    controller.prototype.newCase = function () {
         var form = this.getFormByName("disease_case");
         var model = new mFormData(form.get("form"));
         model.timestamp(Date.now());
@@ -414,28 +433,6 @@
         page.showForm(form, model);
 
     }
-
-    controller.prototype.editForm = function (model) {
-        var form = this.getFormByName("disease_case");
-        var $page = $("#page-new-form");
-        //var model = new mFormData(form.get("form"));
-        //model.name(form.get("name"));
-        //model.timestamp(Date.now());
-        //model.urlRoot = form.get("url");
-        //model._formId = form.get("formId");
-        form.set("current", model);
-        //var pageID = pageURL.hash.replace( /#/, "" );
-        app.view.showForm(form, model, $page);
-        $.mobile.changePage($page, {
-            transition: "slide"
-        });
-        /*
-        var form = app.commHandler.getFormByName(model.name());
-        var $page = $("#page-form-" + form.get("name"));
-        form.set("current",model);
-        app.view.showForm(form,model,$page);
-        */
-    };
 
     controller.prototype.editCase = function (model) {
         var form = this.getFormByName("disease_case");

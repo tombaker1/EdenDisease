@@ -32,25 +32,20 @@ var formType = Backbone.Model.extend({
 });
 var formList = new Backbone.Collection;
 
-
 // create the form list item
 var mFormData = Backbone.Model.extend({
     defaults: {
-        //_name:"",
-        //_timestamp:0,
-        //_submitted:false,
-        //_formId: ""
      },
     initialize: function(options) {
         this._name = "";
         this._timestamp = 0;
-        this._submitted = false;
+        this._needsUpdate = false;
         this._formId = "";
     },
     
     submit: function() {
         console.log("sending model " + this.get("_name"));
-        //this.submitted(true);
+        this.needsUpdate(true);
         
         // Check to see if it is a create or update
         if (this.get("uuid")) {
@@ -62,7 +57,14 @@ var mFormData = Backbone.Model.extend({
     },
     
     getKey: function() {
-        return this.get("_name") + '-' + this.get("_timestamp");
+        var value = unkown;
+        if (this.get("id")) {
+            value = this.get("id");
+        }
+        else {
+            value = this.timestamp();
+        }
+        return this.get("case") + '-' + value;
     },
     
     name: function(_name) {
@@ -74,16 +76,18 @@ var mFormData = Backbone.Model.extend({
     
     timestamp: function(_timestamp) {
         if (_timestamp) {
-            this.set("_timestamp",_timestamp);
+            this._timestamp = _timestamp;
         }
-        return this.get("_timestamp");
+        return this._timestamp;
     },
-    submitted: function(_submitted) {
-        if (_submitted) {
-            this.set("_submitted",_submitted);
+    
+    needsUpdate: function(needsUpdate) {
+        if (needsUpdate != undefined) {
+            this._needsUpdate = needsUpdate;
         }
-        return this.get("_submitted");
+        return this._needsUpdate;
     },
+    
     sendData: function() {
         var obj = {
             $_disease_case: []
@@ -92,8 +96,13 @@ var mFormData = Backbone.Model.extend({
         c[0] = {};
         var f = c[0];
         
+        // If the model came from the server then it has a uuid
         if (this.get("uuid")) {
             f["@uuid"] = this.get("uuid");
+        }
+        else {
+            var dateString = (new Date(this.timestamp())).toISOString();
+            f["@created_on"] = dateString;
         }
         var changed  = this.changed;
 

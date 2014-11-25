@@ -1,6 +1,7 @@
 var config = {
     developerMode: true,
     debug: true,
+    debugNoCommTimeout: false,
     defaults: {
         //url: "http://demo.eden.sahanafoundation.org/eden",
         url: "http://ebola.sahanafoundation.org/eden",

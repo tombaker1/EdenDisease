@@ -101,6 +101,7 @@ display: inline-table;
 }
 
 /* Modal dialog */
+.se-notify,
 .se-modal {
     position: absolute;
     visibility: hidden;
@@ -118,12 +119,14 @@ display: inline-table;
 	pointer-events: none;
 }
 
+.se-notify.visible,
 .se-modal.visible {
     visibility: visible;
 	opacity:1;
 	pointer-events: auto;
 }
 
+.se-notify > #frame,
 .se-modal > #frame {
 	width: 50%;
 	position: relative;
@@ -133,5 +136,4 @@ display: inline-table;
     border: 1px solid #000;
 	background: #ddd;
 }
-
 
