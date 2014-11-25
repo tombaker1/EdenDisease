@@ -42,8 +42,11 @@ Backbone.sync = function(method, model, options) {
 
     case 'update':
         console.log('update');
-        var path = "data-" + model.getKey();
-        localStorage.setItem(path,JSON.stringify(model));
+        //var path = "data-" + model.getKey();
+        //localStorage.setItem(path,JSON.stringify(model));
+        app.commHandler.sendModel(model,
+                                  app.uiController.cbFormSendComplete.bind(controller), 
+                                  options);
     break;
 
     case 'delete':

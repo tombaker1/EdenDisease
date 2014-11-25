@@ -178,8 +178,9 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         var formName = form.get("name");
         var formData = form.get("form");
         var data = form.get("obj")["$_" + formName][0]["field"];
-        for (var key in data) {
-            var item = data[key];
+        var newData = {};
+        for (var i = 0; i < data.length; i++) {
+            var item = data[i];
             var name = item["@name"];
             var searchString = "#case-" + name;
             var element = this.$el.find(searchString).first();
@@ -198,7 +199,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                     var select = element.find("select").first();
                     //var selectIndex = select[0].selectedIndex;
                     value = select[0]["value"];
-                    model.set(name, value);
+                    newData[name] = parseInt(value); //model.set(name, value);
                     /*
                     if (options[i]["@value"] === value) {
                         var select = element.find("select").first();
@@ -213,25 +214,25 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                     var select = element.find("select").first();
                     //var selectIndex = select[0].selectedIndex;
                     value = select[0]["value"];
-                    model.set(name, value);
+                    newData[name] = value; //model.set(name, value);
                 } else {
                     switch (type) {
                     case "string":
                         //TODO: if there is a select then get the string from the select value
                         value = (element.find("input").first().val()) || "";
-                        model.set(name, value);
+                        newData[name] = value; //model.set(name, value);
                         break;
                     case "date":
                         value = (element.find("input").first().val()) || "";
-                        model.set(name, value);
+                        newData[name] = value; //model.set(name, value);
                         break;
                     case "datetime":
                         value = (element.find("input").first().val()) || "";
-                        model.set(name, value);
+                        newData[name] = value; //model.set(name, value);
                         break;
                     case "text":
                         value = (element.find("input").first().val()) || "";
-                        model.set(name, value);
+                        newData[name] = value; //model.set(name, value);
                         break;
                     default:
                         break;
@@ -239,6 +240,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                 }
             }
         }
+        model.set(newData);
     },
 
     navigate: function (event) {

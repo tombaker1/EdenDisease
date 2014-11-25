@@ -123,6 +123,7 @@
             var personName = caseItem["$k_person_id"]["$"];
             //var disease = caseItem["$k_disease_id"]["$"];
             var formOptions = { "case_id":parseInt(caseItem["@id"]),
+                               "uuid":caseItem["@uuid"],
                                name: caseItem["$k_person_id"]["$"],
                                disease: caseItem["$k_disease_id"]["$"],
                                 "case_number":caseItem["case_number"],

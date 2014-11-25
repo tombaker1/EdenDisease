@@ -36,18 +36,29 @@ var formList = new Backbone.Collection;
 // create the form list item
 var mFormData = Backbone.Model.extend({
     defaults: {
-        _name:"",
-        _timestamp:0,
-        _submitted:false,
-        _formId: ""
+        //_name:"",
+        //_timestamp:0,
+        //_submitted:false,
+        //_formId: ""
      },
     initialize: function(options) {
+        this._name = "";
+        this._timestamp = 0;
+        this._submitted = false;
+        this._formId = "";
     },
     
     submit: function() {
         console.log("sending model " + this.get("_name"));
-        this.submitted(true);
-        this.sync('create',this,{local:false});
+        //this.submitted(true);
+        
+        // Check to see if it is a create or update
+        if (this.get("uuid")) {
+            this.sync('update',this,{local:false});
+        }
+        else {
+            this.sync('create',this,{local:false});
+        }
     },
     
     getKey: function() {
@@ -72,6 +83,49 @@ var mFormData = Backbone.Model.extend({
             this.set("_submitted",_submitted);
         }
         return this.get("_submitted");
+    },
+    sendData: function() {
+        var obj = {
+            $_disease_case: []
+        };
+        var c = obj["$_disease_case"];
+        c[0] = {};
+        var f = c[0];
+        
+        if (this.get("uuid")) {
+            f["@uuid"] = this.get("uuid");
+        }
+        var changed  = this.changed;
+
+        var form = app.uiController.getFormByName("disease_case");
+        var defaultForm = form.get("form");
+
+        var data = form.get("obj")["$_disease_case"][0]["field"];
+        for (var key in data) {
+            var item = data[key];
+            var name = item["@name"];
+            var type = item["@type"];
+            var value = this.get(name);
+            if (type.indexOf("reference") === 0) {
+                if (changed[name]) {
+                    if (item["select"]) {
+                        //var resource = type.split(' ')[1];
+                        //var resourceId = "$k_" + name;
+                        //var reference = {
+                        //    "@resource": resource,
+                        //    "@uuid": value
+                        //};
+                        f[name] = value;
+                    }
+                }
+            } else {
+                if (changed[name]) {
+                    f[name] = value;
+                }
+
+            }
+        }
+        return JSON.stringify(obj);
     }
 
 });

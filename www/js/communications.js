@@ -142,7 +142,7 @@
         // notify the controller that the load is complete
         reqState.callback(true, reqState.data);
     };
-
+/*
     communicator.prototype.createJSONData = function (model) {
         var obj = {
             $_disease_case: []
@@ -167,7 +167,7 @@
                         var resourceId = "$k_" + name;
                         var reference = {
                             "@resource": resource,
-                            "@uuid": value
+                            "@id": value
                         };
                         f[name] = value;
                     }
@@ -181,14 +181,15 @@
         }
         return JSON.stringify(obj);
     };
-
+*/
     communicator.prototype.sendModel = function (model, cb, options) {
         reqState.type = "send-form";
         reqState.callback = cb;
         reqState.data = model;
 
         // Get the JSON data to send
-        var jsonDocument = this.createJSONData(model);
+        var jsonDocument = model.sendData(); //this.createJSONData(model);
+        //var jsonDocument = JSON.stringify(jsonString);
 
 
         // create url to send to
