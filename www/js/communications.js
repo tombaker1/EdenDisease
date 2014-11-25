@@ -142,46 +142,7 @@
         // notify the controller that the load is complete
         reqState.callback(true, reqState.data);
     };
-/*
-    communicator.prototype.createJSONData = function (model) {
-        var obj = {
-            $_disease_case: []
-        };
-        var c = obj["$_disease_case"];
-        c[0] = {};
-        var f = c[0];
 
-        var form = app.uiController.getFormByName("disease_case");
-        var defaultForm = form.get("form");
-
-        var data = form.get("obj")["$_disease_case"][0]["field"];
-        for (var key in data) {
-            var item = data[key];
-            var name = item["@name"];
-            var type = item["@type"];
-            var value = model.get(name);
-            if (type.indexOf("reference") === 0) {
-                if (value != defaultForm[name]) {
-                    if (item["select"]) {
-                        var resource = type.split(' ')[1];
-                        var resourceId = "$k_" + name;
-                        var reference = {
-                            "@resource": resource,
-                            "@id": value
-                        };
-                        f[name] = value;
-                    }
-                }
-            } else {
-                if (value != defaultForm[name]) {
-                    f[name] = value;
-                }
-
-            }
-        }
-        return JSON.stringify(obj);
-    };
-*/
     communicator.prototype.sendModel = function (model, cb, options) {
         reqState.type = "send-form";
         reqState.callback = cb;
@@ -189,8 +150,6 @@
 
         // Get the JSON data to send
         var jsonDocument = model.sendData(); //this.createJSONData(model);
-        //var jsonDocument = JSON.stringify(jsonString);
-
 
         // create url to send to
         var serverUrl = app.uiController.getHostURL();

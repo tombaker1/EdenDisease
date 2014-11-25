@@ -109,12 +109,6 @@ var mFormData = Backbone.Model.extend({
             if (type.indexOf("reference") === 0) {
                 if (changed[name]) {
                     if (item["select"]) {
-                        //var resource = type.split(' ')[1];
-                        //var resourceId = "$k_" + name;
-                        //var reference = {
-                        //    "@resource": resource,
-                        //    "@uuid": value
-                        //};
                         f[name] = value;
                     }
                 }

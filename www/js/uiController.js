@@ -19,11 +19,12 @@
 //  THE SOFTWARE.
 
 
-;(function ( $, window, document, undefined ) {
-    
+;
+(function ($, window, document, undefined) {
+
     // The actual plugin constructor
-    function controller(  ) {
-        
+    function controller() {
+
         this._defaults = {};
         this._diseaseCase = null;
         this._dataTable = {};
@@ -32,88 +33,91 @@
             list: [],
             name: ""
         };
-        this._caseList = [];
-       
+        this._caseList = {};
+
     };
-    
-    controller.prototype.init = function ( options ) {
+
+    controller.prototype.init = function (options) {
         if (options["state"]) {
             this.state = options["state"];
-        }
-        else {
+        } else {
             this.state = app.state;
         }
         this.getLocation();
-        
+
         // Load the saved data or initialize data
         var rawData = app.storage.read("form-raw");
         if (rawData) {
             this._diseaseCase = JSON.parse(rawData);
             this.parseForm();
         }
-      
+
         // Update the data tables
-        this.updateData(["cases","persons"]);
-        
+        this.updateData(["cases", "persons"]);
+
     };
-    
-    controller.prototype.getData = function(tableName) {
+
+    controller.prototype.getData = function (tableName) {
         var table = this._dataTable[tableName];
         return table;
     };
-    
-     controller.prototype.setData = function(tableName,tableData) {
+
+    controller.prototype.setData = function (tableName, tableData) {
         this._dataTable[tableName] = tableData;
     };
-    
-    controller.prototype.updateData = function(dataList) {
+
+    controller.prototype.updateData = function (dataList) {
         this._updateState.list = this._updateState.list.concat(dataList);
         this.nextUpdate();
     };
-    
-    controller.prototype.nextUpdate = function() {
+
+    controller.prototype.nextUpdate = function () {
         if (this._updateState.active || (this._updateState.list.length === 0)) {
             return;
         }
-        
+
         var name = this._updateState.list[0];
         var path = this.getHostURL();
         switch (name) {
-                case "cases": {
-                    path += config.defaults.caseListPath; //"/disease/case.json";
-                } break;
-                case "persons": {
-                    path += config.defaults.personListPath; //"/pr/person.json";
-                } break;
-                default: {
-                    alert("nope");
-                }
+        case "cases":
+            {
+                path += config.defaults.caseListPath; //"/disease/case.json";
+            }
+            break;
+        case "persons":
+            {
+                path += config.defaults.personListPath; //"/pr/person.json";
+            }
+            break;
+        default:
+            {
+                alert("nope");
+            }
         }
         this._updateState.active = true;
         app.commHandler.requestData(path, this.cbUpdateData.bind(this));
     };
-    
+
     controller.prototype.cbUpdateData = function (status, dataTable) {
         //TODO update data
         var name = this._updateState.list.shift();
-            this._updateState.active = false;
+        this._updateState.active = false;
         if (status) {
             var data = JSON.parse(dataTable);
-            this.setData(name,data);
+            this.setData(name, data);
             if (name === "cases") {
                 //app.view.getPage("page-cases").update();
                 this.updateCaseList();
             }
             this.nextUpdate();
-        }
-        else {
+        } else {
             alert("Communication failure " + name); //TODO: do the right thing
         }
     };
-    
-    controller.prototype.updateCaseList = function() {
+
+    controller.prototype.updateCaseList = function () {
         var page = app.view.getPage("page-cases");
-                var caseStruct = app.uiController.getData("cases");
+        var caseStruct = app.uiController.getData("cases");
         var caseList = caseStruct["$_disease_case"];
 
         // create all of the case items
@@ -121,32 +125,44 @@
             var caseItem = caseList[i];
             var caseNumber = caseItem["case_number"];
             var personName = caseItem["$k_person_id"]["$"];
-            //var disease = caseItem["$k_disease_id"]["$"];
-            var formOptions = { "case_id":parseInt(caseItem["@id"]),
-                               "uuid":caseItem["@uuid"],
-                               name: caseItem["$k_person_id"]["$"],
-                               disease: caseItem["$k_disease_id"]["$"],
-                                "case_number":caseItem["case_number"],
-                                "person_id":parseInt(caseItem["$k_person_id"]["@id"]),
-                               "disease_id":parseInt(caseItem["$k_disease_id"]["@id"]),
-                               "illness_status":caseItem["illness_status"]["@value"],
-                               //"symptom_debut":caseItem["symptom_debut"]["@value"],
-                               "diagnosis_status":caseItem["diagnosis_status"]["@value"],
-                               "diagnosis_date":caseItem["diagnosis_date"]["@value"],
-                               "monitoring_level":caseItem["monitoring_level"]["@value"],
-                               //"monitoring_until":caseItem["monitoring_until"]["@value"],
-                               "rawData":caseItem
-            };
-            var model = new mFormData(formOptions);
-            page.newCase(model);
+            var uuid = caseItem["@uuid"];
+            var timestamp = new Date(caseItem["@modified_on"]);
+            var model = this._caseList[uuid];
+            if (!model) {
+                model = new mFormData();
+            }
+            if (model._timestamp < timestamp) {
+                //var disease = caseItem["$k_disease_id"]["$"];
+                var formOptions = {
+                    "case_id": parseInt(caseItem["@id"]),
+                    "uuid": uuid,
+                    name: caseItem["$k_person_id"]["$"],
+                    disease: caseItem["$k_disease_id"]["$"],
+                    "case_number": caseItem["case_number"],
+                    "person_id": parseInt(caseItem["$k_person_id"]["@id"]),
+                    "disease_id": parseInt(caseItem["$k_disease_id"]["@id"]),
+                    "illness_status": caseItem["illness_status"]["@value"],
+                    //"symptom_debut":caseItem["symptom_debut"]["@value"],
+                    "diagnosis_status": caseItem["diagnosis_status"]["@value"],
+                    "diagnosis_date": caseItem["diagnosis_date"]["@value"],
+                    "monitoring_level": caseItem["monitoring_level"]["@value"],
+                    //"monitoring_until":caseItem["monitoring_until"]["@value"],
+                    "rawData": caseItem
+                };
+                //var model = new mFormData(formOptions);
+                model.set(formOptions);
+                this._caseList[uuid] = model;
+                model._timestamp = timestamp;
+                page.newCase(model);
+            }
         }
     };
-    
-   controller.prototype.resetAll = function (  ) {
+
+    controller.prototype.resetAll = function () {
         app.view.resetDialog();
     };
-    
-    controller.prototype.onReset = function (  ) {
+
+    controller.prototype.onReset = function () {
         //TODO: Move this into the model or the collection
         var list = app.storage.list();
         for (var i = 0; i < list.length; i++) {
@@ -155,68 +171,72 @@
         }
         //window.requestAnimationFrame(function() {app.view.confirm.show()});
     };
-    
-    controller.prototype.onFormSave = function ( page ) {
+
+    controller.prototype.onFormSave = function (page) {
         //console.log("onFormSave");
         var form = this.getFormByName("disease_case");
         var model = form.get("current");
-            if (!model) {
-                model = form.get("current");
-            }
+        if (!model) {
+            model = form.get("current");
+        }
         page.getModelData(model);
 
         if (!activeForms.contains(model)) {
             activeForms.add(model);
-            model.sync('create',model,{local:true});
-            app.view.newSavedFormItem({model:model});
-        }
-        else {
-            model.sync('update',model,{local:true});
+            model.sync('create', model, {
+                local: true
+            });
+            app.view.newSavedFormItem({
+                model: model
+            });
+        } else {
+            model.sync('update', model, {
+                local: true
+            });
 
         }
 
     };
-    
-    controller.prototype.onFormSubmit = function ( page ) {
+
+    controller.prototype.onFormSubmit = function (page) {
         //console.log("onFormSubmit");
         //var page = $("#page-new-form");
         var form = this.getFormByName("disease_case");
         var model = form.get("current");
-            if (!model) {
-                model = form.get("current");
-            }
+        if (!model) {
+            model = form.get("current");
+        }
         page.getModelData(model);
         model.submit();
-        
+
     };
-    
-    controller.prototype.getHostURL = function (  ) {
+
+    controller.prototype.getHostURL = function () {
         // TODO: this doesn't apply anymore
         var url = "";
         var serverUrl = app.state.settings.serverInfo.get("url");
         if (this.state.settings.source === 1) {
             url = serverUrl; // + config.defaults.formList;
-        }
-        else {
+        } else {
             url = serverUrl; // + "/xforms/" + config.defaults.formList;
         }
         return url;
 
     };
-    
-    controller.prototype.onDebug = function ( event ) {
+
+    controller.prototype.onDebug = function (event) {
         console.log("onDebug");
 
     };
 
-    controller.prototype.loadForm = function ( event ) {
+    controller.prototype.loadForm = function (event) {
         console.log("loadForm");
         var url = app.uiController.getHostURL() + config.defaults.caseCreatePath;
-        app.commHandler.requestForm(url,this.cbFormLoadComplete.bind(this));
+        app.commHandler.requestForm(url, this.cbFormLoadComplete.bind(this));
 
     };
-    
-    controller.prototype.parseRecord = function(record) {
+
+    controller.prototype.parseRecord = function (record) {
         var references = {};
         for (var recordName in record) {
             var child = record[recordName];
@@ -228,9 +248,8 @@
                     var item = this.parseRecord(child[i]);
                     childRecords.push(item);
                 }
-                    
-            }
-            else if (recordName === "field") {
+
+            } else if (recordName === "field") {
                 //field = parseRecord(child);
                 childRecords = {};
                 for (var i = 0; i < child.length; i++) {
@@ -243,32 +262,37 @@
                         if (item["select"]) {
                             value = "";
                         }
-                        
-                    }
-                    else {
+
+                    } else {
                         // show the type so we can find the initial value
                         switch (type) {
-                            case "string": {
+                        case "string":
+                            {
                                 value = "";
                                 break;
                             }
-                            case "date": {
+                        case "date":
+                            {
                                 value = "";
                                 break;
                             }
-                            case "datetime": {
+                        case "datetime":
+                            {
                                 value = "";
                                 break;
                             }
-                            case "text": {
+                        case "text":
+                            {
                                 value = "";
                                 break;
                             }
-                            case "integer": {
+                        case "integer":
+                            {
                                 value = 0;
                                 break;
                             }
-                            default: {
+                        default:
+                            {
                                 value = "unknown";
                                 break;
                             }
@@ -276,59 +300,62 @@
                     }
                     childRecords[name] = value;
                 }
-            }
-            else {
+            } else {
                 childRecords = child;
             }
             references[recordName] = childRecords;
         }
-        
+
         return references;
     };
 
-    controller.prototype.parseForm = function() {
+    controller.prototype.parseForm = function () {
         console.log("\tparseForm");
         var obj = this._diseaseCase;
-        
+
         // Parse the object into the components
         var results = this.parseRecord(obj);
         var modelData = results["$_disease_case"][0]["field"];
-        
+
         // create model
-        var model = new formType({"name":"disease_case","form":modelData,"data":results,"obj":obj});
+        var model = new formType({
+            "name": "disease_case",
+            "form": modelData,
+            "data": results,
+            "obj": obj
+        });
         formList.add(model);
-        
+
         // Update view
         var page = app.view.getPage("page-new-case");
         page.update(obj);
-        
+
         return model;
     };
-    
-    controller.prototype.cbFormLoadComplete = function(status,rawData) {
+
+    controller.prototype.cbFormLoadComplete = function (status, rawData) {
         console.log("cbFormLoadComplete");
- 
+
         // only do this if the form loaded successfully
         if (status) {
-            
+
             // Set model
             this._diseaseCase = JSON.parse(rawData);
             var model = this.parseForm();
-            
+
             // Save data to local storage
             var formName = "form-raw"; //+form.get("name");
-            localStorage.setItem(formName,rawData);
-            app.view.notifyModal("Load","Load Complete.");
-            
+            localStorage.setItem(formName, rawData);
+            app.view.notifyModal("Load", "Load Complete.");
+
+        } else {
+            app.view.notifyModal("Load", "Load failure.");
         }
-        else {
-            app.view.notifyModal("Load","Load failure.");
-        }
-        
+
     };
-    
-    var cbDiseaseCase = function(success, rawData) {
-      
+
+    var cbDiseaseCase = function (success, rawData) {
+
         if (!success) {
             // TODO: print an error message here
             return;
@@ -336,35 +363,40 @@
         // Save the form to local memory
         var filename = "disease-case";
         //localStorage.setItem(filename,xmlFile);
-        app.storage.write(filename,rawData);
+        app.storage.write(filename, rawData);
         var objData = JSON.parse(rawData);
-      
+
         // put the list of forms into the page
         // TODO: parse the forms here
         //app.view.insertForms(app.commHandler.getAllForms());
-        app.view.confirm.setText("Load","Load Complete");
+        app.view.confirm.setText("Load", "Load Complete");
         app.view.confirm.show();
     }
-    
-    controller.prototype.cbFormSendComplete = function(status,model) {
+
+    controller.prototype.cbFormSendComplete = function (status, model) {
         if (status) {
             //console.log("cbFormSendComplete success");
             activeForms.remove(model);
-            app.view.removeSavedFormItem({model:model});
-            model.sync("delete",model,{local:true});
-            app.view.notifyModal("Submit","Submit complete");
-        }
-        else {
+            app.view.removeSavedFormItem({
+                model: model
+            });
+            model.sync("delete", model, {
+                local: true
+            });
+            app.view.notifyModal("Submit", "Submit complete");
+        } else {
             //console.log("cbFormSendComplete failure");
-            app.view.notifyModal("Submit","Submit failure. Form saved.");
+            app.view.notifyModal("Submit", "Submit failure. Form saved.");
             if (!activeForms.contains(model)) {
                 activeForms.add(model);
-                app.view.newSavedFormItem({model:model});
+                app.view.newSavedFormItem({
+                    model: model
+                });
             }
         }
     };
-     
-    controller.prototype.getFormByName = function(name) {
+
+    controller.prototype.getFormByName = function (name) {
         for (var i = 0; i < formList.length; i++) {
             if (name === formList.at(i).get("name")) {
                 return formList.at(i);
@@ -372,18 +404,18 @@
         }
         return null;
     };
-    
-    controller.prototype.newForm = function() {
+
+    controller.prototype.newForm = function () {
         var form = this.getFormByName("disease_case");
         var model = new mFormData(form.get("form"));
         model.timestamp(Date.now());
-        form.set("current",model);
+        form.set("current", model);
         var page = app.view.getPage("page-new-case");
-        page.showForm(form,model);
+        page.showForm(form, model);
 
     }
-    
-    controller.prototype.editForm = function(model) {
+
+    controller.prototype.editForm = function (model) {
         var form = this.getFormByName("disease_case");
         var $page = $("#page-new-form");
         //var model = new mFormData(form.get("form"));
@@ -391,10 +423,12 @@
         //model.timestamp(Date.now());
         //model.urlRoot = form.get("url");
         //model._formId = form.get("formId");
-        form.set("current",model);
+        form.set("current", model);
         //var pageID = pageURL.hash.replace( /#/, "" );
-        app.view.showForm(form,model,$page);
-        $.mobile.changePage($page,{transition:"slide"});
+        app.view.showForm(form, model, $page);
+        $.mobile.changePage($page, {
+            transition: "slide"
+        });
         /*
         var form = app.commHandler.getFormByName(model.name());
         var $page = $("#page-form-" + form.get("name"));
@@ -402,35 +436,38 @@
         app.view.showForm(form,model,$page);
         */
     };
-    
-    controller.prototype.editCase = function(model) {
+
+    controller.prototype.editCase = function (model) {
         var form = this.getFormByName("disease_case");
         var page = app.view.getPage("page-new-case");
-        form.set("current",model);
-        page.showForm(form,model);
+        form.set("current", model);
+        page.showForm(form, model);
         app.view.changePage("page-new-case");
     };
-   
-    var postLocation = function(latitude,longitude) {
+
+    var postLocation = function (latitude, longitude) {
         var msg = $("#content-messages").html();
         msg += "latitude: " + latitude + "<br>";
         msg += "longitude: " + longitude + "<br>";
         $("#content-messages").html(msg);
     };
-    
-    controller.prototype.getLocation = function() {
+
+    controller.prototype.getLocation = function () {
         if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                /*this.*/postLocation(position.coords.latitude, position.coords.longitude);
-            },function() { alert("location failed");});
+            navigator.geolocation.getCurrentPosition(function (position) {
+                /*this.*/
+                postLocation(position.coords.latitude, position.coords.longitude);
+            }, function () {
+                alert("location failed");
+            });
         } else {
             /* geolocation IS NOT available */
         }
     }
-    
-    var localController = new controller();
-    
-    // bind the plugin to jQuery     
-    app.uiController = localController; 
 
-})( jQuery, window, document );
+    var localController = new controller();
+
+    // bind the plugin to jQuery     
+    app.uiController = localController;
+
+})(jQuery, window, document);
