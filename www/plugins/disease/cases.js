@@ -85,8 +85,8 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     content_template: null,
     events: {
         "click #link-button": "navigate",
-
-        "click #new-case": "onNewCase"
+        "click #new-case": "onNewCase",
+        "click #refresh-case-list": "onRefreshList"
     },
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
@@ -118,12 +118,22 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         return this;
     },
 
-    newCase: function (model) {
-        var caseElement = new casesItemElement({model: model});
-        this.caseList.push(caseElement);
+    setCase: function (model) {
+        // first check to see if the case element already exists
+        var caseElement = null;
+        for (var i = 0; i < this.caseList.length; i++) {
+            if (this.caseList[i].model === model) {
+                caseElement = this.caseList[i];
+                break;
+            }
+        }
+        if (!caseElement) {
+            caseElement = new casesItemElement({model: model});
+            this.caseList.push(caseElement);
+            var tableBody = this.$el.find("tbody");
+            tableBody.append(caseElement.$el);
+        }
         caseElement.render();
-        var tableBody = this.$el.find("tbody");
-        tableBody.append(caseElement.$el);
         //this.$el.find("tbody > tr").on("click touchend", this.expandCase.bind(this));
     },
 
@@ -170,6 +180,11 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         console.log("onNewCase ");
         app.uiController.newCase();
         this.trigger("navigate", "page-new-case");
+    },
+
+    onRefreshList: function (event) {
+        console.log("onRefreshList ");
+        app.uiController.updateData("cases");
     }
 
 });

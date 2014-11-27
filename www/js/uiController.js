@@ -164,7 +164,7 @@
                 model.set(formOptions);
                 this._caseList[uuid] = model;
                 model.timestamp(timestamp);
-                page.newCase(model);
+                page.setCase(model);
             }
         }
     };
@@ -362,7 +362,7 @@
             //app.view.notifyModal("Load", "Load Complete.");
 
         } else {
-            app.view.notifyModal("Load", "Load failure.");
+            app.view.notifyModal("Load", "Load failure, check server settings.");
         }
         this._updateState.list.shift();
         this._updateState.active = false;
@@ -393,27 +393,12 @@
         if (status) {
             //console.log("cbFormSendComplete success");
             model.needsUpdate(false);
-            /*
-            activeForms.remove(model);
-            app.view.removeSavedFormItem({
-                model: model
-            });
-            model.sync("delete", model, {
-                local: true
-            });
-            */
+            this.updateData("cases");
             app.view.notifyModal("Submit", "Submit complete");
         } else {
             //console.log("cbFormSendComplete failure");
             app.view.notifyModal("Submit", "Submit failure.");
-            /*
-            if (!activeForms.contains(model)) {
-                activeForms.add(model);
-                app.view.newSavedFormItem({
-                    model: model
-                });
-            }
-            */
+            
         }
     };
 

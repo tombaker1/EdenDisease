@@ -57,7 +57,7 @@ var mFormData = Backbone.Model.extend({
     },
     
     getKey: function() {
-        var value = unkown;
+        var value = 0;
         if (this.get("id")) {
             value = this.get("id");
         }

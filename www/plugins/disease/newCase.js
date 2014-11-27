@@ -44,7 +44,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         "click #link-button": "navigate",
 
         "click #cancel": "onCancel",
-        "click #save": "onSave",
+        //"click #save": "onSave",
         "click #submit": "onSubmit"
     },
     initialize: function (options) {
