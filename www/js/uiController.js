@@ -120,7 +120,9 @@
             }
             this.nextUpdate();
         } else {
-            alert("Communication failure " + name); //TODO: do the right thing
+            //alert("Communication failure " + name); //TODO: do the right thing
+            this._updateState.list = [];
+            app.view.notifyModal("Update data", "Failure in reading data from server");
         }
     };
 

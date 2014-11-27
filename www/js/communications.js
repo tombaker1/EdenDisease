@@ -77,19 +77,22 @@
         reqState.callback = cb;
         xhr.onload = this.cbRequestData.bind(this);
         xhr.open("get", url, true);
-        xhr.send();
-        reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
-
+        try {
+            xhr.send();
+            reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
+        }
+        catch (err) {
+            //alert("send error");
+            clearTimeout(reqTimer);
+            reqState.callback(false,"");
+        }
     };
 
     communicator.prototype.cbRequestData = function (reply) {
         clearTimeout(reqTimer);
-        if (xhr.readyState != 4) {
-            alert("What?");
-            return;
-        }
         if (xhr.status != 200) {
-            alert("Error loading page");
+            //alert("Error loading page");
+            reqState.callback(false, "Server error");
             return;
         }
 
@@ -117,7 +120,8 @@
             xhr.send();
             reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
         } catch (err) {
-            alert("Error loading form");
+            //alert("Error loading form");
+            clearTimeout(reqTimer);
             reqState.callback(false, reqState.data);
         }
     };
