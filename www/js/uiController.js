@@ -415,6 +415,25 @@
         }
     };
 
+
+    controller.prototype.login = function (params) {
+        console.log("controller login");
+        var url = params["url"] + config.defaults.loginPath;
+        //app.view.notifyMessage("Loading...","Loading forms.");
+        app.commHandler.requestLogin(url, params, this.cbLogin.bind(this));
+
+    };
+    
+    controller.prototype.cbLogin = function (status, message) {
+        console.log("login callback");
+        if (status) {
+            app.loginDialog.getText();
+            app.loginDialog.hide();
+        } else {
+            app.loginDialog.onError(message);
+        }
+    };
+
     controller.prototype.getFormByName = function (name) {
         for (var i = 0; i < formList.length; i++) {
             if (name === formList.at(i).get("name")) {

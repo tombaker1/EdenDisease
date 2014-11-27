@@ -173,6 +173,88 @@
         }
     };
 
+
+    communicator.prototype.requestLogin = function (url, params, cb) {
+        //var formListURL = url;  // don't need to do anything here
+        reqState.type = "login";
+        reqState.callback = cb;
+        xhr.onload = this.cbRequestLogin.bind(this);
+        var boundary = '----WebKitFormBoundaryB94vneooSYjS9yn6';
+        var sendText = '--' + boundary + '\r\n' + 
+                        'Content-Disposition: form-data; name="email"\r\n' + 
+                        '\r\n' +                         
+                        'tombaker1@gmail.com\r\n' + 
+                        '--' + boundary + '\r\n' +
+                        'Content-Disposition: form-data; name="password"\r\n' + 
+                        '\r\n' + 
+                        'eden\r\n' + /* + 
+                        '------WebKitFormBoundaryB94vneooSYjS9yn6\r\n' + 
+                        'Content-Disposition: form-data; name="_next"\r\n' + 
+                        '\r\n' +
+                         '/eden/default/index\r\n' + 
+                        '------WebKitFormBoundaryB94vneooSYjS9yn6\r\n' + 
+                        'Content-Disposition: form-data; name="_formkey"\r\n' + 
+                        '\r\n' + 
+                        '7edc3829-8e35-4ad0-aeb5-d8f6f90f8d07\r\n' + 
+                        '------WebKitFormBoundaryB94vneooSYjS9yn6\r\n' + 
+                        'Content-Disposition: form-data; name="_formname"\r\n' + 
+                        '\r\n' + 
+                        'login\r\n' + 
+                        '------WebKitFormBoundaryB94vneooSYjS9yn6\r\n' + 
+                        'Content-Disposition: form-data; name="_utc_offset"\r\n' + 
+                        '\r\n' + 
+                        '480\r\n' + */
+                        '--' + boundary + '--\r\n';
+        var newURL = url; // + "?_next=%2Feden%2Fdefault%2Findex";
+        xhr.open("POST", newURL, true);
+        xhr.setRequestHeader("Content-Type", 'multipart/form-data; boundary=' + boundary);
+        xhr.send(sendText);
+        reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
+
+    };
+
+    communicator.prototype.cbRequestLogin = function (reply) {
+        clearTimeout(reqTimer);
+        if (xhr.readyState != 4) {
+            alert("What?");
+            return;
+        }
+        if (xhr.status != 200) {
+            alert("Error loading page");
+            return;
+        }
+
+        // Check to see if the login succeeded
+        var status = false;
+        var message = "Login failed";
+        var rawData = reply.target.responseText;
+        var allResponses = xhr.getAllResponseHeaders();
+        var index = rawData.indexOf('class="alert');
+        var success = rawData.slice(index,index+8);
+        
+        if (success.indexOf("alert-success")) {
+            message = "Login succeeded";
+            }
+        //var responseText = xhr.getResponseHeader("SetCookie");
+        //var allResponses = xhr.getAllResponseHeaders();
+        //
+        /*
+        if (responseText) {
+        var responses = responseText.split('=');
+        var responseItem = responses[0].split('=');
+            if ((responseItem[0] === "registered") &&
+                (responseItem[1] === "yes")) {
+                status = true;
+            }
+        }
+        */
+
+        // return and show the form
+        rawData = null;
+        reqState.callback(status, message);
+
+    };
+    
     app.commHandler = new communicator();
 
 })(jQuery, window, document);

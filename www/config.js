@@ -9,7 +9,8 @@ var config = {
         caseListPath: "/disease/case.s3json?show_ids=true",
         personListPath: "/pr/person.s3json",
         monitoringPath: "/disease/case/case_monitoring.s3json",
-        newMontitoringPath: "/disease/case/case_monitoring/create.s3json"
+        newMontitoringPath: "/disease/case/case_monitoring/create.s3json",
+        loginPath: "/default/user/login"
         //formPath: "res/xml/",
         //formList: "formList.xml"
     },

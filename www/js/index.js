@@ -55,10 +55,12 @@ var app = {
         this.state.settings.serverInfo = new userInfo();
         this.getState();
         this.view.init();
+        this.loginDialog = new loginDialog();
         //this.uiController.init({state: this.state});
         this.pluginManager.init();
         this.pluginManager.on("plugin-create-complete",this.onDynamicUIComplete.bind(this));
         $(document).foundation();
+        //this.loginDialog.show();
         
     },
     

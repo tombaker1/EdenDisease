@@ -70,7 +70,7 @@ var confirmDialog= Backbone.View.extend({
         messageText: ""
     },
     events: {
-        "click #ok": "onOK"
+        "click #ok": "onLogin"
     },
    
     initialize: function(options) {
@@ -101,5 +101,89 @@ var confirmDialog= Backbone.View.extend({
     
     onOK: function(evt) {
         this.$el.popup("close"); //hide();
+    }
+});
+
+
+
+var loginDialog= Backbone.View.extend({
+    //tagName: "fieldset",
+    //template: _.template("<%= label %><input id='input' type='text' name='<%= reference %>'>"),
+    defaults: {
+        headerText: "",
+        messageText: ""
+    },
+    events: {
+        "click #login": "onLogin"
+    },
+   
+    initialize: function(options) {
+        //console.log("new newFormListItem ");
+        //this.reference = "";
+        //this.label = "";
+        var element = document.getElementById('login-dialog');
+        this.setElement(element);
+        //this.$el.hide();
+        
+        
+     },
+     
+    render: function() {
+        this.setText();
+        return this.$el;
+    },
+    
+    setText: function(header,message) {
+        //this.$('#header h3').html(header);
+       // this.$('#content h3').html(message);
+        var url = app.state.settings.serverInfo.get("url");
+        var username = app.state.settings.serverInfo.get("username");
+        var password = app.state.settings.serverInfo.get("password");
+        this.$el.find("#url").val(url);
+        this.$el.find("#username").val(username);
+        this.$el.find("#password").val(password);
+
+    },
+    
+    getText: function(header,message) {
+        //this.$('#header h3').html(header);
+       // this.$('#content h3').html(message);
+        var url = this.$el.find("#url").val();
+        var username = this.$el.find("#username").val();
+        var password = this.$el.find("#password").val();
+        app.state.settings.serverInfo.set("url",url);
+        app.state.settings.serverInfo.set("username",username);
+        app.state.settings.serverInfo.set("password",password);
+
+    },
+    
+    show: function() {
+        //this.render(); //.show();
+        //this.$el.popup("open").popup({transition:"none"});
+        //$("#confirm-dialog").popup("open").popup({transition:"none"});
+        this.setText();
+        this.$el.addClass("visible");
+    },
+    
+    hide: function() {
+        //this.render(); //.show();
+        //this.$el.popup("open").popup({transition:"none"});
+        //$("#confirm-dialog").popup("open").popup({transition:"none"});
+        //this.setText();
+        this.$el.removeClass("visible");
+    },
+    
+    onLogin: function(evt) {
+        //this.$el.popup("close"); //hide();
+        var params = {
+            "url": this.$el.find("#url").val(),
+            "username": this.$el.find("#username").val(),
+            "password": this.$el.find("#password").val()
+        };
+        //this.hide();
+        app.uiController.login(params);
+    },
+    onError: function(message) {
+        console.log("login dialog error " + message);
     }
 });
