@@ -155,7 +155,7 @@
                     "illness_status": caseItem["illness_status"]["@value"],
                     //"symptom_debut":caseItem["symptom_debut"]["@value"],
                     "diagnosis_status": caseItem["diagnosis_status"]["@value"],
-                    "diagnosis_date": caseItem["diagnosis_date"]["@value"],
+                    //"diagnosis_date": caseItem["diagnosis_date"]["@value"],
                     "monitoring_level": caseItem["monitoring_level"]["@value"],
                     //"monitoring_until":caseItem["monitoring_until"]["@value"],
                     "rawData": caseItem
