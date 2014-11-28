@@ -143,24 +143,33 @@
                 model = new mFormData();
             }
             if (model._timestamp < timestamp) {
-                //var disease = caseItem["$k_disease_id"]["$"];
-                var formOptions = {
-                    "case_id": parseInt(caseItem["@id"]),
-                    "uuid": uuid,
-                    name: caseItem["$k_person_id"]["$"],
-                    disease: caseItem["$k_disease_id"]["$"],
-                    "case_number": caseItem["case_number"],
-                    "person_id": parseInt(caseItem["$k_person_id"]["@id"]),
-                    "disease_id": parseInt(caseItem["$k_disease_id"]["@id"]),
-                    "illness_status": caseItem["illness_status"]["@value"],
-                    //"symptom_debut":caseItem["symptom_debut"]["@value"],
-                    "diagnosis_status": caseItem["diagnosis_status"]["@value"],
-                    //"diagnosis_date": caseItem["diagnosis_date"]["@value"],
-                    "monitoring_level": caseItem["monitoring_level"]["@value"],
-                    //"monitoring_until":caseItem["monitoring_until"]["@value"],
-                    "rawData": caseItem
-                };
-                //var model = new mFormData(formOptions);
+                // Get data from case to put in the model
+                var formOptions = {};
+                formOptions["rawData"] = caseItem;
+                formOptions["uuid"] =  uuid,
+                formOptions["name"] =  caseItem["$k_person_id"]["$"];
+                formOptions["disease"] =  caseItem["$k_disease_id"]["$"];
+                for (var key in caseItem) {
+                    var item = caseItem[key];
+                    //var referenceIndex = 
+                    if (key.indexOf("$k_") >= 0) {
+                        var subkey = key.slice(3);
+                        formOptions[subkey] = item["@id"];
+                    }
+                    else if (key.indexOf("@") >= 0) {
+                        // Do nothing, this is meta-data
+                        continue;
+                    }
+                    else if (typeof item === 'object') {
+                        formOptions[key] = item["@value"];
+                    }
+                    else {
+                        formOptions[key] = item;
+                    }
+                }
+
+                
+                // Put the data into the model
                 model.set(formOptions);
                 this._caseList[uuid] = model;
                 model.timestamp(timestamp);
