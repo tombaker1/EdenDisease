@@ -30,35 +30,60 @@
 <body>
     <!-- Application pages -->
     <div id="page-home" class="se-page se-page-visible">
+
+
         <div class="row top-bar">
-            <div class="small-4 small-offset-4 columns">
+            <ul class="title-area">
+                <li class="name">
+                    <h1><a>Eden Disease Demo</a></h1>
+                </li>
+                <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a>
+                </li>
+            </ul>
+            <section class="top-bar-section">
+                <!-- Right Nav Section -->
+                <ul class="right">
+                    <li class="active"><a href="#">Online</a>
+                    </li>
+                    <li class=""><a id="link-button" link="page-cases">Cases</a>
+                    </li>
+                    <li class=""><a id="link-button" link="page-people">Persons</a>
+                    </li>
+                    <li class=""><a id="link-button" link="page-settings">Settings</a>
+                    </li>
+                </ul>
+                    <!-- Left Nav Section -->
+    <ul class="left">
+      <li><a href="#">Left Nav Button</a></li>
+    </ul>
+
+            </section>
+                <!-- div class="small-4 small-offset-4 columns">
                 <h2>Eden Disease</h2>
-            </div>
-            <div class="small-4 columns">
+            </div -->
+                <!-- div class="small-4 columns">
                 <a href="#" class="top-bar-button right">Settings</a>
-            </div>
+            </div -->
         </div>
 
         <h1>Sahana Disease Response Demo</h1>
-        <div>
-            <ul id="menu" class="stack se-list-menu">
+        <div id="content">
+            <p>Some text should go here</p>
+            <p>Maybe some instructions or updates</p>
+            <!-- ul id="menu" class="stack se-list-menu">
                 <li><a id="link-button" link="page-cases">Cases <i class="chevron"></i></a>
                 </li>
                 <li><a id="link-button" link="page-people">Contact Persons <i class="chevron"></i></a>
                 </li>
                 <li><a id="link-button" link="page-monitoring">Contact Monitoring <i class="chevron"></i></a>
                 </li>
-                <!-- li><a id="link-button" link="page-saved">Saved Forms <i class="chevron"></i></a>
-                </li -->
-                <li><a id="link-button" link="page-settings">Settings </a>
+                 <li><a id="link-button" link="page-settings">Settings </a>
                 </li>
-            </ul>
-        </div>
-        <div data-role="footer" data-position="fixed">
-            <h4></h4>
+            </ul -->
         </div>
     </div>
-<!-- a href="#" data-reveal-id="myModal" class="button">Launch Signup Modal</a -->
+    <!-- a href="#" data-reveal-id="myModal" class="button">Launch Signup Modal</a -->
 
     <!-- Global dialogs -->
     <div id="dialogs">
@@ -84,47 +109,47 @@
                 </div>
             </div>
         </div>
-        
-        
-        
-        
-        <div id="login-dialog" class="center row">
-<div id="login-modal" class="reveal-modal remove-whitespace" data-reveal>
-<div class="row">
-    <div class="large-6 columns auth-plain">
-      <div class="signup-panel left-solid">
-        <p class="welcome">Login Please</p>
-        <form>
-          <div class="row collapse">
-            <div class="small-2  columns">
-              <span class="prefix"><!--i class="fi-torso-female"></i -->Server</span>
-            </div>
-            <div class="small-10  columns">
-              <input id="url" type="text" placeholder="hostname">
-            </div>
-          </div>
-          <div class="row collapse">
-            <div class="small-2  columns">
-              <span class="prefix"><!--i class="fi-torso-female"></i -->User Name</span>
-            </div>
-            <div class="small-10  columns">
-              <input id="username" type="text" placeholder="username">
-            </div>
-          </div>
-          <div class="row collapse">
-            <div class="small-2 columns ">
-              <span class="prefix"><!--i class="fi-torso-female"></i -->Password</span>
-            </div>
-            <div class="small-10 columns ">
-              <input id="password" type="text" placeholder="password">
-            </div>
-          </div>
-        </form>
-        <a id="login" class="button ">Log In </a>
-      </div>
-    </div>
 
-    <!--div class="large-6 columns auth-plain">
+
+
+
+        <div id="login-dialog" class="center row">
+            <div id="login-modal" class="reveal-modal remove-whitespace" data-reveal>
+                <div class="row">
+                    <div class="large-6 columns auth-plain">
+                        <div class="signup-panel left-solid">
+                            <p class="welcome">Login Please</p>
+                            <form>
+                                <div class="row collapse">
+                                    <div class="small-2  columns">
+                                        <span class="prefix"><!--i class="fi-torso-female"></i -->Server</span>
+                                    </div>
+                                    <div class="small-10  columns">
+                                        <input id="url" type="text" placeholder="hostname">
+                                    </div>
+                                </div>
+                                <div class="row collapse">
+                                    <div class="small-2  columns">
+                                        <span class="prefix"><!--i class="fi-torso-female"></i -->User Name</span>
+                                    </div>
+                                    <div class="small-10  columns">
+                                        <input id="username" type="text" placeholder="username">
+                                    </div>
+                                </div>
+                                <div class="row collapse">
+                                    <div class="small-2 columns ">
+                                        <span class="prefix"><!--i class="fi-torso-female"></i -->Password</span>
+                                    </div>
+                                    <div class="small-10 columns ">
+                                        <input id="password" type="text" placeholder="password">
+                                    </div>
+                                </div>
+                            </form>
+                            <a id="login" class="button ">Log In </a>
+                        </div>
+                    </div>
+
+                    <!--div class="large-6 columns auth-plain">
     	<div class="signup-panel newusers">
     		<p class="welcome"> New User?</p>
     		<p>By creating an account with us, you will be able to move through the checkout process faster, view and track your orders, and more.</p><br>
@@ -132,14 +157,14 @@
     	</div>
     </div -->
 
-   </div>   
-  <a class="close-reveal-modal">&#215;</a>
-</div>  
+                </div>
+                <a class="close-reveal-modal">&#215;</a>
+            </div>
         </div>
-            
 
 
-</div>
+
+    </div>
 
     <!-- dynamic page container -->
     <div id="dyamic-pages"></div>
