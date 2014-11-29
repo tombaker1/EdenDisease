@@ -83,12 +83,12 @@ var app = {
     
     onDynamicUIComplete: function() {
         // set version
-        $("#version").html("Version: " + config.version);
+        //$("#version").html("Version: " + config.version);
          this.uiController.init({state: this.state});
-        var settingsPage = this.view.getPage("page-settings");
-        settingsPage.serverURL(app.state.settings.serverInfo.get("url"));
-        settingsPage.username(app.state.settings.serverInfo.get("username"));
-        settingsPage.password(app.state.settings.serverInfo.get("password"));
+        //var settingsPage = this.view.getPage("page-settings");
+        //settingsPage.serverURL(app.state.settings.serverInfo.get("url"));
+        //settingsPage.username(app.state.settings.serverInfo.get("username"));
+        //settingsPage.password(app.state.settings.serverInfo.get("password"));
         
         document.onTouchMove = function(e) {
             e.preventDefault();

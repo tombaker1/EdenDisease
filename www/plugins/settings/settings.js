@@ -77,11 +77,22 @@ var settingsPage = Backbone.View.extend({ //pageView.extend({
         if (this.content_template) {
             this.$el.find("#content").append(this.content_template({}));
         }
+        
+        // Initialize values
+        this.undelegateEvents();
+        this.$("#version").html("Version: " + config.version);
+        this.serverURL(app.state.settings.serverInfo.get("url"));
+        this.username(app.state.settings.serverInfo.get("username"));
+        this.password(app.state.settings.serverInfo.get("password"));
+        this.delegateEvents();
+        //this.on("change #serverURL", this.onURL.bind(this));
+        //this.on("change #username", this.onUsername.bind(this));
+        //this.on("change #password", this.onPassword.bind(this));
         return this; 
     },
 
     serverURL: function(url) {
-        var $input = $('#serverURL');
+        var $input = this.$('#serverURL');
         if (typeof url != 'undefined') {
             $input.val(url);
         }
@@ -92,7 +103,7 @@ var settingsPage = Backbone.View.extend({ //pageView.extend({
     },
     
     username: function(name) {
-        var $input = $('#username');
+        var $input = this.$('#username');
         if (typeof name != 'undefined') {
             $input.val(name);
         }
@@ -103,7 +114,7 @@ var settingsPage = Backbone.View.extend({ //pageView.extend({
     },
     
     password: function(pwd) {
-        var $input = $('#password');
+        var $input = this.$('#password');
         if (typeof pwd != 'undefined') {
             $input.val(pwd);
         }
