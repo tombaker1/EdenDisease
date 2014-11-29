@@ -82,10 +82,13 @@
             element.$el.addClass("se-page-visible");
             if (currentVisiblePage) {
                 currentVisiblePage.$el.removeClass("se-page-visible");            
-                //currentVisiblePage.$el.addClass("se-page-left");
+                var topBar = element.$el.find(".top-bar");
+                if (topBar) {
+                    topBar.removeClass("expanded");
+                }
             }
            
-        }
+       }
     };
     
     view.prototype.popPage = function (  ) {
@@ -93,8 +96,13 @@
             var element = this.pageStack.pop();
             var newActive = this.pageStack[this.pageStack.length-1];
             element.$el.removeClass("se-page-visible");
-            //newActive.$el.removeClass("se-page-left");
-            newActive.$el.addClass("se-page-visible");            
+            //element.$el.find(".top-bar").removeClase("expanded"); // close the menu
+            newActive.$el.removeClass("se-page-left");
+            newActive.$el.addClass("se-page-visible"); 
+             var topBar = newActive.$el.find(".top-bar");
+                if (topBar) {
+                    topBar.removeClass("expanded");
+                }
         }
         
     };
