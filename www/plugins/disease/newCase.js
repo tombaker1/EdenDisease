@@ -24,17 +24,14 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
     className: "se-page",
     name: "",
     template: _.template("<div class='row'>" +
-        "<nav class='top-bar' data-topbar role='navigation'>" +
-        "<section class='top-bar-section'>" +
-        "<!-- Right Nav Section -->" +
-        "<ul class='left'>" +
-        "<li class='active'>" +
-        "<a id='link-button' link='page-back' class='action-btn' type='button'>" +
-        "Back" +
-        "</a>" +
+        "<nav class='top-bar' data-topbar=' '>" +
+        "<ul class='itle-area'>" +
+        "<li class='name'>" +
+        "<h1><a >New Case</a></h1>" +
         "</li>" +
-        " </ul>" +
-        "</section>" +
+        "</li>" +
+        "</ul>" +
+        //"</section>" +
         "</nav>" +
         "</div>" +
         "<div id='content'></div>"
