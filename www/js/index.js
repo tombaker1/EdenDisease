@@ -79,23 +79,20 @@ var app = {
         $("#reset-button").on("click",this.onReset.bind(this));
         $("#load-form-list-button").on("click",this.onLoad.bind(this));
         $("#debug-button").on("click",this.onDebug.bind(this));
+        
     },
     
     onDynamicUIComplete: function() {
-        // set version
-        //$("#version").html("Version: " + config.version);
          this.uiController.init({state: this.state});
-        //var settingsPage = this.view.getPage("page-settings");
-        //settingsPage.serverURL(app.state.settings.serverInfo.get("url"));
-        //settingsPage.username(app.state.settings.serverInfo.get("username"));
-        //settingsPage.password(app.state.settings.serverInfo.get("password"));
         
+        /*
         document.onTouchMove = function(e) {
             e.preventDefault();
         }
         document.onTouchStart = function(e) {
             e.preventDefault();
         }
+        */
     },
     
 

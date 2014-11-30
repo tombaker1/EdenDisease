@@ -23,7 +23,7 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
     tagName: "tr",
     //className: "accordian",
     name: "",
-    template: _.template("<td class='actions'><input class='action-button' value='Edit' type='button'></td>" +
+    template: _.template("<td class='actions'><input class='button tiny' value='Edit' type='button'></td>" +
         "<td><%= number %></td> " +
         "<td><%= name %></td>"
 
@@ -155,6 +155,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         }
         tableBody.foundation();
         this.$el.find("tbody > tr").on("click touchend", this.expandCase.bind(this));
+        //this.$el.foundation();
     },
 
     onEditCase: function (event) {
