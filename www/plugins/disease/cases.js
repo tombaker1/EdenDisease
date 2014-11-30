@@ -23,7 +23,7 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
     tagName: "tr",
     //className: "accordian",
     name: "",
-    template: _.template("<td class='actions'><input class='button tiny' value='Edit' type='button'></td>" +
+    template: _.template("<td class='actions'><input class='edit-button' value='Edit' type='button'></td>" +
         "<td><%= number %></td> " +
         "<td><%= name %></td>"
 
@@ -31,7 +31,7 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
     events: {
         //"click #link-button": "navigate",
 
-        "click .action-button": "onEdit"
+        "click input": "onEdit"
     },
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
