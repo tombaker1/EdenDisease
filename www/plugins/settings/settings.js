@@ -24,6 +24,7 @@ var settingsPage = Backbone.View.extend({ //pageView.extend({
     className: "se-page",
     name: "",
     template: _.template(
+        "<div class='fixed'>" +
         "<div class='row'>" +
         "<nav class='top-bar' data-topbar=' '>" +
         "<ul class='itle-area'>" +
@@ -32,10 +33,11 @@ var settingsPage = Backbone.View.extend({ //pageView.extend({
         "</li>" +
         "</li>" +
         "</ul>" +
-        //"</section>" +
         "</nav>" +
         "</div>" +
-        "<div id='content'></div>"
+        "</div>" + 
+        "<div id='content'>" + 
+        "</div>"
     ),
     content_template: null,
     events: {

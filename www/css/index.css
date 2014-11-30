@@ -59,6 +59,10 @@ display: inline-table;
     */
 }
 
+.se-page #content {
+    margin-top: 50px;
+}
+
 .se-list-menu li {
     background-color: #2ba6cb;
     color: #ffffff;

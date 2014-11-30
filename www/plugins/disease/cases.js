@@ -66,7 +66,9 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     tagName: "div",
     className: "se-page",
     name: "",
-    template: _.template("<div class='row'>" +
+    template: _.template(
+        "<div class='fixed'>" +
+        "<div class='row'>" +
         "<nav class='top-bar' data-topbar=' '>" +
         "<ul class='itle-area'>" +
         "<li class='name'>" +
@@ -76,6 +78,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         "</ul>" +
         //"</section>" +
         "</nav>" +
+        "</div>" +
         "</div>" +
         "<div id='content'></div>"
 
