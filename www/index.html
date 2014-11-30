@@ -13,7 +13,6 @@
 <script src="lib/modernizr.min.js" type="text/javascript"></script>
 
 <link href='lib/ext/resources/css/ext-all-notheme.css' rel='stylesheet' type='text/css' media='screen' charset='utf-8' />
-<!-- link href='lib/themes/default/style.css' rel='stylesheet' type='text/css' media='screen' charset='utf-8' / -->
 
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="cordova_webapp.js"></script>
@@ -65,11 +64,17 @@
         <div id="notify-dialog" class="se-modal">
             <div id="frame">
                 <div id="header" class="row">
+                    <div class="small-3 small-centered columns">
                     <h2></h2>
+                        </div>
                 </div>
                 <div id="content" class="row">
                     <h3></h3>
-                    <input id="ok" type="button" value="OK" class="button small">
+                </div>
+                <div id="controls" class="row">
+                    <div class="small-1 small-centered columns">
+                   <input id="ok" type="button" value="OK" class="button small">
+                    </div>
                 </div>
             </div>
         </div>
