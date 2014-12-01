@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.application.MobileForms" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Eden Disease Response</name>
+    <description>
+        A mobile application for the Sahana Eden Disease template.
+    </description>
+    <author email="sahana-eden@googlegroups.com" href="http://eden.sahanafoundation.org">
+        Sahana Eden Development Team
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <platform name="android">
+              <icon src="www/res/icon/sahana_icon_36x36.png" density="ldpi" />
+              <icon src="www/res/icon/sahana_icon_48x48.png" density="mdpi" />
+              <icon src="www/res/icon/sahana_icon_72x72.png" density="hdpi" />
+              <icon src="www/res/icon/sahana_icon_96x96.png" density="xhdpi" />
+     </platform>     
+</widget>
