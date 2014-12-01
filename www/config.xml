@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="org.sahanafoundation.mobileforms" version="0.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Ebola Response</name>
+    <name>Disease Response</name>
     <description>
         A mobile application for the Sahana Eden Disease template.
     </description>
