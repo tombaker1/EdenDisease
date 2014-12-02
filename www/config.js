@@ -11,8 +11,6 @@ var config = {
         monitoringPath: "/disease/case/case_monitoring.s3json",
         newMontitoringPath: "/disease/case/case_monitoring/create.s3json",
         loginPath: "/default/user/login"
-        //formPath: "res/xml/",
-        //formList: "formList.xml"
     },
     plugins: {
         settings: {
