@@ -59,7 +59,7 @@ following command from the .../eden/static directory.
 4.  Create the platforms that you want to build.  I test on Android.
 ```
 cd EdenDisease
-cordova platform add android```
+cordova platform add android ```
 
 5.  Build the application.
 ```
