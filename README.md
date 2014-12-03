@@ -38,20 +38,21 @@ such as 'Cases'.
 The app is built using the Cordova/Phonegap web runtime.  Phonegap is a distribution of Cordova.  Either one should work.  
 I use Cordova CLI (Command Line Interface) on a Linux Mint system so it has not been tested with Phonegap.
 
-1. First you need to install Cordova, and all of its dependencies including Node.js.  
-The instructions are here: http://cordova.apache.org/docs/en/4.0.0/guide_cli_index.md.html#The%20Command-Line%20Interface.  
-It is best if you read that whole page to become familiar with Cordova.  
-You only need to do  the section *Installing the Cordova CLI*.  I will give instructions for the rest.
+1. First you need to install Cordova, and all of its dependencies including Node.js.  The 
+instructions are 
+here: http://cordova.apache.org/docs/en/4.0.0/guide_cli_index.md.html#The%20Command-Line%20Interface.  It 
+is best if you read that whole page to become familiar with Cordova.  You only need to do  the 
+section **Installing the Cordova CLI**.  I will give instructions for the rest.
 
-2. You must have downloaded the EdenDisease source code.  
-If you have not done so already do steps 1 and 2 in the previous section. 
-Do the second option of cloning it to a different directory name.  
-If you already downloaded the source code to the default directory name then rename it.
+2. You must have downloaded the EdenDisease source code.  If you have not 
+done so already do steps 1 and 2 in the previous section. Do the second option 
+of cloning it to a different directory name.  If you already downloaded the source 
+code to the default directory name then rename it.
 
 3.  Create the Cordova application.  
-The trick here is to use the --copy-from option to load the source from the alternate directory.  
-The directory that you are creating cannot exist before you run the create command.
-Run the following command from the .../eden/static directory.
+The trick here is to use the --copy-from option to load the source from the alternate directory.  The 
+directory that you are creating cannot exist before you run the create command.  Run the 
+following command from the .../eden/static directory.
 ```cordova create EdenDisease "org.sahanafoundation.EdenDisease" "EdenDisease" --copy-from ./EdenDisease-source```
 
 4.  Create the platforms that you want to build.  I test on Android.
@@ -65,8 +66,8 @@ cordova platform add android
 cordova build android
 ```
 
-6. To run the application on an Android device you need to install the Android SDK.  
-Make sure that the tools are in the PATH environment variable.
+6. To run the application on an Android device you need to install the Android SDK.  Make 
+sure that the tools are in the PATH environment variable.
 http://developer.android.com/sdk/installing/index.html?pkg=adt
 
 7.  Connect a device and make sure that it recognized as an android test device.
@@ -78,3 +79,7 @@ adb devices
 ```
 cordova run android
 ```
+
+9.  The default server is ebola.sahanafoundation.org.  It should download the data from 
+there.  Use step 3 in the previous
+section to change to a different server.
