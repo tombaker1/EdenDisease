@@ -68,12 +68,10 @@ sure that the tools are in the PATH environment variable.
 http://developer.android.com/sdk/installing/index.html?pkg=adt
 
 7.  Connect a device and make sure that it recognized as an android test device.
-```
-adb devices```
+``` adb devices```
 
 8.  Install and run the devices.  Cordova will rebuild the package by default.
-```
-cordova run android```
+``` cordova run android```
 
 9.  The default server is ebola.sahanafoundation.org.  It should download the data from 
 there.  Use step 3 in the previous
