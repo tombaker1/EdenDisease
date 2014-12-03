@@ -53,17 +53,15 @@ code to the default directory name then rename it.
 3.  Create the Cordova application.  
 The trick here is to use the --copy-from option to load the source from the alternate directory.  The 
 directory that you are creating cannot exist before you run the create command.  Run the 
-following command from the .../eden/static directory.
+following command from the .../eden/static directory.  
 ```cordova create EdenDisease "org.sahanafoundation.EdenDisease" "EdenDisease" --copy-from ./EdenDisease-source```
 
 4.  Create the platforms that you want to build.  I test on Android.
-```
-cd EdenDisease
+``` cd EdenDisease
 cordova platform add android ```
 
-5.  Build the application.
-```
-cordova build android```
+5.  Build the application. 
+``` cordova build android ```
 
 6. To run the application on an Android device you need to install the Android SDK.  Make 
 sure that the tools are in the PATH environment variable.
