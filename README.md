@@ -12,7 +12,9 @@ There is a restriction for browsers that the application must be run from the sa
 Eden is running in.  It is easiest to run the application within the Eden source tree.
 
 1. Go to the 'static' subdirectory of the Eden source.
-```cd path-to-server-source/web2py/applications/eden/static```
+```
+cd path-to-server-source/web2py/applications/eden/static
+```
 
 2. Check out the application source code.
 ```git clone https://github.com/tombaker1/EdenDisease.git```
