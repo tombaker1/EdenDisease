@@ -35,8 +35,9 @@ such as 'Cases'.
 
 **Creating the application**
 ======================
-The app is built using the Cordova/Phonegap web runtime.  Phonegap is a distribution of Cordova.  Either one should work.  
-I use Cordova CLI (Command Line Interface) on a Linux Mint system so it has not been tested with Phonegap.
+The app is built using the Cordova/Phonegap web runtime.  Phonegap is a distribution 
+of Cordova.  Either one should work.  I use Cordova 
+CLI (Command Line Interface) on a Linux Mint system so it has not been tested with Phonegap.
 
 1. First you need to install Cordova, and all of its dependencies including Node.js.  The 
 instructions are 
@@ -58,13 +59,11 @@ following command from the .../eden/static directory.
 4.  Create the platforms that you want to build.  I test on Android.
 ```
 cd EdenDisease
-cordova platform add android
-```
+cordova platform add android```
 
 5.  Build the application.
 ```
-cordova build android
-```
+cordova build android```
 
 6. To run the application on an Android device you need to install the Android SDK.  Make 
 sure that the tools are in the PATH environment variable.
@@ -72,13 +71,11 @@ http://developer.android.com/sdk/installing/index.html?pkg=adt
 
 7.  Connect a device and make sure that it recognized as an android test device.
 ```
-adb devices
-```
+adb devices```
 
 8.  Install and run the devices.  Cordova will rebuild the package by default.
 ```
-cordova run android
-```
+cordova run android```
 
 9.  The default server is ebola.sahanafoundation.org.  It should download the data from 
 there.  Use step 3 in the previous
