@@ -56,23 +56,26 @@ directory that you are creating cannot exist before you run the create command. 
 following command from the .../eden/static directory.  
 ```cordova create EdenDisease "org.sahanafoundation.EdenDisease" "EdenDisease" --copy-from ./EdenDisease-source```
 
-4.  Create the platforms that you want to build.  I test on Android.
+4.  The cordova command copies everything except the .git folder.  You need this.  Copy it now.
+``` cp -r EdenDisease-source/.git EdenDisease ```
+
+5.  Create the platforms that you want to build.  I test on Android.
 ``` cd EdenDisease
 cordova platform add android ```
 
-5.  Build the application. 
+6.  Build the application. 
 ``` cordova build android ```
 
-6. To run the application on an Android device you need to install the Android SDK.  Make 
+7. To run the application on an Android device you need to install the Android SDK.  Make 
 sure that the tools are in the PATH environment variable.
 http://developer.android.com/sdk/installing/index.html?pkg=adt
 
-7.  Connect a device and make sure that it recognized as an android test device.
+8.  Connect a device and make sure that it recognized as an android test device.
 ``` adb devices```
 
-8.  Install and run the devices.  Cordova will rebuild the package by default.
+9.  Install and run the devices.  Cordova will rebuild the package by default.
 ``` cordova run android```
 
-9.  The default server is ebola.sahanafoundation.org.  It should download the data from 
+10.  The default server is ebola.sahanafoundation.org.  It should download the data from 
 there.  Use step 3 in the previous
 section to change to a different server.
