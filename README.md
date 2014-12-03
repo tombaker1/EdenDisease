@@ -9,7 +9,7 @@ There are two options for running.  It can be run completely in the browser, or 
 **Running in the browser**
 ======================
 There is a restriction for browsers that the application must be run from the same server as 
-Eden is running in.  The application should be in the Eden source tree.
+Eden is running in.  It is easiest to run the application within the Eden source tree.
 
 1. Go to the 'static' subdirectory of the Eden source.
 ```cd path-to-server-source/web2py/applications/eden/static```
@@ -35,3 +35,46 @@ such as 'Cases'.
 
 **Creating the application**
 ======================
+The app is built using the Cordova/Phonegap web runtime.  Phonegap is a distribution of Cordova.  Either one should work.  
+I use Cordova CLI (Command Line Interface) on a Linux Mint system so it has not been tested with Phonegap.
+
+1. First you need to install Cordova, and all of its dependencies including Node.js.  
+The instructions are here: http://cordova.apache.org/docs/en/4.0.0/guide_cli_index.md.html#The%20Command-Line%20Interface.  
+It is best if you read that whole page to become familiar with Cordova.  
+You only need to do  the section *Installing the Cordova CLI*.  I will give instructions for the rest.
+
+2. You must have downloaded the EdenDisease source code.  
+If you have not done so already do steps 1 and 2 in the previous section. 
+Do the second option of cloning it to a different directory name.  
+If you already downloaded the source code to the default directory name then rename it.
+
+3.  Create the Cordova application.  
+The trick here is to use the --copy-from option to load the source from the alternate directory.  
+The directory that you are creating cannot exist before you run the create command.
+Run the following command from the .../eden/static directory.
+```cordova create EdenDisease "org.sahanafoundation.EdenDisease" "EdenDisease" --copy-from ./EdenDisease-source```
+
+4.  Create the platforms that you want to build.  I test on Android.
+```
+cd EdenDisease
+cordova platform add android
+```
+
+5.  Build the application.
+```
+cordova build android
+```
+
+6. To run the application on an Android device you need to install the Android SDK.  
+Make sure that the tools are in the PATH environment variable.
+http://developer.android.com/sdk/installing/index.html?pkg=adt
+
+7.  Connect a device and make sure that it recognized as an android test device.
+```
+adb devices
+```
+
+8.  Install and run the devices.  Cordova will rebuild the package by default.
+```
+cordova run android
+```
