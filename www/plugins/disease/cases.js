@@ -37,6 +37,10 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
         //pageView.prototype.initialize.apply(this,[options]);
         console.log("case item initialize ");
         this._caseData = options["item"];
+        
+        // Set up model change event
+        var model = this.model;
+        model.on("change",this.update.bind(this));
 
     },
     render: function () {
@@ -52,8 +56,9 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
         return this;
     },
 
-    update: function () {
-        console.log("updating case list item");
+    update: function (evt) {
+        console.log("updating case list item ");
+        this.render();
     },
     
     onEdit: function() {
@@ -133,9 +138,8 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
             this.caseList.push(caseElement);
             var tableBody = this.$el.find("tbody");
             tableBody.append(caseElement.$el);
+            caseElement.render();
         }
-        caseElement.render();
-        //this.$el.find("tbody > tr").on("click touchend", this.expandCase.bind(this));
     },
 
     update: function () {
