@@ -23,9 +23,16 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
     tagName: "tr",
     //className: "accordian",
     name: "",
-    template: _.template("<td class='actions'><input class='edit-button' value='Edit' type='button'></td>" +
-        "<td><%= number %></td> " +
-        "<td><%= name %></td>"
+    template: _.template("<td class='actions se-column-all'><input class='edit-button' value='Edit' type='button'></td>" +
+        "<td class='se-column-all'><%= case_number %></td> " +
+        "<td class='se-column-all'><%= name %></td>" + 
+        "<td class='se-column-medium'><%= disease %></td>" + 
+        "<td class='se-column-medium'><%= location %></td>" + 
+        "<td class='se-column-medium'><%= ilness_status %></td>" + 
+        "<td class='se-column-large'><%= symptom_debut %></td>" + 
+        "<td class='se-column-large'><%= diagnosis_status %></td>" + 
+        "<td class='se-column-large'><%= diagnosis_date %></td>" + 
+        "<td class='se-column-medium'><%= monitoring_level %></td>"
 
     ),
     events: {
@@ -44,9 +51,17 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
 
     },
     render: function () {
+        var caseData = this.model.get("rawData");
         var templateData = {
-            name: this.model.get("name"),
-            number: this.model.get("case_number")
+            "name":                     this.model.get("name"),
+            "case_number":              this.model.get("case_number"),
+            "disease":                  this.model.get("disease"),
+            "location":                 "-",
+            "ilness_status":            caseData["illness_status"]["$"],
+            "symptom_debut":            this.model.get("symptom_debut"),
+            "diagnosis_status":         caseData["diagnosis_status"]["$"],
+            "diagnosis_date":           caseData["diagnosis_date"]["$"],
+            "monitoring_level":         caseData["monitoring_level"]["$"]
         };
         this.$el.html(this.template(templateData));
         //this.$el.attr({
