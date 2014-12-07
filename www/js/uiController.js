@@ -54,6 +54,20 @@
         else {
             this.updateData("form");
         }
+        
+        // Read stored models
+        var fileNames = app.storage.list();
+        for (var i = 0; i < fileNames.length; i++) {
+            var key = fileNames[i];
+            if (key.indexOf("data-") >= 0) {
+                var dataString = app.storage.read(key);
+                var data = JSON.parse(dataString);
+                var model = new mFormData(data);
+                var timestamp = Date.parse(data["rawData"]["@modified_on"]);
+                model.timestamp(timestamp);
+                this._caseList[model.get("uuid")] = model;
+            }
+        }
 
         // Update the data tables
         this.updateData(["cases", "persons"]);
