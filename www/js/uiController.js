@@ -176,7 +176,8 @@
                 model.set(formOptions);
                 this._caseList[uuid] = model;
                 model.timestamp(timestamp);
-                model.sync('create', model, {local: true});
+                var path = model.getKey();
+                app.storage.write(path,JSON.stringify(model));
                 page.setCase(model);
             }
         }
