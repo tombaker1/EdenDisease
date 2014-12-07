@@ -58,13 +58,13 @@ var mFormData = Backbone.Model.extend({
     
     getKey: function() {
         var value = 0;
-        if (this.get("id")) {
-            value = this.get("id");
+        if (this.get("uuid")) {
+            value = this.get("uuid");
         }
         else {
-            value = this.timestamp();
+            value = "timestamp:" + this.timestamp();
         }
-        return this.get("case") + '-' + value;
+        return value;
     },
     
     name: function(_name) {

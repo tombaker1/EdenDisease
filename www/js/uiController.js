@@ -137,10 +137,13 @@
             var caseNumber = caseItem["case_number"];
             var personName = caseItem["$k_person_id"]["$"];
             var uuid = caseItem["@uuid"];
-            var timestamp = new Date(caseItem["@modified_on"]);
+            //var caseTime = new Date(caseItem["@modified_on"]);
+            var timestamp = Date.parse(caseItem["@modified_on"]);
             var model = this._caseList[uuid];
+            var newModel = false;
             if (!model) {
                 model = new mFormData();
+                newModel = true;
             }
             if (model._timestamp < timestamp) {
                 // Get data from case to put in the model
@@ -173,6 +176,7 @@
                 model.set(formOptions);
                 this._caseList[uuid] = model;
                 model.timestamp(timestamp);
+                model.sync('create', model, {local: true});
                 page.setCase(model);
             }
         }
