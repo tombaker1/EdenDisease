@@ -56,6 +56,7 @@
         }
         
         // Read stored models
+        var page = app.view.getPage("page-cases");
         var fileNames = app.storage.list();
         for (var i = 0; i < fileNames.length; i++) {
             var key = fileNames[i];
@@ -66,6 +67,7 @@
                 var timestamp = Date.parse(data["rawData"]["@modified_on"]);
                 model.timestamp(timestamp);
                 this._caseList[model.get("uuid")] = model;
+                page.setCase(model);
             }
         }
 
