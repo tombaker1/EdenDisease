@@ -41,6 +41,7 @@ var mFormData = Backbone.Model.extend({
         this._timestamp = 0;
         this._needsUpdate = false;
         this._formId = "";
+        this._serverState = 0;  // 0 = not on server, 1 = server valid
     },
     
     submit: function() {

@@ -145,22 +145,30 @@
     controller.prototype.updateCaseList = function () {
         var page = app.view.getPage("page-cases");
         var caseStruct = app.uiController.getData("cases");
-        var caseList = caseStruct["$_disease_case"];
+        var serverCases = caseStruct["$_disease_case"];
+        
+        // Initialize list server state to detect deleted items
+        for (var key in this._caseList) {
+            var model = this._caseList[key];
+            model._serverState = 0;
+        }
 
-        // create all of the case items
-        for (var i = 0; i < caseList.length; i++) {
-            var caseItem = caseList[i];
+        // create or update all of the case items
+        for (var i = 0; i < serverCases.length; i++) {
+            var caseItem = serverCases[i];
             var caseNumber = caseItem["case_number"];
             var personName = caseItem["$k_person_id"]["$"];
             var uuid = caseItem["@uuid"];
             //var caseTime = new Date(caseItem["@modified_on"]);
             var timestamp = Date.parse(caseItem["@modified_on"]);
             var model = this._caseList[uuid];
-            var newModel = false;
+            //var newModel = false;
             if (!model) {
                 model = new mFormData();
-                newModel = true;
+                //newModel = true;
             }
+            model._serverState = 1;
+            
             if (model._timestamp < timestamp) {
                 // Get data from case to put in the model
                 var formOptions = {};
@@ -197,6 +205,18 @@
                 page.setCase(model);
             }
         }
+        
+        // Delete records that don't exist on the server anymore
+        for (var key in this._caseList) {
+            var model = this._caseList[key];
+            if (model._serverState === 0) {
+                console.log("delete this model");
+                page.removeCase(model);
+                app.storage.delete(model.getKey());
+                delete this._caseList[key];
+            }
+        }
+
     };
 
     controller.prototype.resetAll = function () {

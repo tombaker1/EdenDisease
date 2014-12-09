@@ -163,6 +163,19 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
             caseElement.render();
         }
     },
+    
+    removeCase: function(model) {
+        // first check to see if the case element already exists
+        var caseElement = null;
+        for (var i = 0; i < this.caseList.length; i++) {
+            if (this.caseList[i].model === model) {
+                caseElement = this.caseList[i];
+                caseElement.remove();
+                this.caseList.splice(i,1);
+                break;
+            }
+        }
+    },
 
     update: function () {
         // TODO: this is obsolete, it will be needed when the cases are refreshed from the server
