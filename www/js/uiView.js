@@ -80,12 +80,15 @@
             var currentVisiblePage = this.pageStack[this.pageStack.length-1];
             this.pageStack.push(element);
             element.$el.addClass("se-page-visible");
+            $("#page-container").append(element.el);
+            element.setEvents();
             if (currentVisiblePage) {
                 currentVisiblePage.$el.removeClass("se-page-visible");            
                 var topBar = element.$el.find(".top-bar");
                 if (topBar) {
-                    topBar.removeClass("expanded");
+                    //topBar.removeClass("expanded");
                 }
+                currentVisiblePage.$el.remove();
             }
            
        }
@@ -97,8 +100,11 @@
             var newActive = this.pageStack[this.pageStack.length-1];
             element.$el.removeClass("se-page-visible");
             //element.$el.find(".top-bar").removeClase("expanded"); // close the menu
-            newActive.$el.removeClass("se-page-left");
+            //newActive.$el.removeClass("se-page-left");
             newActive.$el.addClass("se-page-visible"); 
+            $("#page-container").append(newActive.el);
+            newActive.setEvents();
+            element.$el.remove();
              var topBar = newActive.$el.find(".top-bar");
                 if (topBar) {
                     topBar.removeClass("expanded");

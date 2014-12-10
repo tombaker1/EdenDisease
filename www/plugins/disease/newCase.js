@@ -86,7 +86,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             // Put name in label   
             // TODO: add required asterisks
             var id = "#case-" + name;
-            var container = $(id);
+            var container = this.$el.find(id);
             var r = container.attr("required");
             if (item["@type"] === "date") {
                 label += " (YYYY-MM-DD)";
@@ -265,6 +265,10 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         console.log("onSubmit ");
         app.uiController.onFormSubmit(this);
         app.view.changePage("page-back");
+    },
+    
+    setEvents: function() {
+        this.delegateEvents();
     }
 
 });

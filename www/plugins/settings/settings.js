@@ -160,5 +160,8 @@ var settingsPage = Backbone.View.extend({ //pageView.extend({
         console.log("onPassword ");
         app.state.settings.serverInfo.set("password",event.target.value);
     },
-
+    
+    setEvents: function() {
+        this.delegateEvents();
+    }
 });

@@ -226,6 +226,13 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     onRefreshList: function (event) {
         console.log("onRefreshList ");
         app.uiController.updateData("cases");
+    },
+    
+    setEvents: function() {
+        this.delegateEvents();
+        for (var i = 0; i < this.caseList.length; i++) {
+            this.caseList[i].delegateEvents();
+        }
     }
 
 });

@@ -73,7 +73,7 @@
                 content: template
             });
             newPage.render();
-            $("#dyamic-pages").append(newPage.el);
+            //$("#dyamic-pages").append(newPage.el);
             app.view.addPage(pageName, newPage);
         }
         $(document).foundation();

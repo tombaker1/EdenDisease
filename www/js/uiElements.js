@@ -59,6 +59,10 @@ var pageView = Backbone.View.extend({
         this.$el.attr({"id":name});
         this.$el.html(this.template({}));
         return this;
+    },
+    
+    setEvents: function() {
+        this.delegateEvents();
     }
 });
 
