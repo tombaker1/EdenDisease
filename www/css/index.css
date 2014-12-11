@@ -171,6 +171,8 @@ login dialog
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
+    width: 100%;
+    height: 100%;
 }
 
 #login-dialog.visible {
@@ -193,8 +195,8 @@ margin-bottom: 0px;
 .signup-panel {
   border-radius: 5px;
   padding: 15px;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  /* margin-top: 30px;
+  margin-bottom: 30px;*/
   background: #fff;
     border: 1px solid #000;
 }
