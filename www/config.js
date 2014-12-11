@@ -29,6 +29,7 @@ var config = {
                 type: "page",
                 template: "/disease/cases.htm",
                 script: "/disease/cases.js",
+                style: "/disease/cases.css",
                 classname: "casesPage",
                 backButton: true
             }

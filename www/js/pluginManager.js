@@ -135,7 +135,9 @@
                 {
                     var path = currentPlugin.config["style"];
                     if (path) {
-                        console.log("pluginManager: style loading not implemented!!!");
+                        var elementString = "<link href='plugins" + path + "' rel='stylesheet' onload = 'app.pluginManager.cbLoadComplete()'>";
+                        parent.append(elementString);
+                        done = true;
                     }
                 }
                 break;
