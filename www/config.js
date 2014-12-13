@@ -53,6 +53,16 @@ var config = {
                 classname: "newPersonPage",
                 backButton: false
             }
+        },
+        newUpdate: {
+            name: "new-update",
+            config: {
+                type: "page",
+                template: "/disease/new-update.htm",
+                script: "/disease/newUpdate.js",
+                classname: "newUpdatePage",
+                backButton: false
+            }
         }
     },
     version: "0.2.3"
