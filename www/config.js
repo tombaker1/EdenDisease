@@ -43,7 +43,17 @@ var config = {
                 classname: "newCasePage",
                 backButton: false
             }
+        },
+        newPerson: {
+            name: "new-person",
+            config: {
+                type: "page",
+                template: "/disease/new-person.htm",
+                script: "/disease/newPerson.js",
+                classname: "newPersonPage",
+                backButton: false
+            }
         }
     },
-    version: "0.2.2"
+    version: "0.2.3"
 };

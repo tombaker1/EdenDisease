@@ -490,6 +490,16 @@
 
     }
 
+    controller.prototype.newPerson = function () {
+        var form = null; //this.getFormByName("disease_person");
+        var model = null; //new mFormData(form.get("form"));
+        //model.timestamp(Date.now());
+        //form.set("current", model);
+        var page = app.view.getPage("page-new-person");
+        page.showForm(form, model);
+
+    }
+
     controller.prototype.editCase = function (model) {
         var form = this.getFormByName("disease_case");
         var page = app.view.getPage("page-new-case");

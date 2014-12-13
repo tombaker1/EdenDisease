@@ -19,7 +19,7 @@
 //  THE SOFTWARE.
 
 
-var newCasePage = Backbone.View.extend({ //pageView.extend({
+var newPersonPage = Backbone.View.extend({ //pageView.extend({
     tagName: "div",
     className: "se-page",
     name: "",
@@ -29,7 +29,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         "<nav class='top-bar' data-topbar=' '>" +
         "<ul class='itle-area'>" +
         "<li class='name'>" +
-        "<h1><a >New Case</a></h1>" +
+        "<h1><a >New Person</a></h1>" +
         "</li>" +
         "</li>" +
         "</ul>" +
@@ -41,8 +41,9 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
     content_template: null,
     events: {
         "click #link-button": "navigate",
-        "click #new-person-button": "onNewPerson",
+
         "click #cancel": "onCancel",
+        //"click #save": "onSave",
         "click #submit": "onSubmit"
     },
     initialize: function (options) {
@@ -75,6 +76,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
 
     update: function (obj) {
         // Loop through elements filling in data
+        /*
         var field = obj["$_disease_case"][0]["field"];
         for (var i = 0; i < field.length; i++) {
             // Get fields
@@ -109,9 +111,11 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                 container.find("select").first().html(selectOptions);
             }
         }
+        */
     },
     showForm: function (form, model) {
         // Loop through keys finding page elements
+        /*
         var formName = form.get("name");
         var formData = form.get("form");
         var data = form.get("obj")["$_" + formName][0]["field"];
@@ -169,100 +173,22 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                 }
             }
         }
+        */
     },
 
     getModelData: function (model) {
-        var form = app.uiController.getFormByName("disease_case");
-        var formName = form.get("name");
-        var formData = form.get("form");
-        var data = form.get("obj")["$_" + formName][0]["field"];
-        var newData = {};
-        for (var i = 0; i < data.length; i++) {
-            var item = data[i];
-            var name = item["@name"];
-            var searchString = "#case-" + name;
-            var element = this.$el.find(searchString).first();
-            var type = item["@type"];
-            var value = null;
 
-            if (element.length === 0) {
-                continue;
-            }
-
-            if (type.indexOf("reference") === 0) {
-                if (item["select"]) {
-                    //value = "";
-                    //var options = item["select"][0]["option"];
-                    //for (var i = 0; i < options.length; i++) {
-                    var select = element.find("select").first();
-                    //var selectIndex = select[0].selectedIndex;
-                    value = select[0]["value"];
-                    newData[name] = parseInt(value); //model.set(name, value);
-                    /*
-                    if (options[i]["@value"] === value) {
-                        var select = element.find("select").first();
-                        select[0].selectedIndex = i;
-                        select.selectmenu("refresh");
-                    }
-                    */
-                    //}
-                }
-            } else {
-                if (item["select"]) {
-                    var select = element.find("select").first();
-                    //var selectIndex = select[0].selectedIndex;
-                    value = select[0]["value"];
-                    newData[name] = value; //model.set(name, value);
-                } else {
-                    switch (type) {
-                    case "string":
-                        //TODO: if there is a select then get the string from the select value
-                        value = (element.find("input").first().val()) || "";
-                        newData[name] = value; //model.set(name, value);
-                        break;
-                    case "date":
-                        value = (element.find("input").first().val()) || "";
-                        newData[name] = value; //model.set(name, value);
-                        break;
-                    case "datetime":
-                        value = (element.find("input").first().val()) || "";
-                        newData[name] = value; //model.set(name, value);
-                        break;
-                    case "text":
-                        value = (element.find("input").first().val()) || "";
-                        newData[name] = value; //model.set(name, value);
-                        break;
-                    default:
-                        break;
-                    }
-                }
-            }
-        }
-        model.set(newData);
     },
 
     navigate: function (event) {
         var target = event.currentTarget;
         var path = $(target).attr("link");
         this.trigger("navigate", path);
-        //console.log("navigate " + path);
-    },
-
-    onNewPerson: function (event) {
-        console.log("onNewPerson ");
-        app.uiController.newPerson();
-        this.trigger("navigate", "page-new-person");
     },
 
     onCancel: function (event) {
         console.log("onCancel ");
         this.$el.find("legend").scrollTop(0);
-        app.view.changePage("page-back");
-    },
-
-    onSave: function (event) {
-        console.log("onSave ");
-        app.uiController.onFormSave(this);
         app.view.changePage("page-back");
     },
 
