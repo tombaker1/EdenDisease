@@ -65,7 +65,7 @@
     };
 
     view.prototype.changePage = function (pageName) {
-        console.log("view changePage to " + pageName);
+        //console.log("view changePage to " + pageName);
         if (pageName === "page-back") {
             this.popPage();
         } else if (pageName === "page-people") {
