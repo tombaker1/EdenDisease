@@ -82,7 +82,7 @@
             element.$el.addClass("se-page-visible");
             $("#page-container").append(element.el);
             element.setEvents();
-            element.$el.foundation();
+            //element.$el.foundation();
             if (currentVisiblePage) {
                 currentVisiblePage.$el.removeClass("se-page-visible");            
                 var topBar = element.$el.find(".top-bar");
@@ -106,7 +106,7 @@
             $("#page-container").append(newActive.el);
             newActive.setEvents();
             element.$el.remove();
-            newActive.$el.foundation();
+            //newActive.$el.foundation();
              var topBar = newActive.$el.find(".top-bar");
                 if (topBar) {
                     topBar.removeClass("expanded");
