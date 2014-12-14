@@ -56,6 +56,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         if (name) {
             this.name = name;
         }
+        this.addNewPerson = false;
     },
     setContent: function (content) {
         if (content) {
@@ -250,8 +251,17 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
 
     onNewPerson: function (event) {
         console.log("onNewPerson ");
-        app.uiController.newPerson();
-        this.trigger("navigate", "page-new-person");
+        //app.uiController.newPerson();
+        //this.trigger("navigate", "page-new-person");
+        this.addNewPerson = !this.addNewPerson;
+        if (this.addNewPerson) {
+            this.$el.find("#case-new-person").addClass("active");
+            this.$el.find("#select-person_id").prop("disabled",true);
+        }
+        else {
+            this.$el.find("#case-new-person").removeClass("active");
+            this.$el.find("#select-person_id").prop("disabled",false);
+        }
     },
 
     onCancel: function (event) {

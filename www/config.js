@@ -44,16 +44,6 @@ var config = {
                 backButton: false
             }
         },
-        newPerson: {
-            name: "new-person",
-            config: {
-                type: "page",
-                template: "/disease/new-person.htm",
-                script: "/disease/newPerson.js",
-                classname: "newPersonPage",
-                backButton: false
-            }
-        },
         newUpdate: {
             name: "new-update",
             config: {

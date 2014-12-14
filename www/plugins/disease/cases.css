@@ -7,6 +7,16 @@
     visibility: visible;
 }
 
+.se-accordian {
+    visibility: hidden;
+    height: 0;
+}
+
+.se-accordian.active {
+    visibility: visible;
+    height: auto;
+}
+
 @media only screen and (max-width: 768px) {
 	.se-column-large { display: none; visibility: hidden; }
 }
