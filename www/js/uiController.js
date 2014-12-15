@@ -26,7 +26,8 @@
     function controller() {
 
         this._defaults = {};
-        this._diseaseCase = null;
+        this._diseaseCaseForm = null;
+        this._diseasePersonForm = null;
         this._dataTable = {};
         this._updateState = {
             active: false,
@@ -46,15 +47,23 @@
         this.getLocation();
 
         // Load the saved data or initialize data
-        var rawData = app.storage.read("form-raw");
+        var rawData = app.storage.read("case-form");
         if (rawData) {
-            this._diseaseCase = JSON.parse(rawData);
-            this.parseForm();
+            this._diseaseCaseForm = JSON.parse(rawData);
+            this.parseCaseForm();
+        } else {
+            this.updateData("case-form");
         }
-        else {
-            this.updateData("form");
+
+        // Load person form
+        rawData = app.storage.read("person-form");
+        if (rawData) {
+            this._diseasePersonForm = JSON.parse(rawData);
+            this.parsePersonForm();
+        } else {
+            this.updateData("person-form");
         }
-        
+
         // Read stored models
         var page = app.view.getPage("page-cases");
         var fileNames = app.storage.list();
@@ -99,12 +108,18 @@
         var name = this._updateState.list[0];
         var path = this.getHostURL();
         switch (name) {
-                case "form":
-                {
-                    this.loadForm();
-                    return;
-                } 
-                break;
+        case "case-form":
+            {
+                this.loadCaseForm();
+                return;
+            }
+            break;
+        case "person-form":
+            {
+                this.loadPersonForm();
+                return;
+            }
+            break;
         case "cases":
             {
                 path += config.defaults.caseListPath; //"/disease/case.json";
@@ -146,7 +161,7 @@
         var page = app.view.getPage("page-cases");
         var caseStruct = app.uiController.getData("cases");
         var serverCases = caseStruct["$_disease_case"];
-        
+
         // Initialize list server state to detect deleted items
         for (var key in this._caseList) {
             var model = this._caseList[key];
@@ -168,44 +183,41 @@
                 //newModel = true;
             }
             model._serverState = 1;
-            
+
             if (model._timestamp < timestamp) {
                 // Get data from case to put in the model
                 var formOptions = {};
                 formOptions["rawData"] = caseItem;
-                formOptions["uuid"] =  uuid,
-                formOptions["name"] =  caseItem["$k_person_id"]["$"];
-                formOptions["disease"] =  caseItem["$k_disease_id"]["$"];
+                formOptions["uuid"] = uuid,
+                formOptions["name"] = caseItem["$k_person_id"]["$"];
+                formOptions["disease"] = caseItem["$k_disease_id"]["$"];
                 for (var key in caseItem) {
                     var item = caseItem[key];
                     //var referenceIndex = 
                     if (key.indexOf("$k_") >= 0) {
                         var subkey = key.slice(3);
                         formOptions[subkey] = item["@id"];
-                    }
-                    else if (key.indexOf("@") >= 0) {
+                    } else if (key.indexOf("@") >= 0) {
                         // Do nothing, this is meta-data
                         continue;
-                    }
-                    else if (typeof item === 'object') {
+                    } else if (typeof item === 'object') {
                         formOptions[key] = item["@value"];
-                    }
-                    else {
+                    } else {
                         formOptions[key] = item;
                     }
                 }
 
-                
+
                 // Put the data into the model
                 model.set(formOptions);
                 this._caseList[uuid] = model;
                 model.timestamp(timestamp);
                 var path = model.getKey();
-                app.storage.write(path,JSON.stringify(model));
+                app.storage.write(path, JSON.stringify(model));
                 page.setCase(model);
             }
         }
-        
+
         // Delete records that don't exist on the server anymore
         for (var key in this._caseList) {
             var model = this._caseList[key];
@@ -290,15 +302,23 @@
 
     };
 
-    controller.prototype.loadForm = function (event) {
-        console.log("loadForm");
-        var url = app.uiController.getHostURL() + config.defaults.caseCreatePath;
-        app.view.notifyMessage("Loading...","Loading forms.");
-        app.commHandler.requestForm(url, this.cbFormLoadComplete.bind(this));
+    controller.prototype.loadCaseForm = function (event) {
+        console.log("loadCaseForm");
+        var url = app.uiController.getHostURL() + config.defaults.caseFormPath;
+        app.view.notifyMessage("Loading...", "Loading forms.");
+        app.commHandler.requestForm(url, this.cbCaseFormLoadComplete.bind(this));
 
     };
 
-    controller.prototype.parseRecord = function (record) {
+    controller.prototype.loadPersonForm = function (event) {
+        console.log("loadPersonForm");
+        var url = app.uiController.getHostURL() + config.defaults.personFormPath;
+        app.view.notifyMessage("Loading...", "Loading forms.");
+        app.commHandler.requestForm(url, this.cbPersonFormLoadComplete.bind(this));
+
+    };
+
+    controller.prototype.parseCaseRecord = function (record) {
         var references = {};
         for (var recordName in record) {
             var child = record[recordName];
@@ -307,12 +327,12 @@
             if (recordName.indexOf("$_") === 0) {
                 childRecords = [];
                 for (var i = 0; i < child.length; i++) {
-                    var item = this.parseRecord(child[i]);
+                    var item = this.parseCaseRecord(child[i]);
                     childRecords.push(item);
                 }
 
             } else if (recordName === "field") {
-                //field = parseRecord(child);
+                //field = parseCaseRecord(child);
                 childRecords = {};
                 for (var i = 0; i < child.length; i++) {
                     var item = child[i];
@@ -371,12 +391,21 @@
         return references;
     };
 
-    controller.prototype.parseForm = function () {
-        console.log("\tparseForm");
-        var obj = this._diseaseCase;
+    controller.prototype.parsePersonRecord = function (record) {
+        // Notes the person record is much more complicated than the case form
+        // The person information does not have to be displayed in this application
+    
+        var references = {};
+
+        return references;
+    };
+    
+    controller.prototype.parseCaseForm = function () {
+        console.log("\tparseCaseForm");
+        var obj = this._diseaseCaseForm;
 
         // Parse the object into the components
-        var results = this.parseRecord(obj);
+        var results = this.parseCaseRecord(obj);
         var modelData = results["$_disease_case"][0]["field"];
 
         // create model
@@ -395,19 +424,44 @@
         return model;
     };
 
-    controller.prototype.cbFormLoadComplete = function (status, rawData) {
-        console.log("cbFormLoadComplete");
+    controller.prototype.parsePersonForm = function () {
+        console.log("\tparsePersonForm");
+        var obj = this._diseasePersonForm;
+
+        // Parse the object into the components
+        var results = this.parsePersonRecord(obj);
+        var modelData = {"full_name":"",
+                         "sex":0,
+                         "date_of_birth":"",
+                         "mobile_phone":"",
+                         "email":""};
+
+        // create model
+        var model = new formType({
+            "name": "disease_person",
+            "form": modelData,
+            "data": results,
+            "obj": obj
+        });
+        formList.add(model);
+
+        return model;
         
+    };
+
+    controller.prototype.cbCaseFormLoadComplete = function (status, rawData) {
+        console.log("cbCaseFormLoadComplete");
+
         app.view.hideNotifyMessage("Loading forms.");
         // only do this if the form loaded successfully
         if (status) {
 
             // Set model
-            this._diseaseCase = JSON.parse(rawData);
-            var model = this.parseForm();
+            this._diseaseCaseForm = JSON.parse(rawData);
+            var model = this.parseCaseForm();
 
             // Save data to local storage
-            var formName = "form-raw"; //+form.get("name");
+            var formName = "case-form"; //+form.get("name");
             localStorage.setItem(formName, rawData);
             //app.view.notifyModal("Load", "Load Complete.");
 
@@ -418,6 +472,32 @@
         this._updateState.active = false;
         this.nextUpdate();
 
+    };
+
+    controller.prototype.cbPersonFormLoadComplete = function (status, rawData) {
+        console.log("cbCaseFormLoadComplete");
+        
+        app.view.hideNotifyMessage("Loading forms.");
+        // only do this if the form loaded successfully
+        if (status) {
+
+            // Set model
+            this._diseaseCaseForm = JSON.parse(rawData);
+            var model = this.parsePersonForm();
+
+            // Save data to local storage
+            var formName = "person-form"; //+form.get("name");
+            localStorage.setItem(formName, rawData);
+            //app.view.notifyModal("Load", "Load Complete.");
+
+        } else {
+            app.view.notifyModal("Load", "Load failure, check server settings.");
+        }
+        this._updateState.list.shift();
+        this._updateState.active = false;
+        this.nextUpdate();
+        /*
+*/
     };
 
     var cbDiseaseCase = function (success, rawData) {
@@ -448,7 +528,7 @@
         } else {
             //console.log("cbFormSendComplete failure");
             app.view.notifyModal("Submit", "Submit failure.");
-            
+
         }
     };
 
@@ -460,7 +540,7 @@
         app.commHandler.requestLogin(url, params, this.cbLogin.bind(this));
 
     };
-    
+
     controller.prototype.cbLogin = function (status, message) {
         console.log("login callback");
         if (status) {

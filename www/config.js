@@ -5,7 +5,8 @@ var config = {
     defaults: {
         //url: "http://demo.eden.sahanafoundation.org/eden",
         url: "http://ebola.sahanafoundation.org/eden",
-        caseCreatePath: "/disease/case/create.s3json?options=true&references=true",
+        caseFormPath: "/disease/case/create.s3json?options=true&references=true",
+        personFormPath: "/pr/person/create.s3json?options=true",
         caseListPath: "/disease/case.s3json?show_ids=true",
         personListPath: "/pr/person.s3json",
         monitoringPath: "/disease/case/case_monitoring.s3json",
