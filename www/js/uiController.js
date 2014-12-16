@@ -500,8 +500,7 @@
         this._updateState.list.shift();
         this._updateState.active = false;
         this.nextUpdate();
-        /*
-*/
+        
     };
 
     var cbDiseaseCase = function (success, rawData) {

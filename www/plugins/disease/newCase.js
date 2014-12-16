@@ -154,6 +154,21 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         // Do the ad-hoc parts
         var container = this.$el.find("#case-person_name");
         container.find("label").first().html("Name: <bold style='color:red'>*</bold>");
+        var contactRecord = obj["$_pr_person"][0]["$_pr_contact"][0]["field"];
+        //var contactTypes = ["SMS","EMAIL"];
+        for (var i = 0; i < contactRecord.length; i++) {
+            var item = contactRecord[i];
+            if (item["@name"] === "contact_method") {
+                var list = item["select"][0]["option"];
+                for (var j = 0; j < list.length; j++) {
+                    var id = "#case-" + list[j]["@value"];
+                    var container = this.$el.find(id);
+                    if (container.length) {
+                        container.find("label").first().html(list[j]["$"]);
+                    }
+                }
+            }
+        }
     },
     
     showForm: function (form, model) {
