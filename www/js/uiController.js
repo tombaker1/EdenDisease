@@ -419,7 +419,7 @@
 
         // Update view
         var page = app.view.getPage("page-new-case");
-        page.update(obj);
+        page.updateCase(obj);
 
         return model;
     };
@@ -444,6 +444,10 @@
             "obj": obj
         });
         formList.add(model);
+        
+        // Update view
+        var page = app.view.getPage("page-new-case");
+        page.updatePerson(obj);
 
         return model;
         
@@ -482,7 +486,7 @@
         if (status) {
 
             // Set model
-            this._diseaseCaseForm = JSON.parse(rawData);
+            this._diseasePersonForm = JSON.parse(rawData);
             var model = this.parsePersonForm();
 
             // Save data to local storage

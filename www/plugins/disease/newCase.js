@@ -74,7 +74,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         return this;
     },
 
-    update: function (obj) {
+    updateCase: function (obj) {
         // Loop through elements filling in data
         var field = obj["$_disease_case"][0]["field"];
         for (var i = 0; i < field.length; i++) {
@@ -111,6 +111,47 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             }
         }
     },
+
+    updatePerson: function (obj) {
+        // Loop through elements filling in data
+        var field = obj["$_pr_person"][0]["field"];
+        for (var i = 0; i < field.length; i++) {
+            // Get fields
+            var item = field[i];
+            var name = item["@name"];
+            var label = item["@label"];
+
+            // Put name in label   
+            // TODO: add required asterisks
+            var id = "#case-" + name;
+            var container = this.$el.find(id);
+            if (container.length) {
+                var r = container.attr("required");
+                if (item["@type"] === "date") {
+                    label += " (YYYY-MM-DD)";
+                }
+                if (container.attr("required")) {
+                    label += '<bold style="color:red">*</bold>';
+                }
+                container.find("label").first().html(label);
+                
+                // Fill in select entrys
+                var select = item["select"];
+                if (select) {
+                    var selectOptions = "";
+                    var options = select[0]["option"];
+                    for (var j = 0; j < options.length; j++) {
+                        var opt = options[j];
+                        var value = opt["@value"];
+                        var optionLabel = opt["$"] || "";
+                        selectOptions += '<option value = "' + value + '">' + optionLabel + '</option>';
+                    }
+                    container.find("select").first().html(selectOptions);
+                }
+            }
+        }
+    },
+    
     showForm: function (form, model) {
         // Loop through keys finding page elements
         var formName = form.get("name");

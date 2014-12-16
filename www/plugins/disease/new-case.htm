@@ -18,43 +18,47 @@
                     <div> <a id='new-person-button' class="button tiny">New Person</a>
                     </div>
                 </div>
-
+                
                 <select name="select-person_id" id="select-person_id"></select>
+                
+                <!-- New person form.  Only visible when new person control selected -->
                 <div id="case-new-person" class="se-accordian">
                     <fieldset>
                         <legend>New Person</legend>
 
-                        <div id="case-person_name" name="person_name" data-role="fieldcontain">
+                        <div id="case-person_name" name="person_name" data-role="fieldcontain" required="true">
                             <label></label>
                             <input id='input' type='text' name='person_name' />
                         </div>
-                        <div id="case-person_sex" name="person_sex" data-role="fieldcontain" required="true">
-                            <label for="select-person_sex" class="select"></label>
-                            <select name="select-person_sex" id="select-person_sex">
-                                <option value=""></option>
+                        
+                        <div id="case-gender" name="gender" data-role="fieldcontain">
+                            <label for="select-gender" class="select"></label>
+                            <select name="select-gender" id="select-gender">
+                                <!-- option value=""></option>
                                 <option value="female">Female</option>
-                                <option value="male">Male</option>
+                                <option value="male">Male</option -->
 
                             </select>
                         </div>
 
-                        <div id="case-date-of-birth" name="date-of-birth" data-role="fieldcontain">
-                            <label>Date of Birth:</label>
-                            <input id='input' type='text' name='date-of-birth' />
+                        <div id="case-date_of_birth" name="date_of_birth" data-role="fieldcontain">
+                            <label></label>
+                            <input id='input' type='text' name='date_of_birth' />
                         </div>
 
                         <div id="case-mobile_phone" name="mobile_phone" data-role="fieldcontain">
-                            <label>Mobile Phone:</label>
+                            <label></label>
                             <input id='input' type='text' name='mobile_phone' />
                         </div>
 
                         <div id="case-email" name="email" data-role="fieldcontain">
-                            <label>Email:</label>
+                            <label></label>
                             <input id='input' type='text' name='email' />
                         </div>
 
                     </fieldset>
                 </div>
+                <!-- End new person form -->
 
 
             </div>
