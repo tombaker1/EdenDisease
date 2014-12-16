@@ -150,6 +150,10 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                 }
             }
         }
+        
+        // Do the ad-hoc parts
+        var container = this.$el.find("#case-person_name");
+        container.find("label").first().html("Name: <bold style='color:red'>*</bold>");
     },
     
     showForm: function (form, model) {
