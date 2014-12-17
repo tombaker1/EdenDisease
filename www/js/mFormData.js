@@ -57,6 +57,12 @@ var mFormData = Backbone.Model.extend({
         }
     },
     
+    submitPerson: function() {
+        console.log("sending person " + this.get("person_name"));
+        this.needsUpdate(true);
+        this.sync('create',this,{local:false});
+    },
+    
     getKey: function() {
         var value = 0;
         if (this.get("uuid")) {
@@ -132,6 +138,12 @@ var mFormData = Backbone.Model.extend({
         return JSON.stringify(obj);
     }
 
+});
+
+var mCaseData = mFormData.extend({
+    initialize: function(options) {
+       mFormData.prototype.initialize.call(this,arguments);
+    }
 });
 
 var mActiveFormList = Backbone.Collection.extend({

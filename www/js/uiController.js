@@ -35,6 +35,7 @@
             name: ""
         };
         this._caseList = {};
+        this._newPersonList = [];
 
     };
 
@@ -72,7 +73,7 @@
             if (key.indexOf("data-") >= 0) {
                 var dataString = app.storage.read(key);
                 var data = JSON.parse(dataString);
-                var model = new mFormData(data);
+                var model = new mCaseData(data);
                 var timestamp = Date.parse(data["rawData"]["@modified_on"]);
                 model.timestamp(timestamp);
                 this._caseList[model.get("uuid")] = model;
@@ -179,7 +180,7 @@
             var model = this._caseList[uuid];
             //var newModel = false;
             if (!model) {
-                model = new mFormData();
+                model = new mCaseData();
                 //newModel = true;
             }
             model._serverState = 1;
@@ -272,6 +273,7 @@
     };
     
     controller.prototype.updatePersonList = function (model) {
+        this._newPersonList.push(model.get("person_name"));
     };
 
     controller.prototype.onFormSubmit = function (page) {
@@ -293,9 +295,9 @@
                                         date_of_birth:"",
                                         SMS:"",
                                         EMAIL:""});    
-            page.getPersonData(personModel);    // TODO
-            //this.updatePersonList(personModel); // TODO
-            //personModel.submit();               // TODO
+            page.getPersonData(personModel);    
+            this.updatePersonList(personModel); 
+            personModel.submitPerson();
             //activeForms.add(personModel);
         }
     };
@@ -581,7 +583,7 @@
 
     controller.prototype.newCase = function () {
         var form = this.getFormByName("disease_case");
-        var model = new mFormData(form.get("form"));
+        var model = new mCaseData(form.get("form"));
         model.timestamp(Date.now());
         form.set("current", model);
         var page = app.view.getPage("page-new-case");
