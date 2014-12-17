@@ -154,8 +154,9 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         // Do the ad-hoc parts
         var container = this.$el.find("#case-person_name");
         container.find("label").first().html("Name: <bold style='color:red'>*</bold>");
+        
+        // The contacts are options in the $_pr_contact record
         var contactRecord = obj["$_pr_person"][0]["$_pr_contact"][0]["field"];
-        //var contactTypes = ["SMS","EMAIL"];
         for (var i = 0; i < contactRecord.length; i++) {
             var item = contactRecord[i];
             if (item["@name"] === "contact_method") {
@@ -252,46 +253,32 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
 
             if (type.indexOf("reference") === 0) {
                 if (item["select"]) {
-                    //value = "";
-                    //var options = item["select"][0]["option"];
-                    //for (var i = 0; i < options.length; i++) {
                     var select = element.find("select").first();
-                    //var selectIndex = select[0].selectedIndex;
                     value = select[0]["value"];
-                    newData[name] = parseInt(value); //model.set(name, value);
-                    /*
-                    if (options[i]["@value"] === value) {
-                        var select = element.find("select").first();
-                        select[0].selectedIndex = i;
-                        select.selectmenu("refresh");
-                    }
-                    */
-                    //}
+                    newData[name] = parseInt(value); 
                 }
             } else {
                 if (item["select"]) {
                     var select = element.find("select").first();
-                    //var selectIndex = select[0].selectedIndex;
                     value = select[0]["value"];
-                    newData[name] = value; //model.set(name, value);
+                    newData[name] = value; 
                 } else {
                     switch (type) {
                     case "string":
-                        //TODO: if there is a select then get the string from the select value
-                        value = (element.find("input").first().val()) || "";
-                        newData[name] = value; //model.set(name, value);
+                         value = (element.find("input").first().val()) || "";
+                        newData[name] = value; 
                         break;
                     case "date":
                         value = (element.find("input").first().val()) || "";
-                        newData[name] = value; //model.set(name, value);
+                        newData[name] = value; 
                         break;
                     case "datetime":
                         value = (element.find("input").first().val()) || "";
-                        newData[name] = value; //model.set(name, value);
+                        newData[name] = value; 
                         break;
                     case "text":
                         value = (element.find("input").first().val()) || "";
-                        newData[name] = value; //model.set(name, value);
+                        newData[name] = value; 
                         break;
                     default:
                         break;
@@ -311,8 +298,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
 
     onNewPerson: function (event) {
         console.log("onNewPerson ");
-        //app.uiController.newPerson();
-        //this.trigger("navigate", "page-new-person");
+
         this.addNewPerson = !this.addNewPerson;
         if (this.addNewPerson) {
             this.$el.find("#case-new-person").addClass("active");
