@@ -121,7 +121,6 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             var label = item["@label"];
 
             // Put name in label   
-            // TODO: add required asterisks
             var id = "#case-" + name;
             var container = this.$el.find(id);
             if (container.length) {
@@ -220,7 +219,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         }
     },
 
-    getModelData: function (model) {
+    getCaseData: function (model) {
         var form = app.uiController.getFormByName("disease_case");
         var formName = form.get("name");
         var formData = form.get("form");
@@ -274,8 +273,110 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             }
         }
         model.set(newData);
+        
     },
 
+
+    getPersonData: function (model) {
+        
+        var name = "", 
+            element = null, 
+            value = null, 
+            searchString = "";
+        
+        // Get person name
+        name = "person_name";
+        searchString = "#case-" + name + " > input";
+        element = this.$el.find(searchString).first();
+        value = element.val();
+        model.set(name,value);
+        
+        // Get gender
+        name = "gender";
+        searchString = "#case-" + name + " > select";
+        element = this.$el.find(searchString).first();
+        value = element.val();
+        model.set(name,value);
+        
+        // Get date_of_birth
+        name = "date_of_birth";
+        searchString = "#case-" + name + " > input";
+        element = this.$el.find(searchString).first();
+        value = element.val();
+        model.set(name,value);
+        
+        // Get SMS
+        name = "SMS";
+        searchString = "#case-" + name + " > input";
+        element = this.$el.find(searchString).first();
+        value = element.val();
+        model.set(name,value);
+        
+        // Get EMAIL
+        name = "EMAIL";
+        searchString = "#case-" + name + " > input";
+        element = this.$el.find(searchString).first();
+        value = element.val();
+        model.set(name,value);
+        
+/*        
+        var form = app.uiController.getFormByName("disease_case");
+        var formName = form.get("name");
+        var formData = form.get("form");
+        var data = form.get("obj")["$_" + formName][0]["field"];
+        var newData = {};
+        var attributes = model.attributes;
+        for (var key in attributes) {
+            //var item = data[i];
+            //var name = item["@name"];
+            var searchString = "#case-" + key;
+            var element = this.$el.find(searchString).first();
+            //var type = item["@type"];
+            //var value = null;
+
+            if (element.length === 0) {
+                continue;
+            }
+
+            if (type.indexOf("reference") === 0) {
+                if (item["select"]) {
+                    var select = element.find("select").first();
+                    value = select[0]["value"];
+                    newData[name] = parseInt(value);
+                }
+            } else {
+                if (item["select"]) {
+                    var select = element.find("select").first();
+                    value = select[0]["value"];
+                    newData[name] = value;
+                } else {
+                    switch (type) {
+                    case "string":
+                        value = (element.find("input").first().val()) || "";
+                        newData[name] = value;
+                        break;
+                    case "date":
+                        value = (element.find("input").first().val()) || "";
+                        newData[name] = value;
+                        break;
+                    case "datetime":
+                        value = (element.find("input").first().val()) || "";
+                        newData[name] = value;
+                        break;
+                    case "text":
+                        value = (element.find("input").first().val()) || "";
+                        newData[name] = value;
+                        break;
+                    default:
+                        break;
+                    }
+                }
+             
+            }
+        model.set(newData);
+           */
+    },
+    
     navigate: function (event) {
         var target = event.currentTarget;
         var path = $(target).attr("link");

@@ -270,6 +270,9 @@
         }
 
     };
+    
+    controller.prototype.updatePersonList = function (model) {
+    };
 
     controller.prototype.onFormSubmit = function (page) {
         //console.log("onFormSubmit");
@@ -279,9 +282,22 @@
         if (!model) {
             model = form.get("current");
         }
-        page.getModelData(model);
+        page.getCaseData(model);
         model.submit();
 
+        // Check for new person model
+        var personModel = null;
+        if (page.addNewPerson) {
+            personModel = new mFormData({person_name:"",
+                                        gender:1,
+                                        date_of_birth:"",
+                                        SMS:"",
+                                        EMAIL:""});    
+            page.getPersonData(personModel);    // TODO
+            //this.updatePersonList(personModel); // TODO
+            //personModel.submit();               // TODO
+            //activeForms.add(personModel);
+        }
     };
 
     controller.prototype.getHostURL = function () {
