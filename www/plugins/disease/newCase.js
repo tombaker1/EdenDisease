@@ -84,7 +84,6 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             var label = item["@label"];
 
             // Put name in label   
-            // TODO: add required asterisks
             var id = "#case-" + name;
             var container = this.$el.find(id);
             var r = container.attr("required");
@@ -134,7 +133,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                     label += '<bold style="color:red">*</bold>';
                 }
                 container.find("label").first().html(label);
-                
+
                 // Fill in select entrys
                 var select = item["select"];
                 if (select) {
@@ -150,11 +149,11 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                 }
             }
         }
-        
+
         // Do the ad-hoc parts
         var container = this.$el.find("#case-person_name");
         container.find("label").first().html("Name: <bold style='color:red'>*</bold>");
-        
+
         // The contacts are options in the $_pr_contact record
         var contactRecord = obj["$_pr_person"][0]["$_pr_contact"][0]["field"];
         for (var i = 0; i < contactRecord.length; i++) {
@@ -171,7 +170,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             }
         }
     },
-    
+
     showForm: function (form, model) {
         // Loop through keys finding page elements
         var formName = form.get("name");
@@ -191,25 +190,13 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
 
             if (type.indexOf("reference") === 0) {
                 if (item["select"]) {
-                    //value = "";
-                    //var options = item["select"][0]["option"];
-                    //for (var i = 0; i < options.length; i++) {
-                        //if (options[i]["@value"] === value) {
-                            var select = element.find("select");
-                            select.val(value);
-                        //}
-                    //}
+                    var select = element.find("select");
+                    select.val(value);
                 }
             } else {
                 if (item["select"]) {
-                    //value = "";
-                    //var options = item["select"][0]["option"];
-                    //for (var i = 0; i < options.length; i++) {
-                        //if (options[i]["@value"] === value) {
-                            var select = element.find("select");
-                            select.val(value);
-                        //}
-                    //}
+                    var select = element.find("select");
+                    select.val(value);
                 } else {
                     switch (type) {
                     case "string":
@@ -255,30 +242,30 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                 if (item["select"]) {
                     var select = element.find("select").first();
                     value = select[0]["value"];
-                    newData[name] = parseInt(value); 
+                    newData[name] = parseInt(value);
                 }
             } else {
                 if (item["select"]) {
                     var select = element.find("select").first();
                     value = select[0]["value"];
-                    newData[name] = value; 
+                    newData[name] = value;
                 } else {
                     switch (type) {
                     case "string":
-                         value = (element.find("input").first().val()) || "";
-                        newData[name] = value; 
+                        value = (element.find("input").first().val()) || "";
+                        newData[name] = value;
                         break;
                     case "date":
                         value = (element.find("input").first().val()) || "";
-                        newData[name] = value; 
+                        newData[name] = value;
                         break;
                     case "datetime":
                         value = (element.find("input").first().val()) || "";
-                        newData[name] = value; 
+                        newData[name] = value;
                         break;
                     case "text":
                         value = (element.find("input").first().val()) || "";
-                        newData[name] = value; 
+                        newData[name] = value;
                         break;
                     default:
                         break;
@@ -302,11 +289,10 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         this.addNewPerson = !this.addNewPerson;
         if (this.addNewPerson) {
             this.$el.find("#case-new-person").addClass("active");
-            this.$el.find("#select-person_id").prop("disabled",true);
-        }
-        else {
+            this.$el.find("#select-person_id").prop("disabled", true);
+        } else {
             this.$el.find("#case-new-person").removeClass("active");
-            this.$el.find("#select-person_id").prop("disabled",false);
+            this.$el.find("#select-person_id").prop("disabled", false);
         }
     },
 
@@ -327,8 +313,8 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         app.uiController.onFormSubmit(this);
         app.view.changePage("page-back");
     },
-    
-    setEvents: function() {
+
+    setEvents: function () {
         this.delegateEvents();
     }
 
