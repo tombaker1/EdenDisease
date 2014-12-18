@@ -34,8 +34,15 @@
             list: [],
             name: ""
         };
+        this._submitState = {
+            active: false,
+            list: [],
+            name: ""
+        };
         this._caseList = {};
         this._newPersonList = [];
+        this._submitPerson = null;
+
 
     };
 
@@ -95,13 +102,23 @@
         this._dataTable[tableName] = tableData;
     };
 
+    //-------------------------------------------------------------------------
+    //
+    //  Data submission queue
+    //
+
     controller.prototype.updateData = function (dataList) {
         this._updateState.list = this._updateState.list.concat(dataList);
         this.nextUpdate();
     };
 
     controller.prototype.nextUpdate = function () {
-        if (this._updateState.active || (this._updateState.list.length === 0)) {
+        if (this._updateState.active || this._submitState.active || 
+            (this._updateState.list.length === 0) ||
+            (this._submitState.list.length)) {
+            if (this._submitState.list.length) {
+                this.nextSubmit();
+            }
             return;
         }
 
@@ -157,6 +174,86 @@
             app.view.notifyModal("Update data", "Failure in reading data from server");
         }
     };
+
+    //-------------------------------------------------------------------------
+    //
+    //  Data submission queue
+    //
+
+    controller.prototype.submitData = function (modelList) {
+        this._submitState.list = this._submitState.list.concat(modelList);
+        this.nextSubmit();
+    };
+
+    controller.prototype.nextSubmit = function () {
+        if (this._submitState.active || this._updateState.active) {
+            return;
+        }
+        if (this._submitState.list.length === 0) {
+            this.updateData("cases");
+            //this.nextUpdate();
+            return;
+        }
+
+        this._submitState.active = true;
+        var model = this._submitState.list[0];
+        var type = model._type;
+        var path = this.getHostURL();
+        var data = model.sendData();;
+        switch (type) {
+        case "case":
+            {
+                path += config.defaults.caseSubmitPath;
+            }
+            break;
+        case "person":
+            {
+                path += config.defaults.personSubmitPath;
+            }
+            break;
+        default:
+            {
+                alert("Trying to submit an unknow type");
+                active = false;
+                return;
+            }
+        }
+        app.commHandler.submitData(path, this.cbSubmitData.bind(this), data);
+    };
+
+    controller.prototype.cbSubmitData = function (status, dataTable) {
+        //TODO update data
+        var model = this._submitState.list.shift();
+        var type = model._type;
+        this._submitState.active = false;
+        if (status) {
+            //var data = JSON.parse(dataTable);
+            //this.setData(name, data);
+            model.needsUpdate(false);
+            /*
+            switch (type) {
+            case "case":
+                {
+                    this.cbFormSendComplete(status, model);
+                }
+                break;
+            case "person":
+                {
+                    this.cbFormSendComplete(status, model);
+                }
+                break;
+            }
+            */
+            this.nextSubmit();
+        } else {
+            //alert("Communication failure " + name); //TODO: do the right thing
+            this._submitState.list = [];
+            app.view.notifyModal("Submit", "Submit failure.");
+            this.nextUpdate();
+        }
+    };
+
+    //-------------------------------------------------------------------------
 
     controller.prototype.updateCaseList = function () {
         var page = app.view.getPage("page-cases");
@@ -271,7 +368,7 @@
         }
 
     };
-    
+
     controller.prototype.updatePersonList = function (model) {
         this._newPersonList.push(model.get("person_name"));
     };
@@ -285,19 +382,24 @@
             model = form.get("current");
         }
         page.getCaseData(model);
-        model.submit();
+        //model.submit();
+        this.submitData(model);
 
         // Check for new person model
         var personModel = null;
         if (page.addNewPerson) {
-            personModel = new mFormData({person_name:"",
-                                        gender:1,
-                                        date_of_birth:"",
-                                        SMS:"",
-                                        EMAIL:""});    
-            page.getPersonData(personModel);    
-            this.updatePersonList(personModel); 
-            personModel.submitPerson();
+            personModel = new mPersonData({
+                person_name: "",
+                gender: 1,
+                date_of_birth: "",
+                SMS: "",
+                EMAIL: ""
+            });
+            page.getPersonData(personModel);
+            this.updatePersonList(personModel);
+            this.submitData(personModel);
+            //this._submitPerson = personModel;
+            //personModel.submit();
             //activeForms.add(personModel);
         }
     };
@@ -412,12 +514,12 @@
     controller.prototype.parsePersonRecord = function (record) {
         // Notes the person record is much more complicated than the case form
         // The person information does not have to be displayed in this application
-    
+
         var references = {};
 
         return references;
     };
-    
+
     controller.prototype.parseCaseForm = function () {
         console.log("\tparseCaseForm");
         var obj = this._diseaseCaseForm;
@@ -448,11 +550,13 @@
 
         // Parse the object into the components
         var results = this.parsePersonRecord(obj);
-        var modelData = {"full_name":"",
-                         "sex":0,
-                         "date_of_birth":"",
-                         "mobile_phone":"",
-                         "email":""};
+        var modelData = {
+            "full_name": "",
+            "sex": 0,
+            "date_of_birth": "",
+            "mobile_phone": "",
+            "email": ""
+        };
 
         // create model
         var model = new formType({
@@ -462,13 +566,13 @@
             "obj": obj
         });
         formList.add(model);
-        
+
         // Update view
         var page = app.view.getPage("page-new-case");
         page.updatePerson(obj);
 
         return model;
-        
+
     };
 
     controller.prototype.cbCaseFormLoadComplete = function (status, rawData) {
@@ -498,7 +602,7 @@
 
     controller.prototype.cbPersonFormLoadComplete = function (status, rawData) {
         console.log("cbCaseFormLoadComplete");
-        
+
         app.view.hideNotifyMessage("Loading forms.");
         // only do this if the form loaded successfully
         if (status) {
@@ -518,7 +622,7 @@
         this._updateState.list.shift();
         this._updateState.active = false;
         this.nextUpdate();
-        
+
     };
 
     var cbDiseaseCase = function (success, rawData) {

@@ -178,6 +178,36 @@
     };
 
 
+    communicator.prototype.submitData = function (url, cb,  data) {
+        reqState.type = "send-form";
+        reqState.callback = cb;
+        reqState.data = data;
+
+        // Get the JSON data to send
+        //var jsonDocument = model.sendData(); //this.createJSONData(model);
+
+        // create url to send to
+        //var serverUrl = app.uiController.getHostURL();
+        //var urlSubmit = serverUrl + "/disease/case.s3json";
+
+        // create authentication
+        var username = app.state.settings.serverInfo.get("username");
+        var password = app.state.settings.serverInfo.get("password");
+        var authentication = 'Basic ' + window.btoa(username + ':' + password);
+
+        // Set headers
+        xhr.onload = this.cbSendModel.bind(this);
+        xhr.open('PUT', url, true);
+        xhr.setRequestHeader('Authorization', authentication);
+        try {
+            xhr.send(data);
+            reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
+        } catch (err) {
+            alert("send error");
+            reqState.callback(false, reqState.data);
+        }
+    };
+    
     communicator.prototype.requestLogin = function (url, params, cb) {
         //var formListURL = url;  // don't need to do anything here
         reqState.type = "login";

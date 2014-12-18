@@ -9,6 +9,8 @@ var config = {
         personFormPath: "/pr/person/create.s3json?options=true",
         caseListPath: "/disease/case.s3json?show_ids=true",
         personListPath: "/pr/person.s3json",
+        caseSubmitPath: "/disease/case.s3json",
+        personSubmitPath: "pr/person.s3json",
         monitoringPath: "/disease/case/case_monitoring.s3json",
         newMontitoringPath: "/disease/case/case_monitoring/create.s3json",
         loginPath: "/default/user/login"

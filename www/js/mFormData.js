@@ -42,6 +42,7 @@ var mFormData = Backbone.Model.extend({
         this._needsUpdate = false;
         this._formId = "";
         this._serverState = 0;  // 0 = not on server, 1 = server valid
+        this._type = "";
     },
     
     submit: function() {
@@ -55,12 +56,6 @@ var mFormData = Backbone.Model.extend({
         else {
             this.sync('create',this,{local:false});
         }
-    },
-    
-    submitPerson: function() {
-        console.log("sending person " + this.get("person_name"));
-        this.needsUpdate(true);
-        this.sync('create',this,{local:false});
     },
     
     getKey: function() {
@@ -93,6 +88,20 @@ var mFormData = Backbone.Model.extend({
             this._needsUpdate = needsUpdate;
         }
         return this._needsUpdate;
+    },
+    
+    sendData: function() { 
+        console.log("mFormData::sendData not implemented, should be overridden");
+    }
+    
+
+});
+
+var mCaseData = mFormData.extend({
+    initialize: function(options) {
+       mFormData.prototype.initialize.call(this,arguments);
+        
+        this._type = "case";
     },
     
     sendData: function() {
@@ -137,12 +146,59 @@ var mFormData = Backbone.Model.extend({
         }
         return JSON.stringify(obj);
     }
-
 });
 
-var mCaseData = mFormData.extend({
+
+var mPersonData = mFormData.extend({
     initialize: function(options) {
        mFormData.prototype.initialize.call(this,arguments);
+        
+        this._type = "person";
+    },
+    
+    sendData: function() {
+        /*
+        var obj = {
+            $_disease_case: []
+        };
+        var c = obj["$_disease_case"];
+        c[0] = {};
+        var f = c[0];
+        
+        // If the model came from the server then it has a uuid
+        if (this.get("uuid")) {
+            f["@uuid"] = this.get("uuid");
+        }
+        else {
+            var dateString = (new Date(this.timestamp())).toISOString();
+            f["@created_on"] = dateString;
+        }
+        var changed  = this.changed;
+
+        var form = app.uiController.getFormByName("disease_case");
+        var defaultForm = form.get("form");
+
+        var data = form.get("obj")["$_disease_case"][0]["field"];
+        for (var key in data) {
+            var item = data[key];
+            var name = item["@name"];
+            var type = item["@type"];
+            var value = this.get(name);
+            if (type.indexOf("reference") === 0) {
+                if (changed[name]) {
+                    if (item["select"]) {
+                        f[name] = value;
+                    }
+                }
+            } else {
+                if (changed[name]) {
+                    f[name] = value;
+                }
+
+            }
+        }
+        return JSON.stringify(obj);
+        */
     }
 });
 
