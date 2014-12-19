@@ -26,7 +26,7 @@ var formType = Backbone.Model.extend({
         form: null,
         data: null
     },
-    initialize: function() {
+    initialize: function () {
         //console.log("new formType name:" + this.get("name"));
     }
 });
@@ -34,93 +34,101 @@ var formList = new Backbone.Collection;
 
 // create the form list item
 var mFormData = Backbone.Model.extend({
-    defaults: {
-     },
-    initialize: function(options) {
+    defaults: {},
+    initialize: function (options) {
         this._name = "";
         this._timestamp = 0;
         this._needsUpdate = false;
         this._formId = "";
-        this._serverState = 0;  // 0 = not on server, 1 = server valid
+        this._serverState = 0; // 0 = not on server, 1 = server valid
         this._type = "";
+        this._person = null;
     },
-    
-    submit: function() {
+
+    submit: function () {
         console.log("sending model " + this.get("_name"));
         this.needsUpdate(true);
-        
+
         // Check to see if it is a create or update
         if (this.get("uuid")) {
-            this.sync('update',this,{local:false});
-        }
-        else {
-            this.sync('create',this,{local:false});
+            this.sync('update', this, {
+                local: false
+            });
+        } else {
+            this.sync('create', this, {
+                local: false
+            });
         }
     },
-    
-    getKey: function() {
+
+    getKey: function () {
         var value = 0;
         if (this.get("uuid")) {
             value = this.get("uuid");
-        }
-        else {
+        } else {
             value = "timestamp:" + this.timestamp();
         }
         return "data-" + value;
     },
-    
-    name: function(_name) {
+
+    name: function (_name) {
         if (_name) {
-            this.set("_name",_name);
+            this.set("_name", _name);
         }
         return this.get("_name");
     },
-    
-    timestamp: function(_timestamp) {
+
+    person: function (_person) {
+        if (_person) {
+            this._person = _person;
+        }
+        return this._person;
+    },
+
+    timestamp: function (_timestamp) {
         if (_timestamp) {
             this._timestamp = _timestamp;
         }
         return this._timestamp;
     },
-    
-    needsUpdate: function(needsUpdate) {
+
+    needsUpdate: function (needsUpdate) {
         if (needsUpdate != undefined) {
             this._needsUpdate = needsUpdate;
         }
         return this._needsUpdate;
     },
-    
-    sendData: function() { 
+
+    sendData: function () {
         console.log("mFormData::sendData not implemented, should be overridden");
     }
-    
+
 
 });
 
 var mCaseData = mFormData.extend({
-    initialize: function(options) {
-       mFormData.prototype.initialize.call(this,arguments);
-        
+    initialize: function (options) {
+        mFormData.prototype.initialize.call(this, arguments);
+
         this._type = "case";
     },
-    
-    sendData: function() {
+
+    sendData: function () {
         var obj = {
             $_disease_case: []
         };
         var c = obj["$_disease_case"];
         c[0] = {};
         var f = c[0];
-        
+
         // If the model came from the server then it has a uuid
         if (this.get("uuid")) {
             f["@uuid"] = this.get("uuid");
-        }
-        else {
+        } else {
             var dateString = (new Date(this.timestamp())).toISOString();
             f["@created_on"] = dateString;
         }
-        var changed  = this.changed;
+        var changed = this.changed;
 
         var form = app.uiController.getFormByName("disease_case");
         var defaultForm = form.get("form");
@@ -144,67 +152,116 @@ var mCaseData = mFormData.extend({
 
             }
         }
+        
+        // Add person data if necessary
+        var person = this.person();
+        if (person) {
+            var personObject = person.sendObject();
+            var tuid = personObject["$_pr_person"][0]["@tuid"];
+            f["$k_person_id"] = {"@resource":"pr_person","@tuid":tuid};
+            obj = _.extend(obj,personObject);
+        }
+                
         return JSON.stringify(obj);
     }
 });
 
 
 var mPersonData = mFormData.extend({
-    initialize: function(options) {
-       mFormData.prototype.initialize.call(this,arguments);
-        
+
+    defaults: {
+        person_name: "",
+        gender: 1,
+        date_of_birth: "",
+        SMS: "",
+        EMAIL: ""
+    },
+    initialize: function (options) {
+        mFormData.prototype.initialize.call(this, arguments);
+
         this._type = "person";
     },
-    
-    sendData: function() {
-        /*
+
+    sendObject: function () {
+
         var obj = {
-            $_disease_case: []
+            $_pr_person: [{
+
+            }]
         };
-        var c = obj["$_disease_case"];
-        c[0] = {};
-        var f = c[0];
-        
-        // If the model came from the server then it has a uuid
-        if (this.get("uuid")) {
-            f["@uuid"] = this.get("uuid");
-        }
-        else {
-            var dateString = (new Date(this.timestamp())).toISOString();
-            f["@created_on"] = dateString;
-        }
-        var changed  = this.changed;
+        var p = obj["$_pr_person"][0];
 
-        var form = app.uiController.getFormByName("disease_case");
-        var defaultForm = form.get("form");
+        //  Split full name into first, middle, and last
+        var fullName = this.get("person_name");
+        p["@tuid"] = fullName;
+            
+        var names = fullName.split(" ");
+        switch (names.length) {
+        case 0:
+            {
+                return "";
+            }
+        case 1:
+            {
+                p["first_name"] = names[0];
+            }
+            break;
+        case 2:
+            {
+                p["first_name"] = names[0];
+                p["last_name"] = names[1];
+            }
+            break;
 
-        var data = form.get("obj")["$_disease_case"][0]["field"];
-        for (var key in data) {
-            var item = data[key];
-            var name = item["@name"];
-            var type = item["@type"];
-            var value = this.get(name);
-            if (type.indexOf("reference") === 0) {
-                if (changed[name]) {
-                    if (item["select"]) {
-                        f[name] = value;
-                    }
-                }
-            } else {
-                if (changed[name]) {
-                    f[name] = value;
-                }
-
+            // This includes names.length >= 3
+        default:
+            {
+                p["first_name"] = names[0];
+                p["middle_name"] = names[1];
+                p["last_name"] = names.splice(0, 2).join(" ");
             }
         }
-        return JSON.stringify(obj);
-        */
+
+
+
+
+        // gender
+        p["gender"] = this.get("gender");
+
+        // date of birth
+        var dob = this.get("date_of_birth");
+        if (dob.length) {
+            p["date_of_birth"] = dob;
+        }
+
+        // contacts
+        var email = this.get("EMAIL");
+        var phone = this.get("SMS");
+        if (email.length || phone.length) {
+            p["$_pr_contact"] = [];
+            var c = p["$_pr_contact"][0];
+            if (phone.length) {
+                c.push({
+                    "contact_method": "SMS",
+                    "value": phone
+                });
+            }
+            if (email.length) {
+                c.push({
+                    "contact_method": "EMAIL",
+                    "value": email
+                });
+            }
+        }
+
+        return obj;
+
     }
 });
 
 var mActiveFormList = Backbone.Collection.extend({
-    model:mFormData,
-    restore: function(modelList) {
+    model: mFormData,
+    restore: function (modelList) {
         while (modelList.length) {
             var key = modelList.pop();
             var fields = key.split('-');
@@ -216,9 +273,11 @@ var mActiveFormList = Backbone.Collection.extend({
             var model = new mFormData(data);
             model.urlRoot = form.get("url");
             this.add(model);
-            app.view.newSavedFormItem({model:model});
+            app.view.newSavedFormItem({
+                model: model
+            });
         }
-    } 
+    }
 });
 
 var activeForms = new mActiveFormList([]);

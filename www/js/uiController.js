@@ -383,25 +383,21 @@
         }
         page.getCaseData(model);
         //model.submit();
-        this.submitData(model);
 
         // Check for new person model
         var personModel = null;
         if (page.addNewPerson) {
-            personModel = new mPersonData({
-                person_name: "",
-                gender: 1,
-                date_of_birth: "",
-                SMS: "",
-                EMAIL: ""
-            });
+            personModel = new mPersonData();
             page.getPersonData(personModel);
-            this.updatePersonList(personModel);
-            this.submitData(personModel);
+            model.person(personModel);
+            //this.updatePersonList(personModel);
+            //this.submitData(personModel);
+           
             //this._submitPerson = personModel;
             //personModel.submit();
             //activeForms.add(personModel);
         }
+        this.submitData(model);
     };
 
     controller.prototype.getHostURL = function () {
