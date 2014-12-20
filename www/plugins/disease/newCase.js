@@ -217,6 +217,18 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                 }
             }
         }
+        
+        // Reset person form
+        this.addNewPerson = !this.addNewPerson;
+        this.$el.find("#case-new-person").removeClass("active");
+        this.$el.find("#select-person_id").prop("disabled", false);
+        this.$el.find("#case-person_name > input").val("");;
+        this.$el.find("#case-gender > select").val(1);;
+        this.$el.find("#case-date_of_birth > input").val("");;
+        this.$el.find("#case-SMS > input").val("");;
+        this.$el.find("#case-EMAIL > input").val("");;
+         
+        
     },
 
     getCaseData: function (model) {
