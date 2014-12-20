@@ -59,9 +59,9 @@
         if (rawData) {
             this._diseaseCaseForm = JSON.parse(rawData);
             this.parseCaseForm();
-        } else {
-            this.updateData("case-form");
-        }
+        } 
+        // always update in case the server db changed
+        this.updateData("case-form");
 
         // Load person form
         rawData = app.storage.read("person-form");
@@ -190,6 +190,7 @@
             return;
         }
         if (this._submitState.list.length === 0) {
+            this.updateData("case-form");
             this.updateData("cases");
             //this.nextUpdate();
             return;
