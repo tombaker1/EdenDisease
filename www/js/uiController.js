@@ -710,6 +710,15 @@
         app.view.changePage("page-new-case");
     };
 
+    controller.prototype.caseMonitoring = function (model) {
+        //var form = this.getFormByName("disease_case");
+        var page = app.view.getPage("page-monitoring");
+        //form.set("current", model);
+        //page.showForm(form, model);
+        page.showCase(model);
+        app.view.changePage("page-monitoring");
+    };
+    
     var postLocation = function (latitude, longitude) {
         var msg = $("#content-messages").html();
         msg += "latitude: " + latitude + "<br>";

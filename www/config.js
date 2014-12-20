@@ -47,7 +47,17 @@ var config = {
                 backButton: false
             }
         },
-        newUpdate: {
+        monitoring: {
+            name: "monitoring",
+            config: {
+                type: "page",
+                template: "/disease/monitoring.htm",
+                script: "/disease/monitoring.js",
+                //style: "/disease/cases.css",
+                classname: "monitoringPage",
+                backButton: true
+            }
+        },        newUpdate: {
             name: "new-update",
             config: {
                 type: "page",

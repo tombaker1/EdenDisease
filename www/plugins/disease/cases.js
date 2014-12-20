@@ -23,7 +23,10 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
     tagName: "tr",
     //className: "accordian",
     name: "",
-    template: _.template("<td class='actions se-column-all'><input class='edit-button' value='Edit' type='button'></td>" +
+    template: _.template("<td class='actions se-column-all'>" +
+                         "<input id='edit' class='edit-button' value='Edit' type='button'>" +
+                         "<input id='monitor' class='edit-button' value='Monitor' type='button'>" +
+                         "</td>" +
         "<td class='se-column-all'><%= case_number %></td> " +
         "<td class='se-column-all'><%= name %></td>" + 
         "<td class='se-column-medium'><%= disease %></td>" + 
@@ -38,7 +41,9 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
     events: {
         //"click #link-button": "navigate",
 
-        "click input": "onEdit"
+        "click input#edit": "onEdit",
+        "click input#monitor": "onMonitor"
+        
     },
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
@@ -86,6 +91,12 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
     onEdit: function() {
         console.log("casesItemElement onEdit");
         app.uiController.editCase(this.model);
+    },
+    
+    
+    onMonitor: function() {
+        console.log("casesItemElement onEdit");
+        app.uiController.caseMonitoring(this.model);
     }
 });
 
@@ -97,7 +108,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         "<div class='fixed'>" +
         "<div class='row'>" +
         "<nav class='top-bar' data-topbar=' '>" +
-        "<ul class='itle-area'>" +
+        "<ul class='title-area'>" +
         "<li class='name'>" +
         "<h1><a id='link-button' link='page-back'>< Back</a></h1>" +
         "</li>" +
