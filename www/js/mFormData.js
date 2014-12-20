@@ -216,9 +216,9 @@ var mPersonData = mFormData.extend({
             // This includes names.length >= 3
         default:
             {
-                p["first_name"] = names[0];
-                p["middle_name"] = names[1];
-                p["last_name"] = names.splice(0, 2).join(" ");
+                p["first_name"] = names.shift();
+                p["middle_name"] = names.shift();
+                p["last_name"] = names.join(" ");
             }
         }
 
@@ -239,7 +239,7 @@ var mPersonData = mFormData.extend({
         var phone = this.get("SMS");
         if (email.length || phone.length) {
             p["$_pr_contact"] = [];
-            var c = p["$_pr_contact"][0];
+            var c = p["$_pr_contact"];
             if (phone.length) {
                 c.push({
                     "contact_method": "SMS",
