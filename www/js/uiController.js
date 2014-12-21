@@ -522,17 +522,29 @@
         var obj = this._diseaseCaseForm;
 
         // Parse the object into the components
-        var results = this.parseCaseRecord(obj);
-        var modelData = results["$_disease_case"][0]["field"];
+        var caseData = this.parseCaseRecord(obj);
+        var modelData = caseData["$_disease_case"][0]["field"];
+        
 
         // create model
         var model = new formType({
             "name": "disease_case",
             "form": modelData,
-            "data": results,
+            "data": caseData,
             "obj": obj
         });
         formList.add(model);
+        
+        // create monitoring model
+        var monitoringData = caseData["$_disease_case"][0];
+        var monitoringModelData = monitoringData["$_disease_case_monitoring"][0]["field"];
+        var monitoringModel = new formType({
+            "name": "disease_case_monitoring",
+            "form": monitoringModelData,
+            "data": monitoringData,
+            "obj": obj
+        });
+        formList.add(monitoringModel);
 
         // Update view
         var page = app.view.getPage("page-new-case");
