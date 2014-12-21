@@ -714,6 +714,16 @@
 
     }
 
+    controller.prototype.newMonitor = function () {
+        var form = this.getFormByName("disease_case_monitoring");
+        var model = new mCaseData(form.get("form"));
+        model.timestamp(Date.now());
+        form.set("current", model);
+        var page = app.view.getPage("page-new-monitoring");
+        page.showForm(form, model);
+
+    }
+
     controller.prototype.editCase = function (model) {
         var form = this.getFormByName("disease_case");
         var page = app.view.getPage("page-new-case");
