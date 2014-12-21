@@ -1,0 +1,66 @@
+<xmp>
+    <fieldset>
+        <legend>Monitoring</legend>
+        <div><b>Person: </b>
+            <div id="person_name"></div>
+        </div>
+        <div id="new-monitor-button" class="row"> <a id='new-monitor' link="page-new-monitor" class="button small">Add Monitoring Data</a>
+        </div>
+
+        <!-- New update form.  Only visible when new update control selected -->
+        <div id="monitor-new-update" class="se-accordian">
+            <fieldset>
+                <legend>New Monitoring Data</legend>
+
+
+                <div id="monitor-date" name="date" data-role="fieldcontain">
+                    <label></label>
+                    <input id='input' type='text' name='date' />
+                </div>
+
+                <div id="case-illness_status" name="illness_status" data-role="fieldcontain">
+                    <label for="select-illness_status" class="select"></label>
+                    <select name="select-illness_status" id="select-illness_status"></select>
+                </div>
+
+                <div id="case-symptoms" name="symptoms" data-role="fieldcontain">
+                    <label for="select-symptoms" class="select">Symptoms:</label>
+                    <select name="select-symptoms" id="select-symptoms"></select>
+                </div>
+
+                <div id="monitor-comments" name="comments" data-role="fieldcontain">
+                    <label></label>
+                    <input id='input' type='text' name='comments' />
+                </div>
+                <div class='three-up' type="button">
+                    <a class='item button' id='cancel'>Cancel</a> 
+                    <!-- a class='item button' id='save'>Save</a -->
+                    <a class='item button' id='save'>Save</a> 
+                </div>
+            </fieldset>
+        </div>
+        <!-- End new person form -->
+
+
+        <div class="row">
+            <div class="medium-9 large-10 columns">
+                <table class="responsive dataTable display dtr-inline collapsed" role="grid">
+                    <thead>
+                        <tr role="row">
+                            <th class="se-column-all">
+                                <div></div>
+                            </th>
+                            <th class="se-column-all">Date</th>
+                            <th class="se-column-all">Illness Status</th>
+                            <th class="se-column-medium">Symptoms</th>
+                            <th class="se-column-medium">Comments</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+</xmp>
