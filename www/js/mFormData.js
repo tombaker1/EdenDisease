@@ -265,6 +265,7 @@ var mMonitoringData = mFormData.extend({
         mFormData.prototype.initialize.call(this, arguments);
 
         this._type = "monitor";
+        this._parent = null;
     },
 
     sendData: function () {
@@ -272,7 +273,7 @@ var mMonitoringData = mFormData.extend({
         var obj = {
             $_disease_case: []
         };
-        /*
+
         var c = obj["$_disease_case"];
         c[0] = {};
         var f = c[0];
@@ -281,15 +282,18 @@ var mMonitoringData = mFormData.extend({
         if (this.get("uuid")) {
             f["@uuid"] = this.get("uuid");
         } else {
-            var dateString = (new Date(this.timestamp())).toISOString();
+            var dateString = this.get("date"); //(new Date(this.timestamp())).toISOString();
             f["@created_on"] = dateString;
         }
+        f["$_disease_case_monitoring"] = {};
+        var m = f["$_disease_case_monitoring"];
+        
         var changed = this.changed;
 
         var form = app.uiController.getFormByName("disease_case_monitoring");
         var defaultForm = form.get("form");
 
-        var data = form.get("obj")["$_disease_case"][0]["field"];
+        var data = form.get("obj")["$_disease_case"][0]["$_disease_case_monitoring"][0]["field"];
         for (var key in data) {
             var item = data[key];
             var name = item["@name"];
@@ -298,26 +302,17 @@ var mMonitoringData = mFormData.extend({
             if (type.indexOf("reference") === 0) {
                 if (changed[name]) {
                     if (item["select"]) {
-                        f[name] = value;
+                        m[name] = value;
                     }
                 }
             } else {
                 if (changed[name]) {
-                    f[name] = value;
+                    m[name] = value;
                 }
 
             }
         }
         
-        // Add person data if necessary
-        var person = this.person();
-        if (person) {
-            var personObject = person.sendObject();
-            var tuid = personObject["$_pr_person"][0]["@tuid"];
-            f["$k_person_id"] = {"@resource":"pr_person","@tuid":tuid};
-            obj = _.extend(obj,personObject);
-        }
-              */  
         return JSON.stringify(obj);
     }
 });

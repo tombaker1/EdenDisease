@@ -113,7 +113,6 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
         //pageView.prototype.initialize.apply(this,[options]);
         console.log("page initialize ");
         this.itemList = [];
-        this._case = null;
         this.addNewUpdate = false;
 
         var content = options["content"];
@@ -181,7 +180,7 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
     },
     
     showCase: function(model) {
-        this._case = model;
+        this.model = model;
         this.$el.find("#person_name").html(model.get("name"));
         
         // Clean out table
@@ -190,7 +189,7 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
             item.remove();
         }
         
-        // Parse monitoring records
+        // Parse monitoring records to put in table
         var table = this.$el.find("tbody");
         var rawData = model.get("rawData");
         var monitoringData = rawData["$_disease_case_monitoring"];
@@ -203,14 +202,31 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
                 this.itemList.push(item);
             }
         }
+        
+        // Put current date/time in form
+        var element = this.$el.find("#monitor-date input");
+        var dateTime = new Date();
+        var y = dateTime.getYear();
+        var dateTimeString = dateTime.getYear() + "-" +
+            dateTime.getMonth() + "-" +
+            dateTime.getDay() + " " +
+            dateTime.getHours() + ":" +
+            dateTime.getMinutes();
+        element.val(dateTimeString);
+        
     },
     
     getData: function(model) {
-         var form = app.uiController.getFormByName("disease_case_monitoring");
+        var form = app.uiController.getFormByName("disease_case_monitoring");
         var formName = form.get("name");
         var formData = form.get("form");
         var data = form.get("obj")["$_disease_case"][0]["$_" + formName][0]["field"];
         var newData = {};
+        var id = this.model.get("rawData")["@id"];
+        newData["case_id"] = id;
+        
+        // fill in form data
+        
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             var name = item["@name"];
@@ -258,7 +274,9 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
                 }
             }
         }
-        model.set(newData);   },
+        model.set(newData);   
+        
+    },
 
     onEditCase: function (event) {
         console.log("edit");
@@ -302,7 +320,7 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
         this.addNewUpdate = false;
         this.$el.find("#monitor-new-update").removeClass("active");
         app.uiController.onUpdateSubmit(this);
-        app.view.changePage("page-back");
+        
     },
 
     setEvents: function() {

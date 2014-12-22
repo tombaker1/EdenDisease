@@ -212,6 +212,10 @@
                 path += config.defaults.personSubmitPath;
             }
             break;
+        case "monitor":
+            {
+                path += config.defaults.caseSubmitPath;
+            }
         default:
             {
                 alert("Trying to submit an unknow type");
