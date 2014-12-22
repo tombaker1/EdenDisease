@@ -401,6 +401,20 @@
         this.submitData(model);
     };
 
+    controller.prototype.onUpdateSubmit = function (page) {
+        //console.log("onFormSubmit");
+        //var page = $("#page-new-form");
+        var form = this.getFormByName("disease_case_monitoring");
+        var model = form.get("current");
+        if (!model) {
+            model = new mMonitoringData(form.get("form"));
+        }
+        page.getData(model);
+        //model.submit();
+
+        this.submitData(model);
+    };
+
     controller.prototype.getHostURL = function () {
         // TODO: this doesn't apply anymore
         var url = "";
@@ -549,6 +563,10 @@
         // Update view
         var page = app.view.getPage("page-new-case");
         page.updateCase(obj);
+        
+        // Monitoring page
+        page = app.view.getPage("page-monitoring");
+        page.update(obj);
 
         return model;
     };
