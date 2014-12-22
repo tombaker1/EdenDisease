@@ -207,9 +207,9 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
         var element = this.$el.find("#monitor-date input");
         var dateTime = new Date();
         var y = dateTime.getYear();
-        var dateTimeString = dateTime.getYear() + "-" +
-            dateTime.getMonth() + "-" +
-            dateTime.getDay() + " " +
+        var dateTimeString = dateTime.getFullYear() + "-" +
+            (dateTime.getMonth()+1) + "-" +
+            dateTime.getDate() + " " +
             dateTime.getHours() + ":" +
             dateTime.getMinutes();
         element.val(dateTimeString);
