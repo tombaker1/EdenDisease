@@ -63,6 +63,15 @@
     view.prototype.getPage = function (name) {
         return this.pageSet[name];
     };
+    
+ 
+    view.prototype.getVisiblePage = function () {
+        var len = this.pageStack.length;
+        if (len <= 0) {
+            return;
+        }
+        return this.pageStack[len-1];
+    };
 
     view.prototype.changePage = function (pageName) {
         //console.log("view changePage to " + pageName);

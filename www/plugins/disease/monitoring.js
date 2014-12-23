@@ -24,11 +24,11 @@ var monitoringItemElement = Backbone.View.extend({ //pageView.extend({
     //className: "accordian",
     name: "",
     template: _.template("<td class='actions se-column-all'>" +
-                         "<input id='edit' class='edit-button' value='Edit' type='button'>" +
-                         "</td>" +
+        "<input id='edit' class='edit-button' value='Edit' type='button'>" +
+        "</td>" +
         "<td class='se-column-all'><%= date %></td> " +
-        "<td class='se-column-all'><%= illness_status %></td>" + 
-        "<td class='se-column-medium'><%= symptoms %></td>" + 
+        "<td class='se-column-all'><%= illness_status %></td>" +
+        "<td class='se-column-medium'><%= symptoms %></td>" +
         "<td class='se-column-medium'><%= comments %></td>"
 
     ),
@@ -36,33 +36,32 @@ var monitoringItemElement = Backbone.View.extend({ //pageView.extend({
         //"click #link-button": "navigate",
 
         "click input#edit": "onEdit"
-        
+
     },
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
         console.log("monitoring item initialize ");
         this._caseData = options["item"];
-        
+
         // Set up model change event
         var model = this.model;
-        model.on("change",this.update.bind(this));
+        model.on("change", this.update.bind(this));
 
     },
     render: function () {
 
         var caseData = this._caseData;
-        var fieldList = ["date","illness_status","symptoms","comments"];
+        var fieldList = ["date", "illness_status", "symptoms", "comments"];
         var templateData = {};
         for (var i = 0; i < fieldList.length; i++) {
             var fieldName = fieldList[i];
             if (caseData[fieldName]) {
                 templateData[fieldName] = caseData[fieldName]["$"];
-            }
-            else {
+            } else {
                 templateData[fieldName] = "";
             }
         }
-       
+
         this.$el.html(this.template(templateData));
 
         return this;
@@ -72,13 +71,13 @@ var monitoringItemElement = Backbone.View.extend({ //pageView.extend({
         console.log("updating case list item ");
         this.render();
     },
-    
-    onEdit: function() {
+
+    onEdit: function () {
         console.log("monitoringItemElement onEdit");
         //app.uiController.editCase(this.model);
     }
-    
-    
+
+
 });
 
 var monitoringPage = Backbone.View.extend({ //pageView.extend({
@@ -104,10 +103,10 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
     ),
     content_template: null,
     events: {
-        "click #link-button":   "navigate",
-        "click #new-monitor":   "onNewMonitor",
-        "click #cancel":        "onCancel",
-        "click #save":          "onSave"
+        "click #link-button": "navigate",
+        "click #new-monitor": "onNewMonitor",
+        "click #cancel": "onCancel",
+        "click #save": "onSave"
     },
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
@@ -153,56 +152,64 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
             var id = "#monitor-" + name;
             var container = this.$el.find(id);
             if (container.length) {
-            var r = container.attr("required");
-            if (item["@type"] === "date") {
-                label += " (YYYY-MM-DD)";
-            }
-            if (container.attr("required")) {
-                label += '<bold style="color:red">*</bold>';
-            }
-            container.find("label").first().html(label);
-
-            // Fill in select entrys
-            var select = item["select"];
-            if (select) {
-                var selectOptions = "";
-                var options = select[0]["option"];
-                for (var j = 0; j < options.length; j++) {
-                    var opt = options[j];
-                    var value = opt["@value"];
-                    var optionLabel = opt["$"] || "";
-                    selectOptions += '<option value = "' + value + '">' + optionLabel + '</option>';
+                var r = container.attr("required");
+                if (item["@type"] === "date") {
+                    label += " (YYYY-MM-DD)";
                 }
-                container.find("select").first().html(selectOptions);
+                if (container.attr("required")) {
+                    label += '<bold style="color:red">*</bold>';
+                }
+                container.find("label").first().html(label);
+
+                // Fill in select entrys
+                var select = item["select"];
+                if (select) {
+                    var selectOptions = "";
+                    var options = select[0]["option"];
+                    for (var j = 0; j < options.length; j++) {
+                        var opt = options[j];
+                        var value = opt["@value"];
+                        var optionLabel = opt["$"] || "";
+                        selectOptions += '<option value = "' + value + '">' + optionLabel + '</option>';
+                    }
+                    container.find("select").first().html(selectOptions);
+                }
             }
-        }
         }
     },
-    
-    showCase: function(model) {
-        this.model = model;
-        this.$el.find("#person_name").html(model.get("name"));
-        
+
+    showCase: function (model) {
+        if (model) {
+            this.model = model;
+        }
+        if (!this.model) {
+            return;
+        }
+        this.$el.find("#person_name").html(this.model.get("name"));
+
         // Clean out table
         while (this.itemList.length) {
             var item = this.itemList.pop();
             item.remove();
         }
-        
+
         // Parse monitoring records to put in table
         var table = this.$el.find("tbody");
-        var rawData = model.get("rawData");
+        var rawData = this.model.get("rawData");
         var monitoringData = rawData["$_disease_case_monitoring"];
         if (monitoringData) {
             for (var i = 0; i < monitoringData.length; i++) {
                 var data = monitoringData[i];
-                var item = new monitoringItemElement({model:model,"item":data});
+                var item = new monitoringItemElement({
+                    model: this.model,
+                    "item": data
+                });
                 item.render();
                 table.append(item.$el);
                 this.itemList.push(item);
             }
         }
-        
+
         // Put current date/time in form
         var element = this.$el.find("#monitor-date input");
         var dateTime = new Date();
@@ -210,16 +217,16 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
         var minutes = dateTime.getMinutes();
         var hh = (hours < 10) ? ("0" + hours.toString()) : (hours.toString());
         var mm = (minutes < 10) ? ("0" + minutes.toString()) : (minutes.toString());
-       var dateTimeString = dateTime.getFullYear() + "-" +
-            (dateTime.getMonth()+1) + "-" +
+        var dateTimeString = dateTime.getFullYear() + "-" +
+            (dateTime.getMonth() + 1) + "-" +
             dateTime.getDate() + " " +
             hh + ":" +
             mm;
         element.val(dateTimeString);
-        
+
     },
-    
-    getData: function(model) {
+
+    getData: function (model) {
         var form = app.uiController.getFormByName("disease_case_monitoring");
         var formName = form.get("name");
         var formData = form.get("form");
@@ -227,9 +234,9 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
         var newData = {};
         var id = this.model.get("rawData")["@id"];
         newData["case_id"] = id;
-        
+
         // fill in form data
-        
+
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             var name = item["@name"];
@@ -277,8 +284,8 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
                 }
             }
         }
-        model.set(newData);   
-        
+        model.set(newData);
+
     },
 
     onEditCase: function (event) {
@@ -288,7 +295,7 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
     expandCase: function (event) {
         console.log("expand");
         // TODO: first make sure that you didn't push a button
-        
+
     },
 
     navigate: function (event) {
@@ -323,10 +330,10 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
         this.addNewUpdate = false;
         this.$el.find("#monitor-new-update").removeClass("active");
         app.uiController.onUpdateSubmit(this);
-        
+
     },
 
-    setEvents: function() {
+    setEvents: function () {
         this.delegateEvents();
         for (var i = 0; i < this.itemList.length; i++) {
             this.itemList[i].delegateEvents();

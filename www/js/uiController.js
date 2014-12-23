@@ -164,8 +164,12 @@
             var data = JSON.parse(dataTable);
             this.setData(name, data);
             if (name === "cases") {
-                //app.view.getPage("page-cases").update();
+                
                 this.updateCaseList();
+                var visiblePage = app.view.getVisiblePage();
+                if (visiblePage.name === "page-monitoring") {
+                    visiblePage.showCase();
+                }
             }
             this.nextUpdate();
         } else {
@@ -381,27 +385,19 @@
 
     controller.prototype.onFormSubmit = function (page) {
         //console.log("onFormSubmit");
-        //var page = $("#page-new-form");
         var form = this.getFormByName("disease_case");
         var model = form.get("current");
         if (!model) {
             model = form.get("current");
         }
         page.getCaseData(model);
-        //model.submit();
-
+ 
         // Check for new person model
         var personModel = null;
         if (page.addNewPerson) {
             personModel = new mPersonData();
             page.getPersonData(personModel);
             model.person(personModel);
-            //this.updatePersonList(personModel);
-            //this.submitData(personModel);
-
-            //this._submitPerson = personModel;
-            //personModel.submit();
-            //activeForms.add(personModel);
         }
         this.submitData(model);
     };
