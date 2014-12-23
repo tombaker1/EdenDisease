@@ -278,12 +278,9 @@ var mMonitoringData = mFormData.extend({
         c[0] = {};
         var f = c[0];
 
-        // If the model came from the server then it has a uuid
-        if (this.get("uuid")) {
-            f["@uuid"] = this.get("uuid");
-        } else {
-            var dateString = this.get("date"); //(new Date(this.timestamp())).toISOString();
-            f["@created_on"] = dateString;
+        // Put in the monitoring record
+        if (this._parent) {
+            f["@uuid"] = this._parent.get("uuid");
         }
         f["$_disease_case_monitoring"] = {};
         var m = f["$_disease_case_monitoring"];

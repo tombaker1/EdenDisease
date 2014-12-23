@@ -59,7 +59,7 @@
         if (rawData) {
             this._diseaseCaseForm = JSON.parse(rawData);
             this.parseCaseForm();
-        } 
+        }
         // always update in case the server db changed
         this.updateData("case-form");
 
@@ -113,7 +113,7 @@
     };
 
     controller.prototype.nextUpdate = function () {
-        if (this._updateState.active || this._submitState.active || 
+        if (this._updateState.active || this._submitState.active ||
             (this._updateState.list.length === 0) ||
             (this._submitState.list.length)) {
             if (this._submitState.list.length) {
@@ -216,6 +216,7 @@
             {
                 path += config.defaults.caseSubmitPath;
             }
+            break;
         default:
             {
                 alert("Trying to submit an unknow type");
@@ -397,7 +398,7 @@
             model.person(personModel);
             //this.updatePersonList(personModel);
             //this.submitData(personModel);
-           
+
             //this._submitPerson = personModel;
             //personModel.submit();
             //activeForms.add(personModel);
@@ -412,6 +413,7 @@
         var model = form.get("current");
         if (!model) {
             model = new mMonitoringData(form.get("form"));
+            model._parent = page.model;
         }
         page.getData(model);
         //model.submit();
@@ -542,7 +544,7 @@
         // Parse the object into the components
         var caseData = this.parseCaseRecord(obj);
         var modelData = caseData["$_disease_case"][0]["field"];
-        
+
 
         // create model
         var model = new formType({
@@ -552,7 +554,7 @@
             "obj": obj
         });
         formList.add(model);
-        
+
         // create monitoring model
         var monitoringData = caseData["$_disease_case"][0];
         var monitoringModelData = monitoringData["$_disease_case_monitoring"][0]["field"];
@@ -567,7 +569,7 @@
         // Update view
         var page = app.view.getPage("page-new-case");
         page.updateCase(obj);
-        
+
         // Monitoring page
         page = app.view.getPage("page-monitoring");
         page.update(obj);
@@ -762,7 +764,7 @@
         page.showCase(model);
         app.view.changePage("page-monitoring");
     };
-    
+
     var postLocation = function (latitude, longitude) {
         var msg = $("#content-messages").html();
         msg += "latitude: " + latitude + "<br>";

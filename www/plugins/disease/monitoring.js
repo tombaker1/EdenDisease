@@ -206,12 +206,15 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
         // Put current date/time in form
         var element = this.$el.find("#monitor-date input");
         var dateTime = new Date();
-        var y = dateTime.getYear();
-        var dateTimeString = dateTime.getFullYear() + "-" +
+        var hours = dateTime.getHours();
+        var minutes = dateTime.getMinutes();
+        var hh = (hours < 10) ? ("0" + hours.toString()) : (hours.toString());
+        var mm = (minutes < 10) ? ("0" + minutes.toString()) : (minutes.toString());
+       var dateTimeString = dateTime.getFullYear() + "-" +
             (dateTime.getMonth()+1) + "-" +
             dateTime.getDate() + " " +
-            dateTime.getHours() + ":" +
-            dateTime.getMinutes();
+            hh + ":" +
+            mm;
         element.val(dateTimeString);
         
     },
