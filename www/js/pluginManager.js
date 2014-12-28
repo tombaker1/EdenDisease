@@ -25,15 +25,15 @@
 //                  page    - Backbone view page
 //                  utility - Functional code
 // template     - File path for View templates
-// backButton   - Defines if the header has a back button [true/false], default true
 // script       - Javascript code implementing the plugin
 // style        - Plugin specific CSS code
 //
 // Order of loading files.  These are the values of loadState.
-// 1. Template
-// 2. Style
-// 3. Script
-// 4. Complete
+// 1. Config
+// 2. Template
+// 3. Style
+// 4. Script
+// 5. Complete
 //
 
 ;
@@ -85,21 +85,34 @@
         var pluginConfig = config.plugins;
         for (key in pluginConfig) {
             var pluginSpec = pluginConfig[key];
-            var pluginData = {
-                config: pluginSpec.config,
-                rawData: ""
-            };
-            this.plugins[pluginSpec.name] = pluginData;
-            this.pluginLoadList.push({
-                name: pluginSpec.name,
-                loadState: 0
-            });
+            var name = pluginSpec["name"];
+            var pluginData = _.extend(pluginSpec,
+                                      {type:"config",
+                                       loadState:0,
+                                       config: [],
+                                       loadIndex:0,
+                                       configName: pluginSpec["config"]
+                                      });//{
+                //config: pluginSpec, //.config,
+                //name: pluginSpec["name"],
+                //type: "config",
+                //path: pluginSpec["path"],
+                //configName: pluginSpec["config"],
+                //rawData: ""
+            //};
+            //this.plugins[pluginSpec.name] = pluginData;
+            this.pluginLoadList.push(pluginData); //{
+                //loadData: pluginData,
+                //loadState: 0
+            //});
+            this.plugins[name] = pluginData;
 
         }
 
         // Initiate the download
         this.requestData();
     };
+
     pluginManager.prototype.requestData = function () {
         //console.log("pluginManager requestData");
 
@@ -109,71 +122,122 @@
             return;
         }
 
+
         // Check state of plugin
-        var pluginLoading = this.pluginLoadList[0];
-        var currentPlugin = this.plugins[pluginLoading.name];
-        var done = false;
-        var parent = $("#dynamic-load");
-        while (!done) {
-            pluginLoading.loadState++;
-            switch (pluginLoading.loadState) {
-            case 1:
-                {
-                    var path = currentPlugin.config["template"];
-                    if (path) {
-                        var elementString = "<iframe id='data-" +
-                            pluginLoading.name +
-                            "' onload='app.pluginManager.cbLoadComplete()' src='plugins" +
-                            path +
-                            "'  style='display:none'></iframe>";
-                        parent.append(elementString);
-                        done = true;
-                    }
-                }
-                break;
-            case 2:
-                {
-                    var path = currentPlugin.config["style"];
-                    if (path) {
-                        var elementString = "<link href='plugins" + path + "' rel='stylesheet' onload = 'app.pluginManager.cbLoadComplete()'>";
-                        parent.append(elementString);
-                        done = true;
-                    }
-                }
-                break;
-            case 3:
-                {
-                    var path = currentPlugin.config["script"];
-                    if (path) {
-                        var elementString = "<script type='text/javascript'></script>"; // id='script-" +
-                        //pluginLoading.name +
-                        //"'  ></script>";
-                        var element = document.createElement('script'); //$(elementString)[0];
-                        element.type = "text/javascript";
-                        element.onload = this.cbLoadComplete.bind(this);
-                        element.src = "plugins" + path;
-                        var p = document.getElementById("dynamic-load");
-                        p.appendChild(element);
-                        //parent.append(element);
-                        done = true;
-                    }
-                }
-                break;
-            case 4:
-                {
-                    this.pluginLoadList.shift();
-                    if (this.pluginLoadList.length) {
-                        pluginLoading = this.pluginLoadList[0];
-                        currentPlugin = this.plugins[pluginLoading.name];
-                    } else {
-                        // All loads are done
-                        done = true;
-                        this.trigger("plugin-load-complete");
-                    }
-                }
-                break;
+       // var itemLoading = this.pluginLoadList[0];
+        //var itemData = itemLoading["loadData"];
+        /*
+        var type = itemLoading["type"];
+        if (type === "config") {
+            console.log("loading config");
+
+            var path = "/" + itemLoading["name"] + "/" + itemLoading["config"];
+            if (path) {
+                var elementString = "<script type='text/javascript'></script>"; // id='script-" +
+                //pluginLoading.name +
+                //"'  ></script>";
+                var element = document.createElement('script'); //$(elementString)[0];
+                element.type = "text/javascript";
+                element.onload = this.cbLoadComplete.bind(this);
+                element.src = "plugins" + path;
+                var p = document.getElementById("dynamic-load");
+                p.appendChild(element);
+                //parent.append(element);
+                done = true;
             }
-        }
+        } else {
+        */
+            var pluginLoading = this.pluginLoadList[0];
+            var currentPlugin = this.plugins[pluginLoading.name];
+            //var pluginData = currentPlugin["config"][0];
+            var done = false;
+            var parent = $("#dynamic-load");
+            while (!done) {
+                pluginLoading.loadState++;
+                switch (pluginLoading.loadState) {
+                        case 1:
+                        {
+                            var path = "/" + pluginLoading["name"] + "/" + pluginLoading["configName"];
+            if (path) {
+                var elementString = "<script type='text/javascript'></script>"; // id='script-" +
+                //pluginLoading.name +
+                //"'  ></script>";
+                var element = document.createElement('script'); //$(elementString)[0];
+                element.type = "text/javascript";
+                element.onload = this.cbLoadComplete.bind(this);
+                element.src = "plugins" + path;
+                var p = document.getElementById("dynamic-load");
+                p.appendChild(element);
+                //parent.append(element);
+                done = true;
+            }
+                        }
+                        break;
+                case 2:
+                    {
+                        var path = currentPlugin.config["template"];
+                        if (path) {
+                            var elementString = "<iframe id='data-" +
+                                pluginLoading.name +
+                                "' onload='app.pluginManager.cbLoadComplete()' src='plugins" +
+                                path +
+                                "'  style='display:none'></iframe>";
+                            parent.append(elementString);
+                            done = true;
+                        }
+                    }
+                    break;
+                case 3:
+                    {
+                        var path = currentPlugin.config["style"];
+                        if (path) {
+                            var elementString = "<link href='plugins" + path + "' rel='stylesheet' onload = 'app.pluginManager.cbLoadComplete()'>";
+                            parent.append(elementString);
+                            done = true;
+                        }
+                    }
+                    break;
+                case 4:
+                    {
+                        var path = currentPlugin.config["script"];
+                        if (path) {
+                            var elementString = "<script type='text/javascript'></script>"; // id='script-" +
+                            //pluginLoading.name +
+                            //"'  ></script>";
+                            var element = document.createElement('script'); //$(elementString)[0];
+                            element.type = "text/javascript";
+                            element.onload = this.cbLoadComplete.bind(this);
+                            element.src = "plugins" + path;
+                            var p = document.getElementById("dynamic-load");
+                            p.appendChild(element);
+                            //parent.append(element);
+                            done = true;
+                        }
+                    }
+                    break;
+                case 5:
+                    {
+                        var list = 
+                        this.pluginLoadList.shift();
+                        if (this.pluginLoadList.length) {
+                            pluginLoading = this.pluginLoadList[0];
+                            currentPlugin = this.plugins[pluginLoading.name];
+                        } else {
+                            // All loads are done
+                            done = true;
+                            this.trigger("plugin-load-complete");
+                        }
+                    }
+                    break;
+
+                default:
+                {
+                    alert("illegal plugin loading state");
+                }
+                break;
+                                        }
+            }
+        //}
     };
 
     pluginManager.prototype.cbLoadComplete = function () {
@@ -181,32 +245,44 @@
 
         // Get the plugin loading info
         var pluginLoading = this.pluginLoadList[0];
-        var currentPlugin = this.plugins[pluginLoading.name];
-        switch (pluginLoading.loadState) {
-            // template
-        case 1:
-            {
-                var id = "#data-" + pluginLoading.name;
-                var data = $(id).contents().find("xmp").html();
-                currentPlugin.rawData = data;
-            }
-            break;
+        //var itemData = pluginLoading["loadData"];
+        /*
+        var type = itemData["type"];
+        if (type === "config") {
+            console.log("loading config");
+            //this.pluginLoadList.shift();
+        } else {
+        */
+            var currentPlugin = this.plugins[pluginLoading.name];
+            switch (pluginLoading.loadState) {
+            case 1:
+                {}
+                break;
+                // template
+            case 2:
+                {
+                    var id = "#data-" + pluginLoading.name;
+                    var data = $(id).contents().find("xmp").html();
+                    currentPlugin.rawData = data;
+                }
+                break;
 
-            // style
-        case 2:
-            {}
-            break;
+                // style
+            case 3:
+                {}
+                break;
 
-            // script
-        case 3:
-            {}
-            break;
+                // script
+            case 4:
+                {}
+                break;
 
 
-        case 4:
-            {}
-            break;
-        };
+            case 5:
+                {}
+                break;
+            };
+        //}
 
         // Download the next file
         this.requestData();
@@ -217,6 +293,32 @@
         console.log("pluginManager cbLoadComplete");
         return this.plugins[key];
     };
+
+
+    pluginManager.prototype.addPlugin = function (config) {
+        console.log("pluginManager addPlugin");
+        var currentPlugin = this.pluginLoadList[0];
+        currentPlugin["config"] = currentPlugin["config"].concat(config);
+        /*
+        for (var i = 0; i < config.length; i++) {
+            var pluginSpec = config[i];
+            var pluginData = {
+                config: pluginSpec, 
+                name: currentPlugin["loadData"]["name"],
+                type: pluginSpec["type"],
+                //path: pluginSpec["path"],
+                //configName: pluginSpec["config"],
+                rawData: ""
+            };
+            //this.plugins[pluginSpec.name] = pluginData;
+            this.pluginLoadList.push({
+                loadData: pluginData,
+                loadState: 0
+            });
+        }
+        */
+    };
+
     // bind the plugin to jQuery     
     app.pluginManager = new pluginManager();
 

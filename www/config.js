@@ -15,7 +15,29 @@ var config = {
         newMontitoringPath: "/disease/case/case_monitoring/create.s3json",
         loginPath: "/default/user/login"
     },
+    mainMenu: [
+        /*{
+            name:"Cases",
+            page:"page-cases",
+            plugin:"disease"
+        },*/
+        {
+            name:"Settings",
+            page:"page-settings",
+            plugin:"settings"
+        }
+    ],
     plugins: {
+        settings: {
+            name:"settings",
+            //path:"settings",
+            config:"config.js"
+        }/*,
+        disease: {
+            path:"disease",
+            config:"config.js"
+        }*/
+        /*
         settings: {
             name: "settings",
             config: {
@@ -67,6 +89,7 @@ var config = {
                 backButton: false
             }
         }
+        */
     },
     version: "0.2.3"
 };
