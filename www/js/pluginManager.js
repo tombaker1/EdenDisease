@@ -116,6 +116,9 @@
         var pluginLoading = this.pluginLoadList[0];
         var currentPlugin = this.plugins[pluginLoading.name];
         //var pluginData = currentPlugin["config"][0];
+        var index = currentPlugin["loadIndex"];
+        var pluginData = currentPlugin["config"][index];
+                           
         var done = false;
         var parent = $("#dynamic-load");
         while (!done) {
@@ -138,7 +141,7 @@
                 break;
             case 2:
                 {
-                    var path = currentPlugin.config["template"];
+                    var path = pluginData["template"];
                     if (path) {
                         var elementString = "<iframe id='data-" +
                             pluginLoading.name +
@@ -152,7 +155,7 @@
                 break;
             case 3:
                 {
-                    var path = currentPlugin.config["style"];
+                    var path = pluginData["style"];
                     if (path) {
                         var elementString = "<link href='plugins" + path + "' rel='stylesheet' onload = 'app.pluginManager.cbLoadComplete()'>";
                         parent.append(elementString);
@@ -162,7 +165,7 @@
                 break;
             case 4:
                 {
-                    var path = currentPlugin.config["script"];
+                    var path = pluginData["script"];
                     if (path) {
                         var elementString = "<script type='text/javascript'></script>"; // id='script-" +
                         //pluginLoading.name +
