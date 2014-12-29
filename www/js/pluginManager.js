@@ -43,6 +43,7 @@
     function pluginManager() {
         this.plugins = {};
         this.pluginLoadList = [];
+        this.controllers = {};
 
     };
 
@@ -53,10 +54,10 @@
         // Connect to Backbone events
         _.extend(this, Backbone.Events);
 
-        this.loadPlugins();
-
         // Initialize all of the plugins
         this.on("plugin-load-complete", this.createPlugins.bind(this));
+
+        this.loadPlugins();
     };
 
     pluginManager.prototype.createPlugins = function () {
@@ -65,14 +66,38 @@
             var plugin = this.plugins[pluginKey];
             var pageName = "page-" + pluginKey;
             var template = plugin.rawData;
-            var className = plugin.config["classname"];
-            //var tt = window["app"];
-            var pageObject = (window || this)[className];
-            var newPage = new pageObject({
-                name: pageName,
-                content: template
-            });
-            newPage.render();
+            var config = plugin["config"];
+            for (var i = 0; i < config.length; i++) {
+                var data = config[i];
+                var className = data["classname"];
+                var obj = data["object"];
+                switch (data["type"]) {
+                case "page":
+                    {
+                        //var tt = window["app"];
+                        //var pageObject = (window || this)[className];
+                        var newPage = new obj({
+                            name: pageName,
+                            content: template
+                        });
+                        newPage.render();
+                    }
+                    break;
+                case "controller":
+                    {
+                        console.log("start settings");
+                        var controller = new obj;
+                        this.addController(className, controller);                        
+
+                    }
+                    break;
+                default:
+                    {
+                        alert("unknown plugin type " + data["type"]);
+                    }
+                    break;
+                }
+            }
             //$("#dyamic-pages").append(newPage.el);
             app.view.addPage(pageName, newPage);
         }
@@ -118,7 +143,7 @@
         //var pluginData = currentPlugin["config"][0];
         var index = currentPlugin["loadIndex"];
         var pluginData = currentPlugin["config"][index];
-                           
+
         var done = false;
         var parent = $("#dynamic-load");
         while (!done) {
@@ -183,14 +208,22 @@
                 break;
             case 5:
                 {
-                    var list = this.pluginLoadList.shift();
-                    if (this.pluginLoadList.length) {
-                        pluginLoading = this.pluginLoadList[0];
-                        currentPlugin = this.plugins[pluginLoading.name];
+                    var plugin = this.pluginLoadList[0];
+                    plugin.loadIndex++;
+                    if (plugin.loadIndex < plugin.config.length) {
+                        plugin.loadState = 1;
+                        pluginData = currentPlugin["config"][plugin.loadIndex];
                     } else {
-                        // All loads are done
-                        done = true;
-                        this.trigger("plugin-load-complete");
+                        var list = this.pluginLoadList.shift();
+                        if (this.pluginLoadList.length) {
+                            pluginLoading = this.pluginLoadList[0];
+                            currentPlugin = this.plugins[pluginLoading.name];
+                            plugin.loadIndex = 0;
+                        } else {
+                            // All loads are done
+                            done = true;
+                            this.trigger("plugin-load-complete");
+                        }
                     }
                 }
                 break;
@@ -256,6 +289,23 @@
         var currentPlugin = this.pluginLoadList[0];
         currentPlugin["config"] = currentPlugin["config"].concat(config);
 
+    };
+
+    pluginManager.prototype.addObject = function (obj) {
+        console.log("pluginManager addController");
+        var currentPlugin = this.pluginLoadList[0];
+        var config = currentPlugin["config"];
+        var configLoading = config[currentPlugin.loadIndex]
+        configLoading["object"] = obj;
+    };
+
+    pluginManager.prototype.addController = function (name, controller) {
+        console.log("pluginManager addController");
+        this.controllers[name] = controller;
+    };
+
+    pluginManager.prototype.getController = function (name) {
+        return this.controllers[name];
     };
 
     // bind the plugin to jQuery     

@@ -19,7 +19,11 @@
 //  THE SOFTWARE.
 
 
-var settingsPage = Backbone.View.extend({ //pageView.extend({
+
+;
+(function ($, window, document, undefined) {
+    
+    var settingsPage = Backbone.View.extend({ //pageView.extend({
     tagName: "div",
     className: "se-page",
     name: "",
@@ -165,3 +169,8 @@ var settingsPage = Backbone.View.extend({ //pageView.extend({
         this.delegateEvents();
     }
 });
+    
+    
+    app.pluginManager.addObject(settingsPage);
+    
+})(jQuery, window, document);
