@@ -29,7 +29,7 @@
     controller.prototype.init = function (options) {
         console.log("settings controller init");
     };
-    
+
     app.pluginManager.addObject(controller);
-    
+
 })(jQuery, window, document);

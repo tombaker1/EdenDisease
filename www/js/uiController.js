@@ -164,7 +164,7 @@
             var data = JSON.parse(dataTable);
             this.setData(name, data);
             if (name === "cases") {
-                
+
                 this.updateCaseList();
                 var visiblePage = app.view.getVisiblePage();
                 if (visiblePage.name === "page-monitoring") {
@@ -391,7 +391,7 @@
             model = form.get("current");
         }
         page.getCaseData(model);
- 
+
         // Check for new person model
         var personModel = null;
         if (page.addNewPerson) {

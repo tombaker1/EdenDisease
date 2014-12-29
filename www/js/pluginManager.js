@@ -74,20 +74,19 @@
                 switch (data["type"]) {
                 case "page":
                     {
-                        //var tt = window["app"];
-                        //var pageObject = (window || this)[className];
                         var newPage = new obj({
                             name: pageName,
                             content: template
                         });
                         newPage.render();
+                        app.view.addPage(pageName, newPage);
                     }
                     break;
                 case "controller":
                     {
                         console.log("start settings");
                         var controller = new obj;
-                        this.addController(className, controller);                        
+                        this.addController(className, controller);
 
                     }
                     break;
@@ -98,8 +97,6 @@
                     break;
                 }
             }
-            //$("#dyamic-pages").append(newPage.el);
-            app.view.addPage(pageName, newPage);
         }
         $(document).foundation();
         this.trigger("plugin-create-complete");
