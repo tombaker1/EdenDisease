@@ -102,6 +102,16 @@
         this.trigger("plugin-create-complete");
     };
 
+    pluginManager.prototype.initPlugins = function () {
+        // Call init for all plugin controllers
+        for (var controllerName in this.controllers) {
+            var controller = this.controllers[controllerName];
+            if (controller.init) {
+                controller.init();
+            }
+        }
+    };
+
     pluginManager.prototype.loadPlugins = function () {
         console.log("pluginManager loadPlugins");
         var pluginConfig = config.plugins;

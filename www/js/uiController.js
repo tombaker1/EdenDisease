@@ -53,7 +53,7 @@
             this.state = app.state;
         }
         this.getLocation();
-
+/*
         // Load the saved data or initialize data
         var rawData = app.storage.read("case-form");
         if (rawData) {
@@ -90,6 +90,7 @@
 
         // Update the data tables
         this.updateData(["cases", "persons"]);
+        */
 
     };
 

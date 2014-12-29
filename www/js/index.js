@@ -83,16 +83,9 @@ var app = {
     },
     
     onDynamicUIComplete: function() {
-         this.uiController.init({state: this.state});
+        this.uiController.init({state: this.state});
+        this.pluginManager.initPlugins();
         
-        /*
-        document.onTouchMove = function(e) {
-            e.preventDefault();
-        }
-        document.onTouchStart = function(e) {
-            e.preventDefault();
-        }
-        */
     },
     
 
