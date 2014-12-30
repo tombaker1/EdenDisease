@@ -24,6 +24,7 @@
     var plugin = [
         {
             type: "page",
+            name: "settings",
             template: "settings.htm",
             script: "settings.js",
             classname: "settingsPage",

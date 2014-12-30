@@ -19,6 +19,9 @@
 //  THE SOFTWARE.
 
 
+;
+(function ($, window, document, undefined) {
+    
 var newCasePage = Backbone.View.extend({ //pageView.extend({
     tagName: "div",
     className: "se-page",
@@ -217,7 +220,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
                 }
             }
         }
-        
+
         // Reset person form
         this.addNewPerson = !this.addNewPerson;
         this.$el.find("#case-new-person").removeClass("active");
@@ -227,8 +230,8 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
         this.$el.find("#case-date_of_birth > input").val("");;
         this.$el.find("#case-SMS > input").val("");;
         this.$el.find("#case-EMAIL > input").val("");;
-         
-        
+
+
     },
 
     getCaseData: function (model) {
@@ -285,54 +288,54 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
             }
         }
         model.set(newData);
-        
+
     },
 
     getPersonData: function (model) {
         // This is completely ad-hoc because
         // the database record is too complicated to parse
-        var name = "", 
-            element = null, 
-            value = null, 
+        var name = "",
+            element = null,
+            value = null,
             searchString = "";
-        
+
         // Get person name
         name = "person_name";
         searchString = "#case-" + name + " > input";
         element = this.$el.find(searchString).first();
         value = element.val();
-        model.set(name,value);
-        
+        model.set(name, value);
+
         // Get gender
         name = "gender";
         searchString = "#case-" + name + " > select";
         element = this.$el.find(searchString).first();
         value = element.val();
-        model.set(name,value);
-        
+        model.set(name, value);
+
         // Get date_of_birth
         name = "date_of_birth";
         searchString = "#case-" + name + " > input";
         element = this.$el.find(searchString).first();
         value = element.val();
-        model.set(name,value);
-        
+        model.set(name, value);
+
         // Get SMS
         name = "SMS";
         searchString = "#case-" + name + " > input";
         element = this.$el.find(searchString).first();
         value = element.val();
-        model.set(name,value);
-        
+        model.set(name, value);
+
         // Get EMAIL
         name = "EMAIL";
         searchString = "#case-" + name + " > input";
         element = this.$el.find(searchString).first();
         value = element.val();
-        model.set(name,value);
-        
+        model.set(name, value);
+
     },
-    
+
     navigate: function (event) {
         var target = event.currentTarget;
         var path = $(target).attr("link");
@@ -376,3 +379,7 @@ var newCasePage = Backbone.View.extend({ //pageView.extend({
     }
 
 });
+
+app.pluginManager.addObject(newCasePage);
+
+})(jQuery, window, document);

@@ -64,7 +64,6 @@
         for (var pluginKey in this.plugins) {
             console.log("plugin: " + pluginKey);
             var plugin = this.plugins[pluginKey];
-            var pageName = "page-" + pluginKey;
             var template = plugin.rawData;
             var config = plugin["config"];
             for (var i = 0; i < config.length; i++) {
@@ -74,6 +73,7 @@
                 switch (data["type"]) {
                 case "page":
                     {
+                        var pageName = "page-" + data["name"];
                         var newPage = new obj({
                             name: pageName,
                             content: template

@@ -30,13 +30,12 @@ var config = {
     plugins: {
         settings: {
             name:"settings",
-            //path:"settings",
             config:"config.js"
-        }/*,
+        },
         disease: {
             name:"disease",
             config:"config.js"
-        }*/
+        }
         /*
         settings: {
             name: "settings",

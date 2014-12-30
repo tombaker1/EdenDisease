@@ -18,7 +18,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-
+;
+(function ($, window, document, undefined) {
+    
 var monitoringItemElement = Backbone.View.extend({ //pageView.extend({
     tagName: "tr",
     //className: "accordian",
@@ -341,3 +343,7 @@ var monitoringPage = Backbone.View.extend({ //pageView.extend({
     }
 
 });
+
+app.pluginManager.addObject(monitoringPage);
+
+})(jQuery, window, document);

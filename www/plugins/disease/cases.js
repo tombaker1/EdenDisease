@@ -19,22 +19,25 @@
 //  THE SOFTWARE.
 
 
+;
+(function ($, window, document, undefined) {
+    
 var casesItemElement = Backbone.View.extend({ //pageView.extend({
     tagName: "tr",
     //className: "accordian",
     name: "",
     template: _.template("<td class='actions se-column-all'>" +
-                         "<input id='edit' class='edit-button' value='Edit' type='button'>" +
-                         "<input id='monitor' class='edit-button' value='Monitor' type='button'>" +
-                         "</td>" +
+        "<input id='edit' class='edit-button' value='Edit' type='button'>" +
+        "<input id='monitor' class='edit-button' value='Monitor' type='button'>" +
+        "</td>" +
         "<td class='se-column-all'><%= case_number %></td> " +
-        "<td class='se-column-all'><%= name %></td>" + 
-        "<td class='se-column-medium'><%= disease %></td>" + 
-        "<td class='se-column-medium'><%= location %></td>" + 
-        "<td class='se-column-medium'><%= illness_status %></td>" + 
-        "<td class='se-column-large'><%= symptom_debut %></td>" + 
-        "<td class='se-column-large'><%= diagnosis_status %></td>" + 
-        "<td class='se-column-large'><%= diagnosis_date %></td>" + 
+        "<td class='se-column-all'><%= name %></td>" +
+        "<td class='se-column-medium'><%= disease %></td>" +
+        "<td class='se-column-medium'><%= location %></td>" +
+        "<td class='se-column-medium'><%= illness_status %></td>" +
+        "<td class='se-column-large'><%= symptom_debut %></td>" +
+        "<td class='se-column-large'><%= diagnosis_status %></td>" +
+        "<td class='se-column-large'><%= diagnosis_date %></td>" +
         "<td class='se-column-medium'><%= monitoring_level %></td>"
 
     ),
@@ -43,43 +46,42 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
 
         "click input#edit": "onEdit",
         "click input#monitor": "onMonitor"
-        
+
     },
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
         console.log("case item initialize ");
         this._caseData = options["item"];
-        
+
         // Set up model change event
         var model = this.model;
-        model.on("change",this.update.bind(this));
+        model.on("change", this.update.bind(this));
 
     },
     render: function () {
         var caseData = this.model.get("rawData");
         var templateData = {
-            "name":                     this.model.get("name"),
-            "case_number":              this.model.get("case_number"),
-            "disease":                  this.model.get("disease"),
-            "location":                 "-",
+            "name": this.model.get("name"),
+            "case_number": this.model.get("case_number"),
+            "disease": this.model.get("disease"),
+            "location": "-",
             //"illness_status":            caseData["illness_status"]["$"],
-            "symptom_debut":            this.model.get("symptom_debut") || ""//,
+            "symptom_debut": this.model.get("symptom_debut") || "" //,
             //"diagnosis_status":         caseData["diagnosis_status"]["$"],
             //"diagnosis_date":           caseData["diagnosis_date"]["$"],
             //"monitoring_level":         caseData["monitoring_level"]["$"]
         };
-        var fieldList = ["illness_status","diagnosis_status","diagnosis_date","monitoring_level"];
+        var fieldList = ["illness_status", "diagnosis_status", "diagnosis_date", "monitoring_level"];
         for (var i = 0; i < fieldList.length; i++) {
             var fieldName = fieldList[i];
             if (caseData[fieldName]) {
                 templateData[fieldName] = caseData[fieldName]["$"];
-            }
-            else {
+            } else {
                 templateData[fieldName] = "";
             }
         }
         this.$el.html(this.template(templateData));
-        
+
         return this;
     },
 
@@ -87,14 +89,14 @@ var casesItemElement = Backbone.View.extend({ //pageView.extend({
         console.log("updating case list item ");
         this.render();
     },
-    
-    onEdit: function() {
+
+    onEdit: function () {
         console.log("casesItemElement onEdit");
         app.uiController.editCase(this.model);
     },
-    
-    
-    onMonitor: function() {
+
+
+    onMonitor: function () {
         console.log("casesItemElement onEdit");
         app.uiController.caseMonitoring(this.model);
     }
@@ -167,22 +169,24 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
             }
         }
         if (!caseElement) {
-            caseElement = new casesItemElement({model: model});
+            caseElement = new casesItemElement({
+                model: model
+            });
             this.caseList.push(caseElement);
             var tableBody = this.$el.find("tbody");
             tableBody.append(caseElement.$el);
             caseElement.render();
         }
     },
-    
-    removeCase: function(model) {
+
+    removeCase: function (model) {
         // first check to see if the case element already exists
         var caseElement = null;
         for (var i = 0; i < this.caseList.length; i++) {
             if (this.caseList[i].model === model) {
                 caseElement = this.caseList[i];
                 caseElement.remove();
-                this.caseList.splice(i,1);
+                this.caseList.splice(i, 1);
                 break;
             }
         }
@@ -191,7 +195,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     update: function () {
         // TODO: this is obsolete, it will be needed when the cases are refreshed from the server
         return;
-        
+
         var tableBody = this.$el.find("tbody");
         var caseStruct = app.uiController.getData("cases");
         var caseList = caseStruct["$_disease_case"];
@@ -218,7 +222,7 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
     expandCase: function (event) {
         console.log("expand");
         // TODO: first make sure that you didn't push a button
-        
+
     },
 
     navigate: function (event) {
@@ -238,12 +242,15 @@ var casesPage = Backbone.View.extend({ //pageView.extend({
         console.log("onRefreshList ");
         app.uiController.updateData("cases");
     },
-    
-    setEvents: function() {
+
+    setEvents: function () {
         this.delegateEvents();
         for (var i = 0; i < this.caseList.length; i++) {
             this.caseList[i].delegateEvents();
         }
     }
-
 });
+
+app.pluginManager.addObject(casesPage);
+
+})(jQuery, window, document);
