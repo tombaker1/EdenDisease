@@ -24,10 +24,27 @@
     // The actual plugin constructor
     function controller() {
         console.log("settings controller");
+        this._page = null;
     };
 
     controller.prototype.init = function (options) {
         console.log("settings controller init");
+        this._page = app.view.getPage("page-settings");
+        var pageElement = this._page.$el;
+        this._page.controller(this);
+        
+    };
+    
+    controller.prototype.onLoad = function(evt) {
+        console.log("settings controller onLoad");
+    };
+    
+    controller.prototype.onReset = function(evt) {
+        app.onReset();
+    };
+    
+    controller.prototype.onDebug = function(evt) {
+        app.onDebug();
     };
 
     app.pluginManager.addObject(controller);

@@ -59,6 +59,7 @@
         //pageView.prototype.initialize.apply(this,[options]);
         console.log("page initialize " + this.position);
 
+        this._controller = null;
         var content = options["content"];
         if (content) {
             this.setContent(content);
@@ -68,11 +69,20 @@
             this.name = name;
         }
     },
+        
     setContent: function (content) {
         if (content) {
             this.content_template = _.template(content);
         }
     },
+        
+    controller: function(obj) {
+        if (obj) {
+            this._controller = obj;
+        }
+        return this._controller;
+    }, 
+        
     render: function () {
         this.$el.html(this.template({}));
         this.$el.attr({
@@ -137,17 +147,23 @@
 
     onLoad: function (event) {
         console.log("onLoad ");
-        app.onLoad();
+        if (this._controller) {
+            this._controller.onLoad();
+        }
     },
 
     onReset: function (event) {
         console.log("onReset ");
-        app.onReset();
+        if (this._controller) {
+            this._controller.onReset();
+        }
     },
 
     onDebug: function (event) {
         console.log("onDebug ");
-        app.onDebug();
+        if (this._controller) {
+            this._controller.onDebug();
+        }
     },
 
     onURL: function (event) {
