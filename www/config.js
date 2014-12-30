@@ -36,59 +36,6 @@ var config = {
             name:"disease",
             config:"config.js"
         }
-        /*
-        settings: {
-            name: "settings",
-            config: {
-                type: "page",
-                template: "/settings/settings.htm",
-                script: "/settings/settings.js",
-                classname: "settingsPage",
-                backButton: true
-            }
-        },
-        cases: {
-            name: "cases",
-            config: {
-                type: "page",
-                template: "/disease/cases.htm",
-                script: "/disease/cases.js",
-                style: "/disease/cases.css",
-                classname: "casesPage",
-                backButton: true
-            }
-        },
-        newCase: {
-            name: "new-case",
-            config: {
-                type: "page",
-                template: "/disease/new-case.htm",
-                script: "/disease/newCase.js",
-                classname: "newCasePage",
-                backButton: false
-            }
-        },
-        monitoring: {
-            name: "monitoring",
-            config: {
-                type: "page",
-                template: "/disease/monitoring.htm",
-                script: "/disease/monitoring.js",
-                //style: "/disease/cases.css",
-                classname: "monitoringPage",
-                backButton: true
-            }
-        },        newUpdate: {
-            name: "new-update",
-            config: {
-                type: "page",
-                template: "/disease/new-update.htm",
-                script: "/disease/newUpdate.js",
-                classname: "newUpdatePage",
-                backButton: false
-            }
-        }
-        */
     },
     version: "0.2.3"
 };
