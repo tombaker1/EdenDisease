@@ -173,8 +173,9 @@
                 break;
             case 2:
                 {
-                    var path = pluginData["template"];
-                    if (path) {
+                    
+                    if (pluginData["template"]) {
+                        var path = "/" + pluginLoading["name"] + "/" + pluginData["template"];
                         var elementString = "<iframe id='data-" +
                             pluginLoading.name +
                             "' onload='app.pluginManager.cbLoadComplete()' src='plugins" +
@@ -187,8 +188,9 @@
                 break;
             case 3:
                 {
-                    var path = pluginData["style"];
-                    if (path) {
+                    
+                    if (pluginData["style"]) {
+                        var path = "/" + pluginLoading["name"] + "/" + pluginData["style"];
                         var elementString = "<link href='plugins" + path + "' rel='stylesheet' onload = 'app.pluginManager.cbLoadComplete()'>";
                         parent.append(elementString);
                         done = true;
@@ -197,8 +199,9 @@
                 break;
             case 4:
                 {
-                    var path = pluginData["script"];
-                    if (path) {
+                    
+                    if (pluginData["script"]) {
+                        var path = "/" + pluginLoading["name"] + "/" + pluginData["script"];
                         var elementString = "<script type='text/javascript'></script>"; // id='script-" +
                         //pluginLoading.name +
                         //"'  ></script>";

@@ -24,13 +24,13 @@
     var plugin = [
         {
             type: "page",
-            template: "/settings/settings.htm",
-            script: "/settings/settings.js",
+            template: "settings.htm",
+            script: "settings.js",
             classname: "settingsPage",
         },
         {
             type: "controller",
-            script: "/settings/settingsController.js",
+            script: "settingsController.js",
             classname: "settingsController"
         }
     ];

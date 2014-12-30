@@ -16,11 +16,11 @@ var config = {
         loginPath: "/default/user/login"
     },
     mainMenu: [
-        /*{
+        {
             name:"Cases",
             page:"page-cases",
             plugin:"disease"
-        },*/
+        },
         {
             name:"Settings",
             page:"page-settings",
@@ -34,7 +34,7 @@ var config = {
             config:"config.js"
         }/*,
         disease: {
-            path:"disease",
+            name:"disease",
             config:"config.js"
         }*/
         /*
