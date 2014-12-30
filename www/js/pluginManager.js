@@ -64,8 +64,8 @@
         for (var pluginKey in this.plugins) {
             console.log("plugin: " + pluginKey);
             var plugin = this.plugins[pluginKey];
-            var template = plugin.rawData;
             var config = plugin["config"];
+            
             for (var i = 0; i < config.length; i++) {
                 var data = config[i];
                 var className = data["classname"];
@@ -74,6 +74,7 @@
                 case "page":
                     {
                         var pageName = "page-" + data["name"];
+                        var template = data.rawData;
                         var newPage = new obj({
                             name: pageName,
                             content: template
@@ -177,7 +178,7 @@
                     if (pluginData["template"]) {
                         var path = "/" + pluginLoading["name"] + "/" + pluginData["template"];
                         var elementString = "<iframe id='data-" +
-                            pluginLoading.name +
+                            pluginData["name"] +
                             "' onload='app.pluginManager.cbLoadComplete()' src='plugins" +
                             path +
                             "'  style='display:none'></iframe>";
@@ -254,6 +255,7 @@
         // Get the plugin loading info
         var pluginLoading = this.pluginLoadList[0];
         var currentPlugin = this.plugins[pluginLoading.name];
+        var config = currentPlugin.config[currentPlugin.loadIndex];
         switch (pluginLoading.loadState) {
         case 1:
             {}
@@ -261,9 +263,9 @@
             // template
         case 2:
             {
-                var id = "#data-" + pluginLoading.name;
+                var id = "#data-" + config["name"];
                 var data = $(id).contents().find("xmp").html();
-                currentPlugin.rawData = data;
+                config.rawData = data;
             }
             break;
 

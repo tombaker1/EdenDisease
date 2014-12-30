@@ -53,7 +53,7 @@
             this.state = app.state;
         }
         this.getLocation();
-/*
+
         // Load the saved data or initialize data
         var rawData = app.storage.read("case-form");
         if (rawData) {
@@ -90,8 +90,7 @@
 
         // Update the data tables
         this.updateData(["cases", "persons"]);
-        */
-
+        
     };
 
     controller.prototype.getData = function (tableName) {
@@ -775,7 +774,8 @@
                 /*this.*/
                 postLocation(position.coords.latitude, position.coords.longitude);
             }, function () {
-                alert("location failed");
+                //alert("location failed");
+                console.log("location failed");
             });
         } else {
             /* geolocation IS NOT available */
