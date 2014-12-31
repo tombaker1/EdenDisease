@@ -104,7 +104,7 @@
     };
 
     controller.prototype.setControllerByModel = function (name, controller) {
-        this._modelMap[tableName] = controller;
+        this._modelMap[name] = controller;
     };
     controller.prototype.getData = function (tableName) {
         var table = this._dataTable[tableName];
@@ -357,6 +357,10 @@
         } else {
             app.loginDialog.onError(message);
         }
+    };
+
+    controller.prototype.addForm = function (model) {
+        this._formList.add(model);
     };
 
     controller.prototype.getFormByName = function (name) {
