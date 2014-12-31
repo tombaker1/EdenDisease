@@ -101,7 +101,7 @@
 
     };
 
-    controller.prototype.cbUpdateData = function (status, dataTable) {
+    controller.prototype.cbUpdateData = function (status, rawData) {
         //TODO update data
         app.view.hideNotifyMessage("Loading forms.");
         var item = this._updateState.list.shift();
@@ -109,10 +109,10 @@
         var controller = item["controller"];
         this._updateState.active = false;
         if (status) {
-            var data = JSON.parse(dataTable);
+            var data = JSON.parse(rawData);
             this.setData(name, data);
             if (controller.updateData) {
-                controller.updateData(name, data);
+                controller.updateData(name, data, rawData);
             }
             this.nextUpdate();
         } else {
