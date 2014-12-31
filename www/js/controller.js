@@ -33,6 +33,7 @@
         this._diseasePersonForm = null;
         */
         this._dataTable = {};
+        this._modelMap = {};
         this._updateState = {
             active: false,
             list: [],
@@ -97,6 +98,14 @@
         */
     };
 
+    controller.prototype.getControllerByModel = function (name) {
+        var controller = this._modelMap[name];
+        return controller;
+    };
+
+    controller.prototype.setControllerByModel = function (name, controller) {
+        this._modelMap[tableName] = controller;
+    };
     controller.prototype.getData = function (tableName) {
         var table = this._dataTable[tableName];
         return table;
@@ -200,6 +209,10 @@
         }
     };
 
+    controller.prototype.updateAll = function () {
+        alert("controller::updateAll not defined, should request update from all controllers, or modesl???");
+    };
+
     //-------------------------------------------------------------------------
     //
     //  Data submission queue
@@ -215,9 +228,10 @@
             return;
         }
         if (this._submitState.list.length === 0) {
-            this.updateData("case-form");
-            this.updateData("cases");
+            //this.updateData("case-form");
+            //this.updateData("cases");
             //this.nextUpdate();
+            this.updateAll();
             return;
         }
 
@@ -225,7 +239,10 @@
         var model = this._submitState.list[0];
         var type = model._type;
         var path = this.getHostURL();
-        var data = model.sendData();;
+        var data = model.sendData();
+        var controller = this.getControllerByModel(type);
+        path += controller.submitPath(type);
+        /*
         switch (type) {
         case "case":
             {
@@ -249,6 +266,7 @@
                 return;
             }
         }
+        */
         app.commHandler.submitData(path, this.cbSubmitData.bind(this), data);
     };
 
@@ -261,6 +279,10 @@
             //var data = JSON.parse(dataTable);
             //this.setData(name, data);
             model.needsUpdate(false);
+            var type = model.type();
+            var controller = this.getControllerByModel(type);
+            controller.submitResponse(status,model);
+           
             /*
             switch (type) {
             case "case":
