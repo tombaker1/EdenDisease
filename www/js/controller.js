@@ -28,10 +28,6 @@
         this._defaults = {};
         this._formList = new Backbone.Collection;
         this._activeForms = new mActiveFormList([]);
-        /*
-        this._diseaseCaseForm = null;
-        this._diseasePersonForm = null;
-        */
         this._dataTable = {};
         this._modelMap = {};
         this._updateState = {
@@ -44,10 +40,6 @@
             list: [],
             name: ""
         };
-        //this._caseList = {};
-        //this._newPersonList = [];
-        //this._submitPerson = null;
-
 
     };
 
@@ -58,44 +50,7 @@
             this.state = app.state;
         }
         this.getLocation();
-/*
-        // Load the saved data or initialize data
-        var rawData = app.storage.read("case-form");
-        if (rawData) {
-            this._diseaseCaseForm = JSON.parse(rawData);
-            this.parseCaseForm();
-        }
-        // always update in case the server db changed
-        this.updateData("case-form");
 
-        // Load person form
-        rawData = app.storage.read("person-form");
-        if (rawData) {
-            this._diseasePersonForm = JSON.parse(rawData);
-            this.parsePersonForm();
-        } else {
-            this.updateData("person-form");
-        }
-
-        // Read stored models
-        var page = app.view.getPage("page-cases");
-        var fileNames = app.storage.list();
-        for (var i = 0; i < fileNames.length; i++) {
-            var key = fileNames[i];
-            if (key.indexOf("data-") >= 0) {
-                var dataString = app.storage.read(key);
-                var data = JSON.parse(dataString);
-                var model = new mCaseData(data);
-                var timestamp = Date.parse(data["rawData"]["@modified_on"]);
-                model.timestamp(timestamp);
-                this._caseList[model.get("uuid")] = model;
-                page.setCase(model);
-            }
-        }
-
-        // Update the data tables
-        this.updateData(["cases", "persons"]);
-        */
     };
 
     controller.prototype.getControllerByModel = function (name) {
@@ -142,39 +97,7 @@
         if (controller) {
             controller.updateRequest(name);
         }
-        /*
-        var path = this.getHostURL();
-        switch (name) {
-        case "case-form":
-            {
-                this.loadCaseForm();
-                return;
-            }
-            break;
-        case "person-form":
-            {
-                this.loadPersonForm();
-                return;
-            }
-            break;
-        case "cases":
-            {
-                path += config.defaults.caseListPath; //"/disease/case.json";
-            }
-            break;
-        case "persons":
-            {
-                path += config.defaults.personListPath; //"/pr/person.json";
-            }
-            break;
-        default:
-            {
-                alert("nope");
-            }
-        }
 
-        app.commHandler.requestData(path, this.cbUpdateData.bind(this));
-        */
     };
 
     controller.prototype.cbUpdateData = function (status, dataTable) {
@@ -189,18 +112,6 @@
             if (controller.updateData) {
                 controller.updateData(name);
             }
-            /*
-            var data = JSON.parse(dataTable);
-            this.setData(name, data);
-            if (name === "cases") {
-
-                this.updateCaseList();
-                var visiblePage = app.view.getVisiblePage();
-                if (visiblePage.name === "page-monitoring") {
-                    visiblePage.showCase();
-                }
-            }
-            */
             this.nextUpdate();
         } else {
             //alert("Communication failure " + name); //TODO: do the right thing
@@ -228,9 +139,6 @@
             return;
         }
         if (this._submitState.list.length === 0) {
-            //this.updateData("case-form");
-            //this.updateData("cases");
-            //this.nextUpdate();
             this.updateAll();
             return;
         }
@@ -242,31 +150,6 @@
         var data = model.sendData();
         var controller = this.getControllerByModel(type);
         path += controller.submitPath(type);
-        /*
-        switch (type) {
-        case "case":
-            {
-                path += config.defaults.caseSubmitPath;
-            }
-            break;
-        case "person":
-            {
-                path += config.defaults.personSubmitPath;
-            }
-            break;
-        case "monitor":
-            {
-                path += config.defaults.caseSubmitPath;
-            }
-            break;
-        default:
-            {
-                alert("Trying to submit an unknow type");
-                active = false;
-                return;
-            }
-        }
-        */
         app.commHandler.submitData(path, this.cbSubmitData.bind(this), data);
     };
 
@@ -283,20 +166,6 @@
             var controller = this.getControllerByModel(type);
             controller.submitResponse(status,model);
            
-            /*
-            switch (type) {
-            case "case":
-                {
-                    this.cbFormSendComplete(status, model);
-                }
-                break;
-            case "person":
-                {
-                    this.cbFormSendComplete(status, model);
-                }
-                break;
-            }
-            */
             this.nextSubmit();
         } else {
             //alert("Communication failure " + name); //TODO: do the right thing
@@ -318,7 +187,6 @@
             var path = list[i];
             app.storage.delete(path);
         }
-        //window.requestAnimationFrame(function() {app.view.confirm.show()});
     };
 
 
@@ -327,9 +195,9 @@
         var url = "";
         var serverUrl = app.state.settings.serverInfo.get("url");
         if (this.state.settings.source === 1) {
-            url = serverUrl; // + config.defaults.formList;
+            url = serverUrl; 
         } else {
-            url = serverUrl; // + "/xforms/" + config.defaults.formList;
+            url = serverUrl; 
         }
         return url;
 
@@ -382,7 +250,6 @@
     controller.prototype.getLocation = function () {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(function (position) {
-                /*this.*/
                 postLocation(position.coords.latitude, position.coords.longitude);
             }, function () {
                 //alert("location failed");
