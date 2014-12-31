@@ -76,7 +76,7 @@
         //var formListURL = url;  // don't need to do anything here
         reqState.type = "data";
         reqState.callback = app.uiController.cbUpdateData.bind(app.uiController);
-        reqState.controller = controller;
+        //reqState.controller = controller;
         xhr.onload = this.cbRequestData.bind(this);
         xhr.open("get", url, true);
         try {
