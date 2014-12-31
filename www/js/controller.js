@@ -95,6 +95,7 @@
         var name = item["name"];
         var controller = item["controller"];
         if (controller) {
+            app.view.notifyMessage("Loading...", "Loading forms.");
             controller.updateRequest(name);
         }
 
@@ -102,6 +103,7 @@
 
     controller.prototype.cbUpdateData = function (status, dataTable) {
         //TODO update data
+        app.view.hideNotifyMessage("Loading forms.");
         var item = this._updateState.list.shift();
         var name = item["name"];
         var controller = item["controller"];
@@ -110,7 +112,7 @@
             var data = JSON.parse(dataTable);
             this.setData(name, data);
             if (controller.updateData) {
-                controller.updateData(name);
+                controller.updateData(name, data);
             }
             this.nextUpdate();
         } else {
