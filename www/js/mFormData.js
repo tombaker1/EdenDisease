@@ -76,7 +76,7 @@ var mFormData = Backbone.Model.extend({
         }
         return this.get("_name");
     },
-/*
+    /*
     person: function (_person) {
         if (_person) {
             this._person = _person;
@@ -84,10 +84,10 @@ var mFormData = Backbone.Model.extend({
         return this._person;
     },
 */
-    type: function(_type) {
+    type: function (_type) {
         return this._type;
     },
-    
+
     timestamp: function (_timestamp) {
         if (_timestamp) {
             this._timestamp = _timestamp;
@@ -129,4 +129,3 @@ var mActiveFormList = Backbone.Collection.extend({
         }
     }
 });
-
