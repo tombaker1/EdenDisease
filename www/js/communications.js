@@ -29,7 +29,8 @@
     var reqState = {
         type: "",
         data: null,
-        callback: null
+        callback: null,
+        controller: null
     };
 
     // The actual plugin constructor
@@ -71,10 +72,11 @@
 
     };
 
-    communicator.prototype.requestData = function (url, cb) {
+    communicator.prototype.requestData = function (url) {
         //var formListURL = url;  // don't need to do anything here
         reqState.type = "data";
-        reqState.callback = cb;
+        reqState.callback = app.uiController.cbUpdateData.bind(app.uiController);
+        reqState.controller = controller;
         xhr.onload = this.cbRequestData.bind(this);
         xhr.open("get", url, true);
         try {

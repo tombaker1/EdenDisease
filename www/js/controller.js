@@ -26,8 +26,12 @@
     function controller() {
 
         this._defaults = {};
+        this._formList = new Backbone.Collection;
+        this._activeForms = new mActiveFormList([]);
+        /*
         this._diseaseCaseForm = null;
         this._diseasePersonForm = null;
+        */
         this._dataTable = {};
         this._updateState = {
             active: false,
@@ -39,9 +43,9 @@
             list: [],
             name: ""
         };
-        this._caseList = {};
-        this._newPersonList = [];
-        this._submitPerson = null;
+        //this._caseList = {};
+        //this._newPersonList = [];
+        //this._submitPerson = null;
 
 
     };
@@ -53,7 +57,7 @@
             this.state = app.state;
         }
         this.getLocation();
-
+/*
         // Load the saved data or initialize data
         var rawData = app.storage.read("case-form");
         if (rawData) {
@@ -90,7 +94,7 @@
 
         // Update the data tables
         this.updateData(["cases", "persons"]);
-        
+        */
     };
 
     controller.prototype.getData = function (tableName) {
@@ -123,7 +127,13 @@
         }
 
         this._updateState.active = true;
-        var name = this._updateState.list[0];
+        var item =  this._updateState.list[0];
+        var name = item["name"];
+        var controller = item["controller"];
+        if (controller) {
+            controller.updateRequest(name);
+        }
+        /*
         var path = this.getHostURL();
         switch (name) {
         case "case-form":
@@ -153,14 +163,24 @@
                 alert("nope");
             }
         }
+
         app.commHandler.requestData(path, this.cbUpdateData.bind(this));
+        */
     };
 
     controller.prototype.cbUpdateData = function (status, dataTable) {
         //TODO update data
-        var name = this._updateState.list.shift();
+        var item = this._updateState.list.shift();
+        var name = item["name"];
+        var controller = item["controller"];
         this._updateState.active = false;
         if (status) {
+            var data = JSON.parse(dataTable);
+            this.setData(name, data);
+            if (controller.updateData) {
+                controller.updateData(name);
+            }
+            /*
             var data = JSON.parse(dataTable);
             this.setData(name, data);
             if (name === "cases") {
@@ -171,6 +191,7 @@
                     visiblePage.showCase();
                 }
             }
+            */
             this.nextUpdate();
         } else {
             //alert("Communication failure " + name); //TODO: do the right thing
@@ -362,8 +383,8 @@
         }
         page.getModelData(model);
 
-        if (!activeForms.contains(model)) {
-            activeForms.add(model);
+        if (!this._activeForms.contains(model)) {
+            this._activeForms.add(model);
             model.sync('create', model, {
                 local: true
             });
@@ -549,7 +570,7 @@
             "data": caseData,
             "obj": obj
         });
-        formList.add(model);
+        this._formList.add(model);
 
         // create monitoring model
         var monitoringData = caseData["$_disease_case"][0];
@@ -560,7 +581,7 @@
             "data": monitoringData,
             "obj": obj
         });
-        formList.add(monitoringModel);
+        this._formList.add(monitoringModel);
 
         // Update view
         var page = app.view.getPage("page-new-case");
@@ -594,7 +615,7 @@
             "data": results,
             "obj": obj
         });
-        formList.add(model);
+        this._formList.add(model);
 
         // Update view
         var page = app.view.getPage("page-new-case");
@@ -706,9 +727,9 @@
     };
 
     controller.prototype.getFormByName = function (name) {
-        for (var i = 0; i < formList.length; i++) {
-            if (name === formList.at(i).get("name")) {
-                return formList.at(i);
+        for (var i = 0; i < this._formList.length; i++) {
+            if (name === this._formList.at(i).get("name")) {
+                return this._formList.at(i);
             }
         }
         return null;

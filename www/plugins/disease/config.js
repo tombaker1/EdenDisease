@@ -49,6 +49,12 @@
             //style: "cases.css",
             classname: "monitoringPage",
             backButton: true
-        }];
+        },
+        {
+            type: "controller",
+            script: "diseaseController.js",
+            classname: "diseaseController"
+        }
+    ];
     app.pluginManager.addPlugin(plugin);
 })(jQuery, window, document);
