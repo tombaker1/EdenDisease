@@ -661,27 +661,6 @@
         return model;
 
     };
-    /*
-
-    var cbDiseaseCase = function (success, rawData) {
-
-        if (!success) {
-            // TODO: print an error message here
-            return;
-        }
-        // Save the form to local memory
-        var filename = "disease-case";
-        //localStorage.setItem(filename,xmlFile);
-        app.storage.write(filename, rawData);
-        var objData = JSON.parse(rawData);
-
-        // put the list of forms into the page
-        // TODO: parse the forms here
-        //app.view.insertForms(app.commHandler.getAllForms());
-        app.view.confirm.setText("Load", "Load Complete");
-        app.view.confirm.show();
-    }
-*/
 
     controller.prototype.onFormSubmit = function (page) {
         //console.log("onFormSubmit");
