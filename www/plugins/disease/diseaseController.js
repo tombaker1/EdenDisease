@@ -713,6 +713,21 @@
         }
         app.uiController.submitData(model);
     };
+
+    controller.prototype.onUpdateSubmit = function (page) {
+        //console.log("onFormSubmit");
+        //var page = $("#page-new-form");
+        var form = app.uiController.getFormByName("disease_case_monitoring");
+        var model = form.get("current");
+        if (!model) {
+            model = new mMonitoringData(form.get("form"));
+            model._parent = page.model;
+        }
+        page.getData(model);
+        //model.submit();
+
+        app.uiController.submitData(model);
+    };
 /*
     controller.prototype.cbFormSendComplete = function (status, model) {
         if (status) {
