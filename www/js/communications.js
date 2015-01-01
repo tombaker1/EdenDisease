@@ -75,7 +75,7 @@
     communicator.prototype.requestData = function (url) {
         //var formListURL = url;  // don't need to do anything here
         reqState.type = "data";
-        reqState.callback = app.uiController.cbUpdateData.bind(app.uiController);
+        reqState.callback = app.controller.cbUpdateData.bind(app.controller);
         //reqState.controller = controller;
         xhr.onload = this.cbRequestData.bind(this);
         xhr.open("get", url, true);
@@ -158,7 +158,7 @@
         var jsonDocument = model.sendData(); //this.createJSONData(model);
 
         // create url to send to
-        var serverUrl = app.uiController.getHostURL();
+        var serverUrl = app.controller.getHostURL();
         var urlSubmit = serverUrl + "/disease/case.s3json";
 
         // create authentication
@@ -189,7 +189,7 @@
         //var jsonDocument = model.sendData(); //this.createJSONData(model);
 
         // create url to send to
-        //var serverUrl = app.uiController.getHostURL();
+        //var serverUrl = app.controller.getHostURL();
         //var urlSubmit = serverUrl + "/disease/case.s3json";
 
         // create authentication

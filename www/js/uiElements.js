@@ -185,7 +185,7 @@ var loginDialog= Backbone.View.extend({
             "password": this.$el.find("#password").val()
         };
         //this.hide();
-        app.uiController.login(params);
+        app.controller.login(params);
     },
     onError: function(message) {
         console.log("login dialog error " + message);

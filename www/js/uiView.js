@@ -153,7 +153,7 @@
         //var form = page.model;
         //var formData = form.get("form");
         //var model = form.get("current");
-        var form = app.uiController.getFormByName("disease_case");
+        var form = app.controller.getFormByName("disease_case");
         var formName = form.get("name");
         var formData = form.get("form");
         var data = form.get("obj")["$_" + formName][0]["field"];
@@ -300,7 +300,7 @@
     view.prototype.onResetOK = function (event) {
         //console.log("onResetOK");
         $("#reset-dialog").popup("close");
-        //app.uiController.onReset();
+        //app.controller.onReset();
         app.reset();
     };
 

@@ -235,7 +235,7 @@
         },
 
         getCaseData: function (model) {
-            var form = app.uiController.getFormByName("disease_case");
+            var form = app.controller.getFormByName("disease_case");
             var formName = form.get("name");
             var formData = form.get("form");
             var data = form.get("obj")["$_" + formName][0]["field"];
@@ -364,7 +364,7 @@
 
         onSubmit: function (event) {
             console.log("onSubmit ");
-            var controller = app.uiController.getControllerByModel("case");
+            var controller = app.controller.getControllerByModel("case");
             controller.onFormSubmit(this);
             app.view.changePage("page-back");
         },

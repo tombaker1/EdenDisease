@@ -28,13 +28,13 @@ Backbone.sync = function(method, model, options) {
     case 'create':
         console.log("create");
         var path = model.getKey(); //"data-" + model.getKey();
-        if (app.uiController.state.offline || options["local"]) {
+        if (app.controller.state.offline || options["local"]) {
             //var vv = JSON.stringify(model);
             localStorage.setItem(path,JSON.stringify(model));
-            app.uiController.cbFormSendComplete(false,model);
+            app.controller.cbFormSendComplete(false,model);
         }
         else {
-            var controller = app.uiController;
+            var controller = app.controller;
             app.commHandler.sendModel(model,controller.cbFormSendComplete.bind(controller), options);
         }
         //localStorage.setItem(path,JSON.stringify(model));
@@ -45,7 +45,7 @@ Backbone.sync = function(method, model, options) {
         //var path = "data-" + model.getKey();
         //localStorage.setItem(path,JSON.stringify(model));
         app.commHandler.sendModel(model,
-                                  app.uiController.cbFormSendComplete.bind(app.uiController), 
+                                  app.controller.cbFormSendComplete.bind(app.controller), 
                                   options);
     break;
 

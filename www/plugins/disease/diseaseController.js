@@ -55,7 +55,7 @@
             var changed = this.changed;
 
             //var controller = app.pluginManager.getController("disease");
-            var form = app.uiController.getFormByName("disease_case");
+            var form = app.controller.getFormByName("disease_case");
             var defaultForm = form.get("form");
 
             var data = form.get("obj")["$_disease_case"][0]["field"];
@@ -215,7 +215,7 @@
 
             var changed = this.changed;
 
-            var form = app.uiController.getFormByName("disease_case_monitoring");
+            var form = app.controller.getFormByName("disease_case_monitoring");
             var defaultForm = form.get("form");
 
             var data = form.get("obj")["$_disease_case"][0]["$_disease_case_monitoring"][0]["field"];
@@ -257,11 +257,11 @@
         console.log("settings controller init");
 
         // Register models for this controller
-        app.uiController.setControllerByModel("case-form", this);
-        app.uiController.setControllerByModel("person-form", this);
-        app.uiController.setControllerByModel("case", this);
-        app.uiController.setControllerByModel("person", this);
-        app.uiController.setControllerByModel("monitor", this);
+        app.controller.setControllerByModel("case-form", this);
+        app.controller.setControllerByModel("person-form", this);
+        app.controller.setControllerByModel("case", this);
+        app.controller.setControllerByModel("person", this);
+        app.controller.setControllerByModel("monitor", this);
 
         //this._page = app.view.getPage("page-settings");
         //var pageElement = this._page.$el;
@@ -279,7 +279,7 @@
             this._diseasePersonForm = JSON.parse(rawData);
             this.parsePersonForm();
         } else {
-            app.uiController.updateData({
+            app.controller.updateData({
                 name: "person-form",
                 controller: this
             });
@@ -307,7 +307,7 @@
 
     controller.prototype.updateRequest = function (name) {
         console.log("settings controller onLoad");
-        var path = app.uiController.getHostURL();
+        var path = app.controller.getHostURL();
         switch (name) {
         case "case-form":
             {
@@ -406,7 +406,7 @@
         switch (type) {
         case "case":
             {
-                app.uiController.updateData({name: "cases",controller: this});
+                app.controller.updateData({name: "cases",controller: this});
             }
             break;
         case "person":
@@ -421,7 +421,7 @@
 
     controller.prototype.updateCaseList = function () {
         var page = app.view.getPage("page-cases");
-        var caseStruct = app.uiController.getData("cases");
+        var caseStruct = app.controller.getData("cases");
         var serverCases = caseStruct["$_disease_case"];
 
         // Initialize list server state to detect deleted items
@@ -496,14 +496,14 @@
 
     controller.prototype.loadCaseForm = function (event) {
         console.log("loadCaseForm");
-        var url = app.uiController.getHostURL() + config.defaults.caseFormPath;
+        var url = app.controller.getHostURL() + config.defaults.caseFormPath;
         app.view.notifyMessage("Loading...", "Loading forms.");
         app.commHandler.requestForm(url, this.cbCaseFormLoadComplete.bind(this));
     };
 
     controller.prototype.loadPersonForm = function (event) {
         console.log("loadPersonForm");
-        var url = app.uiController.getHostURL() + config.defaults.personFormPath;
+        var url = app.controller.getHostURL() + config.defaults.personFormPath;
         app.view.notifyMessage("Loading...", "Loading forms.");
         app.commHandler.requestForm(url, this.cbPersonFormLoadComplete.bind(this));
 
@@ -607,7 +607,7 @@
             "data": caseData,
             "obj": obj
         });
-        app.uiController.addForm(model);
+        app.controller.addForm(model);
 
         // create monitoring model
         var monitoringData = caseData["$_disease_case"][0];
@@ -618,7 +618,7 @@
             "data": monitoringData,
             "obj": obj
         });
-        app.uiController.addForm(monitoringModel);
+        app.controller.addForm(monitoringModel);
 
         // Update view
         var page = app.view.getPage("page-new-case");
@@ -652,7 +652,7 @@
             "data": results,
             "obj": obj
         });
-        app.uiController.addForm(model);
+        app.controller.addForm(model);
 
         // Update view
         var page = app.view.getPage("page-new-case");
@@ -664,7 +664,7 @@
 
     controller.prototype.onFormSubmit = function (page) {
         //console.log("onFormSubmit");
-        var form = app.uiController.getFormByName("disease_case");
+        var form = app.controller.getFormByName("disease_case");
         var model = form.get("current");
         if (!model) {
             model = form.get("current");
@@ -678,13 +678,13 @@
             page.getPersonData(personModel);
             model.person(personModel);
         }
-        app.uiController.submitData(model);
+        app.controller.submitData(model);
     };
 
     controller.prototype.onUpdateSubmit = function (page) {
         //console.log("onFormSubmit");
         //var page = $("#page-new-form");
-        var form = app.uiController.getFormByName("disease_case_monitoring");
+        var form = app.controller.getFormByName("disease_case_monitoring");
         var model = form.get("current");
         if (!model) {
             model = new mMonitoringData(form.get("form"));
@@ -693,11 +693,11 @@
         page.getData(model);
         //model.submit();
 
-        app.uiController.submitData(model);
+        app.controller.submitData(model);
     };
     
         controller.prototype.updateAll = function () {
-            app.uiController.updateData([{
+            app.controller.updateData([{
                 name: "case-form",
                 controller: this
             },
@@ -726,7 +726,7 @@
     };
 */
     controller.prototype.newCase = function () {
-        var form = app.uiController.getFormByName("disease_case");
+        var form = app.controller.getFormByName("disease_case");
         var model = new mCaseData(form.get("form"));
         model.timestamp(Date.now());
         form.set("current", model);
@@ -746,7 +746,7 @@
     }
 
     controller.prototype.newMonitor = function () {
-        var form = app.uiControllergetFormByName("disease_case_monitoring");
+        var form = app.controllergetFormByName("disease_case_monitoring");
         var model = new mCaseData(form.get("form"));
         model.timestamp(Date.now());
         form.set("current", model);
@@ -756,7 +756,7 @@
     }
 
     controller.prototype.editCase = function (model) {
-        var form = app.uiController.getFormByName("disease_case");
+        var form = app.controller.getFormByName("disease_case");
         var page = app.view.getPage("page-new-case");
         form.set("current", model);
         page.showForm(form, model);

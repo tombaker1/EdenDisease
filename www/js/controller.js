@@ -271,6 +271,6 @@
     var localController = new controller();
 
     // bind the plugin to jQuery     
-    app.uiController = localController;
+    app.controller = localController;
 
 })(jQuery, window, document);

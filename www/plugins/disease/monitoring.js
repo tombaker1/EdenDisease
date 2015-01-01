@@ -76,7 +76,7 @@
 
         onEdit: function () {
             console.log("monitoringItemElement onEdit");
-            //app.uiController.editCase(this.model);
+            //app.controller.editCase(this.model);
         }
 
 
@@ -229,7 +229,7 @@
         },
 
         getData: function (model) {
-            var form = app.uiController.getFormByName("disease_case_monitoring");
+            var form = app.controller.getFormByName("disease_case_monitoring");
             var formName = form.get("name");
             var formData = form.get("form");
             var data = form.get("obj")["$_disease_case"][0]["$_" + formName][0]["field"];
@@ -331,7 +331,7 @@
             console.log("onSubmit ");
             this.addNewUpdate = false;
             this.$el.find("#monitor-new-update").removeClass("active");
-            var controller = app.uiController.getControllerByModel("monitor");
+            var controller = app.controller.getControllerByModel("monitor");
             controller.onUpdateSubmit(this);
 
         },

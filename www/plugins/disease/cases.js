@@ -92,14 +92,14 @@
 
         onEdit: function () {
             console.log("casesItemElement onEdit");
-            var controller = app.uiController.getControllerByModel("case");
+            var controller = app.controller.getControllerByModel("case");
             controller.editCase(this.model);
         },
 
 
         onMonitor: function () {
             console.log("casesItemElement onEdit");
-            var controller = app.uiController.getControllerByModel("case");
+            var controller = app.controller.getControllerByModel("case");
             controller.caseMonitoring(this.model);
         }
     });
@@ -199,7 +199,7 @@
             return;
 
             var tableBody = this.$el.find("tbody");
-            var caseStruct = app.uiController.getData("cases");
+            var caseStruct = app.controller.getData("cases");
             var caseList = caseStruct["$_disease_case"];
 
             // create all of the case items
@@ -236,14 +236,14 @@
 
         onNewCase: function (event) {
             console.log("onNewCase ");
-            var controller = app.uiController.getControllerByModel("case");
+            var controller = app.controller.getControllerByModel("case");
             controller.newCase();
             this.trigger("navigate", "page-new-case");
         },
 
         onRefreshList: function (event) {
             console.log("onRefreshList ");
-            var controller = app.uiController.getControllerByModel("case");
+            var controller = app.controller.getControllerByModel("case");
             controller.updateData("cases");
         },
 

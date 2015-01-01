@@ -20,7 +20,7 @@
 
 var app = {
     commHandler: null,
-    uiController: null,
+    controller: null,
     view: null,
     storage: null,
     state: {
@@ -56,7 +56,7 @@ var app = {
         this.getState();
         this.view.init();
         this.loginDialog = new loginDialog();
-        //this.uiController.init({state: this.state});
+        //this.controller.init({state: this.state});
         this.pluginManager.init();
         this.pluginManager.on("plugin-create-complete",this.onDynamicUIComplete.bind(this));
         $(document).foundation();
@@ -83,14 +83,14 @@ var app = {
     },
     
     onDynamicUIComplete: function() {
-        this.uiController.init({state: this.state});
+        this.controller.init({state: this.state});
         this.pluginManager.initPlugins();
         
     },
     
 
     onLoad: function() {
-        this.uiController.loadForm();
+        this.controller.loadForm();
     },
     
     onDebug: function() {
@@ -99,11 +99,11 @@ var app = {
     },
     
     onReset: function() {
-        this.uiController.resetAll();
+        this.controller.resetAll();
     },
     
     reset: function() {
-        this.uiController.onReset();
+        this.controller.onReset();
         this.view.reset();
         this.view.confirm.setText("Reset All","Reset Complete");
         setTimeout(this.view.confirm.show.bind(this.view.confirm),20);
