@@ -105,30 +105,7 @@
 
     };
 
-    communicator.prototype.requestForm = function (url, cb) {
-        reqState.type = "request-form";
-        reqState.callback = cb;
-        reqState.data = "load-form";
-
-        // send
-        var username = app.state.settings.serverInfo.get("username");
-        var password = app.state.settings.serverInfo.get("password");
-        var authentication = 'Basic ' + window.btoa(username + ':' + password);
-
-        try {
-            xhr.onload = this.cbReadForm.bind(this);
-            xhr.open("get", url, true);
-            xhr.setRequestHeader('Authorization', authentication);
-            xhr.send();
-            reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
-        } catch (err) {
-            //alert("Error loading form");
-            clearTimeout(reqTimer);
-            reqState.callback(false, reqState.data);
-        }
-    };
-
-    communicator.prototype.cbSendModel = function (reply) {
+    communicator.prototype.cbSubmitData = function (reply) {
         clearTimeout(reqTimer);
         //console.log("cbReadFormList done");
         if (xhr.readyState != 4) {
@@ -149,37 +126,6 @@
         reqState.callback(true, reqState.data);
     };
 
-    communicator.prototype.sendModel = function (model, cb, options) {
-        reqState.type = "send-form";
-        reqState.callback = cb;
-        reqState.data = model;
-
-        // Get the JSON data to send
-        var jsonDocument = model.sendData(); //this.createJSONData(model);
-
-        // create url to send to
-        var serverUrl = app.controller.getHostURL();
-        var urlSubmit = serverUrl + "/disease/case.s3json";
-
-        // create authentication
-        var username = app.state.settings.serverInfo.get("username");
-        var password = app.state.settings.serverInfo.get("password");
-        var authentication = 'Basic ' + window.btoa(username + ':' + password);
-
-        // Set headers
-        xhr.onload = this.cbSendModel.bind(this);
-        xhr.open('PUT', urlSubmit, true);
-        xhr.setRequestHeader('Authorization', authentication);
-        try {
-            xhr.send(jsonDocument);
-            reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
-        } catch (err) {
-            alert("send error");
-            reqState.callback(false, reqState.data);
-        }
-    };
-
-
     communicator.prototype.submitData = function (url, cb,  data) {
         reqState.type = "send-form";
         reqState.callback = cb;
@@ -198,7 +144,7 @@
         var authentication = 'Basic ' + window.btoa(username + ':' + password);
 
         // Set headers
-        xhr.onload = this.cbSendModel.bind(this);
+        xhr.onload = this.cbSubmitData.bind(this);
         xhr.open('PUT', url, true);
         xhr.setRequestHeader('Authorization', authentication);
         try {
