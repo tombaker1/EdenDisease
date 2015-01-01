@@ -111,8 +111,8 @@
         if (status) {
             var data = JSON.parse(rawData);
             this.setData(name, data);
-            if (controller.updateData) {
-                controller.updateData(name, data, rawData);
+            if (controller.updateResponse) {
+                controller.updateResponse(name, data, rawData);
             }
             this.nextUpdate();
         } else {

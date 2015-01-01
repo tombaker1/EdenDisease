@@ -41,7 +41,6 @@ var mFormData = Backbone.Model.extend({
         this._formId = "";
         this._serverState = 0; // 0 = not on server, 1 = server valid
         this._type = "";
-        this._person = null;
     },
 
     submit: function () {
@@ -76,14 +75,7 @@ var mFormData = Backbone.Model.extend({
         }
         return this.get("_name");
     },
-    /*
-    person: function (_person) {
-        if (_person) {
-            this._person = _person;
-        }
-        return this._person;
-    },
-*/
+
     type: function (_type) {
         return this._type;
     },

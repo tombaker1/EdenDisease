@@ -27,6 +27,14 @@
             mFormData.prototype.initialize.call(this, arguments);
 
             this._type = "case";
+            this._person = null;
+        },
+
+        person: function (_person) {
+            if (_person) {
+                this._person = _person;
+            }
+            return this._person;
         },
 
         sendData: function () {
@@ -346,7 +354,7 @@
         app.commHandler.requestData(path);
     };
 
-    controller.prototype.updateData = function (name, data, rawData) {
+    controller.prototype.updateResponse = function (name, data, rawData) {
         console.log("settings controller updateData");
 
         switch (name) {
@@ -410,7 +418,7 @@
         switch (type) {
         case "case":
             {
-                this.cbFormSendComplete(status, model);
+                app.uiController.updateData({name: "cases",controller: this});
             }
             break;
         case "person":
@@ -665,7 +673,7 @@
         return model;
 
     };
-/*
+    /*
 
     var cbDiseaseCase = function (success, rawData) {
 
@@ -686,10 +694,30 @@
         app.view.confirm.show();
     }
 */
+
+    controller.prototype.onFormSubmit = function (page) {
+        //console.log("onFormSubmit");
+        var form = app.uiController.getFormByName("disease_case");
+        var model = form.get("current");
+        if (!model) {
+            model = form.get("current");
+        }
+        page.getCaseData(model);
+
+        // Check for new person model
+        var personModel = null;
+        if (page.addNewPerson) {
+            personModel = new mPersonData();
+            page.getPersonData(personModel);
+            model.person(personModel);
+        }
+        app.uiController.submitData(model);
+    };
+/*
     controller.prototype.cbFormSendComplete = function (status, model) {
         if (status) {
             //console.log("cbFormSendComplete success");
-            model.needsUpdate(false);
+            //model.needsUpdate(false);
             this.updateData("cases");
             app.view.notifyModal("Submit", "Submit complete");
         } else {
@@ -698,7 +726,7 @@
 
         }
     };
-
+*/
     controller.prototype.newCase = function () {
         var form = app.uiController.getFormByName("disease_case");
         var model = new mCaseData(form.get("form"));
