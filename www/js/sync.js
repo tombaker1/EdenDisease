@@ -27,7 +27,7 @@ Backbone.sync = function(method, model, options) {
   switch (method) {
     case 'create':
         console.log("create");
-        var path = model.getKey(); //"data-" + model.getKey();
+        var path = model.getKey(); 
         if (app.controller.state.offline || options["local"]) {
             //var vv = JSON.stringify(model);
             localStorage.setItem(path,JSON.stringify(model));
@@ -42,7 +42,6 @@ Backbone.sync = function(method, model, options) {
 
     case 'update':
         console.log('update');
-        //var path = "data-" + model.getKey();
         //localStorage.setItem(path,JSON.stringify(model));
         app.commHandler.sendModel(model,
                                   app.controller.cbFormSendComplete.bind(app.controller), 
@@ -52,14 +51,14 @@ Backbone.sync = function(method, model, options) {
     case 'delete':
         console.log('delete');
         if (options["local"]) {
-            var path = "data-" + model.getKey();
+            var path = model.getKey();
             localStorage.removeItem(path);
         }
     break;
 
     case 'read':
         console.log('read');
-        var path = "data-" + model.getKey();
+        var path = model.getKey();
         var data = localStorage.getItem(path);
         if (data) {
             model = JSON.parse(localStorage.getItem(data));

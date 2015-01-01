@@ -66,7 +66,11 @@ var mFormData = Backbone.Model.extend({
         } else {
             value = "timestamp:" + this.timestamp();
         }
-        return "data-" + value;
+        var prefix = "data-";
+        if (this.type()) {
+            prefix += this.type() + "-";
+        }
+        return prefix + value;
     },
 
     name: function (_name) {

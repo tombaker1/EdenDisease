@@ -290,7 +290,7 @@
         var fileNames = app.storage.list();
         for (var i = 0; i < fileNames.length; i++) {
             var key = fileNames[i];
-            if (key.indexOf("data-") >= 0) {
+            if (key.indexOf("data-case-") >= 0) {
                 var dataString = app.storage.read(key);
                 var data = JSON.parse(dataString);
                 var model = new mCaseData(data);
