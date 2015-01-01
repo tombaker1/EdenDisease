@@ -665,7 +665,7 @@
         return model;
 
     };
-
+/*
 
     var cbDiseaseCase = function (success, rawData) {
 
@@ -685,7 +685,7 @@
         app.view.confirm.setText("Load", "Load Complete");
         app.view.confirm.show();
     }
-
+*/
     controller.prototype.cbFormSendComplete = function (status, model) {
         if (status) {
             //console.log("cbFormSendComplete success");
@@ -730,7 +730,7 @@
     }
 
     controller.prototype.editCase = function (model) {
-        var form = app.uiControllergetFormByName("disease_case");
+        var form = app.uiController.getFormByName("disease_case");
         var page = app.view.getPage("page-new-case");
         form.set("current", model);
         page.showForm(form, model);
