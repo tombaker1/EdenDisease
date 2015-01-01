@@ -123,7 +123,13 @@
     };
 
     controller.prototype.updateAll = function () {
-        alert("controller::updateAll not defined, should request update from all controllers, or modesl???");
+        var controllers = app.pluginManager.controllers;
+        for (var key in controllers) {
+            var controller = controllers[key];
+            if (controller.updateAll) {
+                controller.updateAll();
+            }
+        }
     };
 
     //-------------------------------------------------------------------------

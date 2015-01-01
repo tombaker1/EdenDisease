@@ -272,11 +272,6 @@
             this._diseaseCaseForm = JSON.parse(rawData);
             this.parseCaseForm();
         }
-        // always update in case the server db changed
-        app.uiController.updateData({
-            name: "case-form",
-            controller: this
-        });
 
         // Load person form
         rawData = app.storage.read("person-form");
@@ -306,15 +301,8 @@
             }
         }
 
-        // update list
-        app.uiController.updateData([{
-                name: "cases",
-                controller: this
-            },
-            {
-                name: "persons",
-                controller: this
-            }]);
+        // update all data from server if connected
+        this.updateAll();
     };
 
     controller.prototype.updateRequest = function (name) {
@@ -728,6 +716,22 @@
 
         app.uiController.submitData(model);
     };
+    
+        controller.prototype.updateAll = function () {
+            app.uiController.updateData([{
+                name: "case-form",
+                controller: this
+            },
+                                         {
+                name: "cases",
+                controller: this
+            },
+            {
+                name: "persons",
+                controller: this
+            }]);
+        };
+
 /*
     controller.prototype.cbFormSendComplete = function (status, model) {
         if (status) {
