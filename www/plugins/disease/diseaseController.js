@@ -342,7 +342,7 @@
         app.commHandler.requestData(path);
     };
 
-    controller.prototype.updateResponse = function (name, data, rawData) {
+    controller.prototype.updateResponse = function (name, data, response) {
         console.log("settings controller updateData");
 
         switch (name) {
@@ -401,19 +401,54 @@
         return path;
     };
 
-    controller.prototype.submitResponse = function (status, model) {
+    controller.prototype.submitResponse = function (status, model, response) {
+
         var type = model.type();
-        switch (type) {
-        case "case":
-            {
-                app.controller.updateData({name: "cases",controller: this});
+
+        if (response["status"] === "success") {
+
+
+            switch (type) {
+            case "case":
+                {
+                    app.controller.updateData({
+                        name: "cases",
+                        controller: this
+                    });
+                }
+                break;
+            case "person":
+                {
+                    this.cbFormSendComplete(status, model);
+                }
+                break;
             }
-            break;
-        case "person":
-            {
-                this.cbFormSendComplete(status, model);
+        } else {
+
+            // Parse for error message
+            console.log("diseaseController error");
+            var message = response["message"];
+            
+            for (var i in response["tree"]) {
+                var record = response["tree"][i];
+                if (Array.isArray(record)) {
+                for (var j = 0; j < record.length; j++) {
+                    var recordItem = record[j];
+                    if (recordItem["@error"]) {
+                        message = recordItem["@error"];
+                    }
+                    //else {
+                        for (var k in recordItem) {
+                            var item = recordItem[k];
+                            if (item["@error"]) {
+                                message = item["@error"];
+                            }
+                        }
+                    //}
+                }
+                }
             }
-            break;
+
         }
     };
 
@@ -695,13 +730,13 @@
 
         app.controller.submitData(model);
     };
-    
-        controller.prototype.updateAll = function () {
-            app.controller.updateData([{
+
+    controller.prototype.updateAll = function () {
+        app.controller.updateData([{
                 name: "case-form",
                 controller: this
             },
-                                         {
+            {
                 name: "cases",
                 controller: this
             },
@@ -709,9 +744,9 @@
                 name: "persons",
                 controller: this
             }]);
-        };
+    };
 
-/*
+    /*
     controller.prototype.cbFormSendComplete = function (status, model) {
         if (status) {
             //console.log("cbFormSendComplete success");

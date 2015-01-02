@@ -65,7 +65,9 @@
         if (!config.debugNoCommTimeout) {
             xhr.abort();
             //alert("URL could not be found");
-            reqState.callback(false, reqState.data);
+            reqState.callback(false, {'status': 'failed', 
+                                      'serverResponse': 0,
+                                      'message': 'Server not responding'});
         } else {
             console.log("Debug enabled, xmlHttpRequest timeout ignored");
         }
@@ -121,22 +123,16 @@
         }
 
         var rawText = reply.target.responseText;
+        var response = JSON.parse(rawText);
 
         // notify the controller that the load is complete
-        reqState.callback(true, reqState.data);
+        reqState.callback(true, response);
     };
 
     communicator.prototype.submitData = function (url, cb,  data) {
         reqState.type = "send-form";
         reqState.callback = cb;
         reqState.data = data;
-
-        // Get the JSON data to send
-        //var jsonDocument = model.sendData(); //this.createJSONData(model);
-
-        // create url to send to
-        //var serverUrl = app.controller.getHostURL();
-        //var urlSubmit = serverUrl + "/disease/case.s3json";
 
         // create authentication
         var username = app.state.settings.serverInfo.get("username");
@@ -152,7 +148,9 @@
             reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
         } catch (err) {
             alert("send error");
-            reqState.callback(false, reqState.data);
+            reqState.callback(false, {'status': 'failed', 
+                                      'serverResponse': 0,
+                                      'message': 'Server not responding'});
         }
     };
     

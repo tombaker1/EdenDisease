@@ -161,7 +161,7 @@
         app.commHandler.submitData(path, this.cbSubmitData.bind(this), data);
     };
 
-    controller.prototype.cbSubmitData = function (status, dataTable) {
+    controller.prototype.cbSubmitData = function (status, response) {
         //TODO update data
         var model = this._submitState.list.shift();
         var type = model._type;
@@ -172,7 +172,7 @@
             model.needsUpdate(false);
             var type = model.type();
             var controller = this.getControllerByModel(type);
-            controller.submitResponse(status,model);
+            controller.submitResponse(status,model, response);
            
             this.nextSubmit();
         } else {
