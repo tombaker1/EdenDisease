@@ -63,6 +63,22 @@ var pageView = Backbone.View.extend({
     
     setEvents: function() {
         this.delegateEvents();
+    },
+    
+    findErrorText: function() {
+        return this.$el.find("#error-message");
+    },
+    
+    clearErrorText: function() {
+        var element = this.findErrorText();
+        element.html("");
+        element.removeClass("active");
+    },
+    
+    addErrorText: function(message, options) {
+        var element = this.findErrorText();
+        element.html(element.html() + message);
+        element.addClass("active");
     }
 });
 

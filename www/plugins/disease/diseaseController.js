@@ -415,6 +415,7 @@
                         name: "cases",
                         controller: this
                     });
+                    app.view.changePage("page-back");
                 }
                 break;
             case "person":
@@ -422,30 +423,48 @@
                     this.cbFormSendComplete(status, model);
                 }
                 break;
+                    case "monitor": 
+                    {
+                        var page = app.view.getVisiblePage();
+                        page.$el.find("#monitor-new-update").removeClass("active");
+                    }
+                    break;
             }
         } else {
 
             // Parse for error message
             console.log("diseaseController error");
             var message = response["message"];
-            
+            var page = app.view.getVisiblePage();
+            if (page.clearErrorText) {
+                page.clearErrorText();
+            }
+
             for (var i in response["tree"]) {
                 var record = response["tree"][i];
                 if (Array.isArray(record)) {
-                for (var j = 0; j < record.length; j++) {
-                    var recordItem = record[j];
-                    if (recordItem["@error"]) {
-                        message = recordItem["@error"];
-                    }
-                    //else {
+                    for (var j = 0; j < record.length; j++) {
+                        var recordItem = record[j];
+                        
+                        // Check to see if there is a message in the error field
+                        if (recordItem["@error"]) {
+                            message = recordItem["@error"];
+                            if (page.addErrorText) {
+                                page.addErrorText(message,{"status":"alarm"});
+                            }
+                        }
+                        
+                        // Check to see if the sub records have an error message
                         for (var k in recordItem) {
                             var item = recordItem[k];
                             if (item["@error"]) {
                                 message = item["@error"];
+                                if (page.addErrorText) {
+                                    page.addErrorText(message,{"status":"alarm"});
+                                }
                             }
                         }
-                    //}
-                }
+                    }
                 }
             }
 

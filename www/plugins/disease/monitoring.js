@@ -309,6 +309,7 @@
 
         onNewMonitor: function (event) {
             console.log("onNewMonitor ");
+            this.clearErrorText();
             this.addNewUpdate = !this.addNewUpdate;
             if (this.addNewUpdate) {
                 this.$el.find("#monitor-new-update").addClass("active");
@@ -330,7 +331,7 @@
         onSubmit: function (event) {
             console.log("onSubmit ");
             this.addNewUpdate = false;
-            this.$el.find("#monitor-new-update").removeClass("active");
+            //this.$el.find("#monitor-new-update").removeClass("active");
             var controller = app.controller.getControllerByModel("monitor");
             controller.onUpdateSubmit(this);
 
@@ -341,7 +342,26 @@
             for (var i = 0; i < this.itemList.length; i++) {
                 this.itemList[i].delegateEvents();
             }
+        },
+
+
+        findErrorText: function () {
+            return this.$el.find("#error-message");
+        },
+
+        clearErrorText: function () {
+            var element = this.findErrorText();
+            element.html("");
+            element.removeClass("active");
+        },
+
+        addErrorText: function (message, options) {
+            var element = this.findErrorText();
+            element.html(element.html() + message);
+            element.addClass("active");
+            element.addClass("alarm");
         }
+
 
     });
 

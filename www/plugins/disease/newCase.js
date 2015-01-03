@@ -366,11 +366,29 @@
             console.log("onSubmit ");
             var controller = app.controller.getControllerByModel("case");
             controller.onFormSubmit(this);
-            app.view.changePage("page-back");
+            //app.view.changePage("page-back");
         },
 
         setEvents: function () {
             this.delegateEvents();
+        },
+
+
+        findErrorText: function () {
+            return this.$el.find("#error-message");
+        },
+
+        clearErrorText: function () {
+            var element = this.findErrorText();
+            element.html("");
+            element.removeClass("active");
+        },
+
+        addErrorText: function (message, options) {
+            var element = this.findErrorText();
+            element.html(element.html() + message);
+            element.addClass("active");
+            element.addClass("alarm");
         }
 
     });
