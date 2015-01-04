@@ -243,8 +243,8 @@
 
         onRefreshList: function (event) {
             console.log("onRefreshList ");
-            var controller = app.controller.getControllerByModel("case");
-            controller.updateData("cases");
+            //var controller = app.controller.getControllerByModel("case");
+            app.controller.updateData("cases");
         },
 
         setEvents: function () {

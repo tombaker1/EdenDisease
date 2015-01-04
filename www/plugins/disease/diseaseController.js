@@ -403,9 +403,10 @@
         return path;
     };
 
-    controller.prototype.submitResponse = function (status, model, response) {
+    controller.prototype.submitResponse = function (status, model, rawData) {
 
         var type = model.type();
+        var response = JSON.parse(rawData);
 
         if (response["status"] === "success") {
 
