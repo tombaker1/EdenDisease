@@ -342,8 +342,10 @@
         app.commHandler.requestData(path);
     };
 
-    controller.prototype.updateResponse = function (name, data, response) {
+    controller.prototype.updateResponse = function (name, data, rawData) {
         console.log("settings controller updateData");
+        
+        var data = JSON.parse(rawData);
 
         switch (name) {
         case "case-form":

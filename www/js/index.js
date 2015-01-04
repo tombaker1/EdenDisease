@@ -75,6 +75,8 @@ var app = {
     
     bind: function() {
         document.addEventListener('deviceready', this.deviceready, false);
+        window.addEventListener('online',this.onOnline.bind(this));
+        window.addEventListener('offline',this.onOffline.bind(this));
         
         $("#reset-button").on("click",this.onReset.bind(this));
         $("#load-form-list-button").on("click",this.onLoad.bind(this));
@@ -100,6 +102,22 @@ var app = {
     
     onReset: function() {
         this.controller.resetAll();
+    },
+    
+    onOnline: function() {
+        if (this.controller) {
+            this.controller.onOnline();
+        }
+    },
+    
+    onOffline: function() {
+        if (this.controller) {
+            this.controller.onOffline();
+        }
+    },
+    
+    isOnline: function() {
+        return navigator.onLine;
     },
     
     reset: function() {

@@ -107,28 +107,6 @@
 
     };
 
-    communicator.prototype.cbSubmitData = function (reply) {
-        clearTimeout(reqTimer);
-        //console.log("cbReadFormList done");
-        if (xhr.readyState != 4) {
-            //alert("Error loading form");
-            app.view.notifyModal("Submit", "Submit complete");
-            reqState.callback(false, reqState.data);
-            return;
-        }
-        if ((xhr.status != 200) && (xhr.status != 201)) {
-            //alert("Server error for form " + reqState.data);
-            reqState.callback(false, reqState.data);
-            return;
-        }
-
-        var rawText = reply.target.responseText;
-        var response = JSON.parse(rawText);
-
-        // notify the controller that the load is complete
-        reqState.callback(true, response);
-    };
-
     communicator.prototype.submitData = function (url, cb,  data) {
         reqState.type = "send-form";
         reqState.callback = cb;
@@ -152,6 +130,28 @@
                                       'serverResponse': 0,
                                       'message': 'Server not responding'});
         }
+    };
+
+    communicator.prototype.cbSubmitData = function (reply) {
+        clearTimeout(reqTimer);
+        //console.log("cbReadFormList done");
+        if (xhr.readyState != 4) {
+            //alert("Error loading form");
+            app.view.notifyModal("Submit", "Submit complete");
+            reqState.callback(false, reqState.data);
+            return;
+        }
+        if ((xhr.status != 200) && (xhr.status != 201)) {
+            //alert("Server error for form " + reqState.data);
+            reqState.callback(false, reqState.data);
+            return;
+        }
+
+        var rawText = reply.target.responseText;
+        //var response = JSON.parse(rawText);
+
+        // notify the controller that the load is complete
+        reqState.callback(true, rawText);
     };
     
     communicator.prototype.requestLogin = function (url, params, cb) {

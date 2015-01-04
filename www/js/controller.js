@@ -161,7 +161,7 @@
         app.commHandler.submitData(path, this.cbSubmitData.bind(this), data);
     };
 
-    controller.prototype.cbSubmitData = function (status, response) {
+    controller.prototype.cbSubmitData = function (status, rawText) {
         //TODO update data
         var model = this._submitState.list.shift();
         var type = model._type;
@@ -172,7 +172,7 @@
             model.needsUpdate(false);
             var type = model.type();
             var controller = this.getControllerByModel(type);
-            controller.submitResponse(status,model, response);
+            controller.submitResponse(status,model, rawText);
            
             this.nextSubmit();
         } else {
@@ -213,6 +213,16 @@
 
     controller.prototype.onDebug = function (event) {
         console.log("onDebug");
+
+    };
+
+    controller.prototype.onOnline = function (event) {
+        console.log("onOnline");
+
+    };
+
+    controller.prototype.onOffline = function (event) {
+        console.log("onOffline");
 
     };
 
@@ -266,7 +276,7 @@
         } else {
             /* geolocation IS NOT available */
         }
-    }
+    };
 
     var localController = new controller();
 
