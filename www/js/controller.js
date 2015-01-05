@@ -90,11 +90,12 @@
             return;
         }
 
-        this._updateState.active = true;
-        var item =  this._updateState.list[0];
-        var name = item["name"];
-        var controller = item["controller"];
+        
+        //var item =  this._updateState.list[0];
+        var name = this._updateState.list[0];  //item["name"];
+        var controller = this.getControllerByModel(name);  //item["controller"];
         if (controller) {
+            this._updateState.active = true;
             app.view.notifyMessage("Loading...", "Loading forms.");
             controller.updateRequest(name);
         }
@@ -104,9 +105,9 @@
     controller.prototype.cbUpdateData = function (status, rawData) {
         //TODO update data
         app.view.hideNotifyMessage("Loading forms.");
-        var item = this._updateState.list.shift();
-        var name = item["name"];
-        var controller = item["controller"];
+        //var item = this._updateState.list.shift();
+        var name = this._updateState.list.shift();  //item["name"];
+        var controller = this.getControllerByModel(name);  //item["controller"];
         this._updateState.active = false;
         if (status) {
             var data = JSON.parse(rawData);

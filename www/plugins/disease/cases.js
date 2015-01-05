@@ -199,7 +199,7 @@
             return;
 
             var tableBody = this.$el.find("tbody");
-            var caseStruct = app.controller.getData("cases");
+            var caseStruct = app.controller.getData("case");
             var caseList = caseStruct["$_disease_case"];
 
             // create all of the case items
@@ -244,7 +244,7 @@
         onRefreshList: function (event) {
             console.log("onRefreshList ");
             //var controller = app.controller.getControllerByModel("case");
-            app.controller.updateData("cases");
+            app.controller.updateData("case");
         },
 
         setEvents: function () {

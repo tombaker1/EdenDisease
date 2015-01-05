@@ -62,12 +62,11 @@
     };
 
     var cbReqTimeout = function () {
+        console.log("cbReqTimeout");
         if (!config.debugNoCommTimeout) {
             xhr.abort();
             //alert("URL could not be found");
-            reqState.callback(false, {'status': 'failed', 
-                                      'serverResponse': 0,
-                                      'message': 'Server not responding'});
+            reqState.callback(false, "{'status': 'failed','serverResponse': 0,'message': 'Server not responding'}");
         } else {
             console.log("Debug enabled, xmlHttpRequest timeout ignored");
         }

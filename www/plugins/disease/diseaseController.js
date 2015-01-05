@@ -279,10 +279,7 @@
             this._diseasePersonForm = JSON.parse(rawData);
             this.parsePersonForm();
         } else {
-            app.controller.updateData({
-                name: "person-form",
-                controller: this
-            });
+            app.controller.updateData("person-form");
         }
 
         // Read stored case models
@@ -323,12 +320,12 @@
                 path += config.defaults.personFormPath;
             }
             break;
-        case "cases":
+        case "case":
             {
                 path += config.defaults.caseListPath; //"/disease/case.json";
             }
             break;
-        case "persons":
+        case "person":
             {
                 path += config.defaults.personListPath; //"/pr/person.json";
             }
@@ -343,7 +340,7 @@
     };
 
     controller.prototype.updateResponse = function (name, data, rawData) {
-        console.log("settings controller updateData");
+        console.log("settings controller updateResponse");
         
         var data = JSON.parse(rawData);
 
@@ -363,7 +360,7 @@
             }
             break;
 
-        case "cases":
+        case "case":
             {
                 this.updateCaseList();
                 var visiblePage = app.view.getVisiblePage();
@@ -414,10 +411,7 @@
             switch (type) {
             case "case":
                 {
-                    app.controller.updateData({
-                        name: "cases",
-                        controller: this
-                    });
+                    app.controller.updateData("case");
                     app.view.changePage("page-back");
                 }
                 break;
@@ -478,7 +472,7 @@
 
     controller.prototype.updateCaseList = function () {
         var page = app.view.getPage("page-cases");
-        var caseStruct = app.controller.getData("cases");
+        var caseStruct = app.controller.getData("case");
         var serverCases = caseStruct["$_disease_case"];
 
         // Initialize list server state to detect deleted items
@@ -754,18 +748,7 @@
     };
 
     controller.prototype.updateAll = function () {
-        app.controller.updateData([{
-                name: "case-form",
-                controller: this
-            },
-            {
-                name: "cases",
-                controller: this
-            },
-            {
-                name: "persons",
-                controller: this
-            }]);
+        app.controller.updateData(["case-form","case","person"]);
     };
 
     /*
