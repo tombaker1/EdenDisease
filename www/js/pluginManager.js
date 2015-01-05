@@ -49,8 +49,6 @@
 
     //
     pluginManager.prototype.init = function () {
-        console.log("pluginManager init");
-
         // Connect to Backbone events
         _.extend(this, Backbone.Events);
 
@@ -62,7 +60,7 @@
 
     pluginManager.prototype.createPlugins = function () {
         for (var pluginKey in this.plugins) {
-            console.log("plugin: " + pluginKey);
+            //console.log("plugin: " + pluginKey);
             var plugin = this.plugins[pluginKey];
             var config = plugin["config"];
             
@@ -85,7 +83,7 @@
                     break;
                 case "controller":
                     {
-                        console.log("start settings");
+                        //console.log("start settings");
                         var controller = new obj;
                         this.addController(className, controller);
 
@@ -114,7 +112,7 @@
     };
 
     pluginManager.prototype.loadPlugins = function () {
-        console.log("pluginManager loadPlugins");
+        //console.log("pluginManager loadPlugins");
         var pluginConfig = config.plugins;
         for (key in pluginConfig) {
             var pluginSpec = pluginConfig[key];
@@ -141,7 +139,7 @@
 
         // First check to see if we are done
         if (this.pluginLoadList.length <= 0) {
-            console.log("plugin load complete");
+            //console.log("plugin load complete");
             return;
         }
 
@@ -291,20 +289,20 @@
 
 
     pluginManager.prototype.getPlugin = function (key) {
-        console.log("pluginManager cbLoadComplete");
+        //console.log("pluginManager cbLoadComplete");
         return this.plugins[key];
     };
 
 
     pluginManager.prototype.addPlugin = function (config) {
-        console.log("pluginManager addPlugin");
+        //console.log("pluginManager addPlugin");
         var currentPlugin = this.pluginLoadList[0];
         currentPlugin["config"] = currentPlugin["config"].concat(config);
 
     };
 
     pluginManager.prototype.addObject = function (obj) {
-        console.log("pluginManager addController");
+        //console.log("pluginManager addController");
         var currentPlugin = this.pluginLoadList[0];
         var config = currentPlugin["config"];
         var configLoading = config[currentPlugin.loadIndex]
@@ -312,7 +310,7 @@
     };
 
     pluginManager.prototype.addController = function (name, controller) {
-        console.log("pluginManager addController");
+        //console.log("pluginManager addController");
         this.controllers[name] = controller;
     };
 
