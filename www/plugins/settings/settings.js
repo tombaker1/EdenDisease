@@ -57,7 +57,7 @@
     },
     initialize: function (options) {
         //pageView.prototype.initialize.apply(this,[options]);
-        console.log("page initialize " + this.position);
+        //console.log("page initialize " + this.position);
 
         this._controller = null;
         var content = options["content"];

@@ -112,7 +112,7 @@
         },
         initialize: function (options) {
             //pageView.prototype.initialize.apply(this,[options]);
-            console.log("page initialize ");
+            //console.log("page initialize ");
             this.itemList = [];
             this.addNewUpdate = false;
 

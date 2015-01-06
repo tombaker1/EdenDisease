@@ -30,6 +30,7 @@
         this._activeForms = new mActiveFormList([]);
         this._dataTable = {};
         this._modelMap = {};
+        this._modelList = {};
         this._updateState = {
             active: false,
             list: [],
@@ -61,6 +62,15 @@
     controller.prototype.setControllerByModel = function (name, controller) {
         this._modelMap[name] = controller;
     };
+
+    controller.prototype.addModel = function (modelList) {
+        this._modelList = _.extend(this._modelList, modelList);
+    }
+
+    controller.prototype.getModel = function (modelName) {
+        return this._modelList[modelName];
+    }
+
     controller.prototype.getData = function (tableName) {
         var table = this._dataTable[tableName];
         return table;
@@ -69,6 +79,7 @@
     controller.prototype.setData = function (tableName, tableData) {
         this._dataTable[tableName] = tableData;
     };
+
 
     //-------------------------------------------------------------------------
     //
@@ -90,10 +101,10 @@
             return;
         }
 
-        
+
         //var item =  this._updateState.list[0];
-        var name = this._updateState.list[0];  //item["name"];
-        var controller = this.getControllerByModel(name);  //item["controller"];
+        var name = this._updateState.list[0]; //item["name"];
+        var controller = this.getControllerByModel(name); //item["controller"];
         if (controller) {
             this._updateState.active = true;
             app.view.notifyMessage("Loading...", "Loading forms.");
@@ -106,8 +117,8 @@
         //TODO update data
         app.view.hideNotifyMessage("Loading forms.");
         //var item = this._updateState.list.shift();
-        var name = this._updateState.list.shift();  //item["name"];
-        var controller = this.getControllerByModel(name);  //item["controller"];
+        var name = this._updateState.list.shift(); //item["name"];
+        var controller = this.getControllerByModel(name); //item["controller"];
         this._updateState.active = false;
         if (status) {
             var data = JSON.parse(rawData);
@@ -173,8 +184,8 @@
             model.needsUpdate(false);
             var type = model.type();
             var controller = this.getControllerByModel(type);
-            controller.submitResponse(status,model, rawText);
-           
+            controller.submitResponse(status, model, rawText);
+
             this.nextSubmit();
         } else {
             //alert("Communication failure " + name); //TODO: do the right thing
@@ -204,9 +215,9 @@
         var url = "";
         var serverUrl = app.state.settings.serverInfo.get("url");
         if (this.state.settings.source === 1) {
-            url = serverUrl; 
+            url = serverUrl;
         } else {
-            url = serverUrl; 
+            url = serverUrl;
         }
         return url;
 

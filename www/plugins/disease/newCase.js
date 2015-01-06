@@ -49,7 +49,7 @@
             "click #submit": "onSubmit"
         },
         initialize: function (options) {
-            console.log("page initialize ");
+            //console.log("page initialize ");
 
             var content = options["content"];
             if (content) {

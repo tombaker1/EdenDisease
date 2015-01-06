@@ -51,7 +51,26 @@
             backButton: true
         },
         {
+            type: "model",
+            name: "mCaseData",
+            script: "mCaseData.js",
+            classname: "mCaseData"
+        },
+        {
+            type: "model",
+            name: "mPersonData",
+            script: "mPersonData.js",
+            classname: "mPersonData"
+        },
+        {
+            type: "model",
+            name: "mMonitoringData",
+            script: "mMonitoringData.js",
+            classname: "mMonitoringData"
+        },
+        {
             type: "controller",
+            name: "diseaseController",
             script: "diseaseController.js",
             classname: "diseaseController"
         }

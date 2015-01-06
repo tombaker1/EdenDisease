@@ -50,7 +50,7 @@
         },
         initialize: function (options) {
             //pageView.prototype.initialize.apply(this,[options]);
-            console.log("case item initialize ");
+            //console.log("case item initialize ");
             this._caseData = options["item"];
 
             // Set up model change event
@@ -133,7 +133,7 @@
         },
         initialize: function (options) {
             //pageView.prototype.initialize.apply(this,[options]);
-            console.log("page initialize ");
+            //console.log("page initialize ");
             this.caseList = [];
 
             var content = options["content"];

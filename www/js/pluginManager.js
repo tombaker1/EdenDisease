@@ -66,12 +66,13 @@
             
             for (var i = 0; i < config.length; i++) {
                 var data = config[i];
+                var name = data["name"];
                 var className = data["classname"];
                 var obj = data["object"];
                 switch (data["type"]) {
                 case "page":
                     {
-                        var pageName = "page-" + data["name"];
+                        var pageName = "page-" + name;
                         var template = data.rawData;
                         var newPage = new obj({
                             name: pageName,
@@ -86,6 +87,14 @@
                         //console.log("start settings");
                         var controller = new obj;
                         this.addController(className, controller);
+
+                    }
+                    break;
+                case "model":
+                    {
+                        var modelData = {};
+                        modelData[name] = obj;
+                        app.controller.addModel(modelData);
 
                     }
                     break;

@@ -21,7 +21,7 @@
 
 ;
 (function ($, window, document, undefined) {
-
+/*
     var mCaseData = mFormData.extend({
         initialize: function (options) {
             mFormData.prototype.initialize.call(this, arguments);
@@ -241,7 +241,7 @@
             return JSON.stringify(obj);
         }
     });
-
+*/
     // The actual plugin constructor
     function controller() {
         //console.log("settings controller");
@@ -290,7 +290,9 @@
             if (key.indexOf("data-case-") >= 0) {
                 var dataString = app.storage.read(key);
                 var data = JSON.parse(dataString);
-                var model = new mCaseData(data);
+                //var model = new mCaseData(data);
+                var modelObj = app.controller.getModel("mCaseData");
+                var model = new modelObj(data);
                 var timestamp = Date.parse(data["rawData"]["@modified_on"]);
                 model.timestamp(timestamp);
                 this._caseList[model.get("uuid")] = model;
@@ -492,8 +494,10 @@
             var model = this._caseList[uuid];
             //var newModel = false;
             if (!model) {
-                model = new mCaseData();
+                //model = new mCaseData();
                 //newModel = true;
+                var modelObj = app.controller.getModel("mCaseData");
+                model = new modelObj();
             }
             model._serverState = 1;
 
@@ -765,9 +769,12 @@
         }
     };
 */
+
     controller.prototype.newCase = function () {
         var form = app.controller.getFormByName("disease_case");
-        var model = new mCaseData(form.get("form"));
+        //var model = new mCaseData(form.get("form"));
+        var modelObj = app.controller.getModel("mCaseData");
+        var model = new modelObj(form.get("form"));
         model.timestamp(Date.now());
         form.set("current", model);
         var page = app.view.getPage("page-new-case");
@@ -787,7 +794,9 @@
 
     controller.prototype.newMonitor = function () {
         var form = app.controllergetFormByName("disease_case_monitoring");
-        var model = new mCaseData(form.get("form"));
+        //var model = new mCaseData(form.get("form"));
+        var modelObj = app.controller.getModel("mCaseData");
+        var model = new modelObj(form.get("form"));
         model.timestamp(Date.now());
         form.set("current", model);
         var page = app.view.getPage("page-new-monitoring");
