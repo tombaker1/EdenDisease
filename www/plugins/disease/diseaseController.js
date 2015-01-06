@@ -244,7 +244,7 @@
 
     // The actual plugin constructor
     function controller() {
-        console.log("settings controller");
+        //console.log("settings controller");
         this._pages = {};
         this._diseaseCaseForm = null;
         this._diseasePersonForm = null;
@@ -254,7 +254,7 @@
     };
 
     controller.prototype.init = function (options) {
-        console.log("settings controller init");
+        //console.log("settings controller init");
 
         // Register models for this controller
         app.controller.setControllerByModel("case-form", this);
@@ -303,7 +303,7 @@
     };
 
     controller.prototype.updateRequest = function (name) {
-        console.log("settings controller onLoad");
+        //console.log("settings controller onLoad");
         var path = app.controller.getHostURL();
         switch (name) {
         case "case-form":
@@ -340,7 +340,7 @@
     };
 
     controller.prototype.updateResponse = function (name, data, rawData) {
-        console.log("settings controller updateResponse");
+        //console.log("settings controller updateResponse");
         
         var data = JSON.parse(rawData);
 
@@ -546,14 +546,14 @@
 
 
     controller.prototype.loadCaseForm = function (event) {
-        console.log("loadCaseForm");
+        //console.log("loadCaseForm");
         var url = app.controller.getHostURL() + config.defaults.caseFormPath;
         app.view.notifyMessage("Loading...", "Loading forms.");
         app.commHandler.requestForm(url, this.cbCaseFormLoadComplete.bind(this));
     };
 
     controller.prototype.loadPersonForm = function (event) {
-        console.log("loadPersonForm");
+        //console.log("loadPersonForm");
         var url = app.controller.getHostURL() + config.defaults.personFormPath;
         app.view.notifyMessage("Loading...", "Loading forms.");
         app.commHandler.requestForm(url, this.cbPersonFormLoadComplete.bind(this));
@@ -643,7 +643,7 @@
     };
 
     controller.prototype.parseCaseForm = function () {
-        console.log("\tparseCaseForm");
+        //console.log("\tparseCaseForm");
         var obj = this._diseaseCaseForm;
 
         // Parse the object into the components
@@ -683,7 +683,7 @@
     };
 
     controller.prototype.parsePersonForm = function () {
-        console.log("\tparsePersonForm");
+        //console.log("\tparsePersonForm");
         var obj = this._diseasePersonForm;
 
         // Parse the object into the components
@@ -813,7 +813,7 @@
     };
 
     controller.prototype.onLoad = function (evt) {
-        console.log("settings controller onLoad");
+        //console.log("settings controller onLoad");
     };
 
     controller.prototype.onReset = function (evt) {
