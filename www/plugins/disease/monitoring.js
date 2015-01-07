@@ -26,7 +26,7 @@
         //className: "accordian",
         name: "",
         template: _.template("<td class='actions se-column-all'>" +
-            "<input id='edit' class='edit-button' value='Edit' type='button'>" +
+            "<!-- input id='edit' class='edit-button' value='Edit' type='button' -->" +
             "</td>" +
             "<td class='se-column-all'><%= date %></td> " +
             "<td class='se-column-all'><%= illness_status %></td>" +
