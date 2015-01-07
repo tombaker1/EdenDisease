@@ -729,7 +729,9 @@
         // Check for new person model
         var personModel = null;
         if (page.addNewPerson) {
-            personModel = new mPersonData();
+            //personModel = new mPersonData();
+            var modelObj = app.controller.getModel("mPersonData");
+            personModel = new modelObj();
             page.getPersonData(personModel);
             model.person(personModel);
         }
@@ -742,7 +744,9 @@
         var form = app.controller.getFormByName("disease_case_monitoring");
         var model = form.get("current");
         if (!model) {
-            model = new mMonitoringData(form.get("form"));
+            //model = new mMonitoringData(form.get("form"));
+            var modelObj = app.controller.getModel("mMonitoringData");
+            model = new modelObj(form.get("form"));
             model._parent = page.model;
         }
         page.getData(model);
