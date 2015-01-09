@@ -67,16 +67,20 @@
         var fileNames = app.storage.list();
         for (var i = 0; i < fileNames.length; i++) {
             var key = fileNames[i];
+            var dataString = app.storage.read(key);
+            var data = JSON.parse(dataString);
             if (key.indexOf("data-case-") >= 0) {
-                var dataString = app.storage.read(key);
-                var data = JSON.parse(dataString);
-                //var model = new mCaseData(data);
-                var modelObj = app.controller.getModel("mCaseData");
-                var model = new modelObj(data);
-                var timestamp = Date.parse(data["rawData"]["@modified_on"]);
-                model.timestamp(timestamp);
-                this._caseList[model.get("uuid")] = model;
-                page.setCase(model);
+                if (key.indexOf("urn:uuid") >= 0) {
+                    //var model = new mCaseData(data);
+                    var modelObj = app.controller.getModel("mCaseData");
+                    var model = new modelObj(data);
+                    var timestamp = Date.parse(data["rawData"]["@modified_on"]);
+                    model.timestamp(timestamp);
+                    this._caseList[model.get("uuid")] = model;
+                    page.setCase(model);
+                } else if (key.indexOf("timestamp") >= 0) {
+                    // TODO: create un-submitted model data here
+                }
             }
         }
 
@@ -124,7 +128,7 @@
     controller.prototype.updateResponse = function (name, data, rawData) {
         //console.log("settings controller updateResponse");
 
-        var data = JSON.parse(rawData);
+        //var data = JSON.parse(rawData);
 
         switch (name) {
         case "case-form":
@@ -215,7 +219,7 @@
                 // The app is offline store the data locally
                 //var path = model.getKey();
                 //app.storage.write(path, rawData);
-                this.storeOffline(model,rawData);
+                this.storeOffline(model, rawData);
                 page.setCase(model);
             } else {
                 // Parse for error message
@@ -290,10 +294,11 @@
                 //newModel = true;
                 var modelObj = app.controller.getModel("mCaseData");
                 model = new modelObj();
+                model.timestamp(1);     // force the new data condition to be true
             }
             model._serverState = 1;
 
-            if (model._timestamp < timestamp) {
+            if (model.timestamp() < timestamp) {
                 // Get data from case to put in the model
                 var formOptions = {};
                 formOptions["rawData"] = caseItem;
@@ -580,7 +585,7 @@
         //var model = new mCaseData(form.get("form"));
         var modelObj = app.controller.getModel("mCaseData");
         var model = new modelObj(form.get("form"));
-        model.timestamp(Date.now());
+        //model.timestamp(Date.now());
         form.set("current", model);
         var page = app.view.getPage("page-new-case");
         page.showForm(form, model);
@@ -602,7 +607,7 @@
         //var model = new mCaseData(form.get("form"));
         var modelObj = app.controller.getModel("mCaseData");
         var model = new modelObj(form.get("form"));
-        model.timestamp(Date.now());
+        // model.timestamp(Date.now());
         form.set("current", model);
         var page = app.view.getPage("page-new-monitoring");
         page.showForm(form, model);
