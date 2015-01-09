@@ -42,7 +42,7 @@
     communicator.prototype.init = function () {
         xhr = new XMLHttpRequest();
     };
-
+/*
     communicator.prototype.cbReadForm = function (reply) {
         clearTimeout(reqTimer);
         if (xhr.readyState != 4) {
@@ -60,7 +60,7 @@
 
         reqState.callback(true, rawXML);
     };
-
+*/
     var cbReqTimeout = function () {
         console.log("cbReqTimeout");
         if (!config.debugNoCommTimeout) {
@@ -80,6 +80,7 @@
         //reqState.controller = controller;
         xhr.onload = this.cbRequestData.bind(this);
         xhr.open("get", url, true);
+        var status = true;
         try {
             xhr.send();
             reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
@@ -87,8 +88,10 @@
         catch (err) {
             //alert("send error");
             clearTimeout(reqTimer);
-            reqState.callback(false,"");
+            //reqState.callback(false,"");
+            status = false;
         }
+        return status;
     };
 
     communicator.prototype.cbRequestData = function (reply) {
@@ -120,20 +123,23 @@
         xhr.onload = this.cbSubmitData.bind(this);
         xhr.open('PUT', url, true);
         xhr.setRequestHeader('Authorization', authentication);
+        var status = true;
         try {
             xhr.send(data);
             reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
         } catch (err) {
-            alert("send error");
-            reqState.callback(false, {'status': 'failed', 
-                                      'serverResponse': 0,
-                                      'message': 'Server not responding'});
+            //alert("send error");
+            //reqState.callback(false, {'status': 'failed', 
+            //                          'serverResponse': 0,
+            //                          'message': 'Server not responding'});
+            clearTimeout(reqTimer);
+            status = false;
         }
+        return status;
     };
 
     communicator.prototype.cbSubmitData = function (reply) {
         clearTimeout(reqTimer);
-        //console.log("cbReadFormList done");
         if (xhr.readyState != 4) {
             //alert("Error loading form");
             app.view.notifyModal("Submit", "Submit complete");

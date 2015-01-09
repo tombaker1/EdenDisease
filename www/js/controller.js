@@ -31,6 +31,8 @@
         this._dataTable = {};
         this._modelMap = {};
         this._modelList = {};
+        this._online = true;
+        this._offlineList = [];
         this._updateState = {
             active: false,
             list: [],
@@ -55,8 +57,8 @@
     };
 
     controller.prototype.getControllerByModel = function (name) {
-        var controller = this._modelMap[name];
-        return controller;
+        var pluginController = this._modelMap[name];
+        return pluginController;
     };
 
     controller.prototype.setControllerByModel = function (name, controller) {
@@ -79,6 +81,13 @@
     controller.prototype.setData = function (tableName, tableData) {
         this._dataTable[tableName] = tableData;
     };
+    
+    controller.prototype.online = function(_online) {
+        if (_online !== undefined) {
+            this._online = _online;
+        }
+        return this._online;
+    }
 
 
     //-------------------------------------------------------------------------
@@ -104,11 +113,17 @@
 
         //var item =  this._updateState.list[0];
         var name = this._updateState.list[0]; //item["name"];
-        var controller = this.getControllerByModel(name); //item["controller"];
-        if (controller) {
+        var pluginController = this.getControllerByModel(name); //item["controller"];
+        if (pluginController) {
             this._updateState.active = true;
             app.view.notifyMessage("Loading...", "Loading forms.");
-            controller.updateRequest(name);
+            var path = pluginController.updatePath(name);
+            var status = app.commHandler.requestData(path);
+            if (!status) {
+                this.online(false);
+                this._updateState.active = false;
+                this._updateState.list = [];
+            }
         }
 
     };
@@ -118,28 +133,32 @@
         app.view.hideNotifyMessage("Loading forms.");
         //var item = this._updateState.list.shift();
         var name = this._updateState.list.shift(); //item["name"];
-        var controller = this.getControllerByModel(name); //item["controller"];
+        var pluginController = this.getControllerByModel(name); //item["controller"];
         this._updateState.active = false;
         if (status) {
+            this.online(true);
             var data = JSON.parse(rawData);
             this.setData(name, data);
-            if (controller.updateResponse) {
-                controller.updateResponse(name, data, rawData);
+            if (pluginController.updateResponse) {
+                pluginController.updateResponse(name, data, rawData);
             }
             this.nextUpdate();
         } else {
             //alert("Communication failure " + name); //TODO: do the right thing
+            this.online(false);
+            //this._updateState.active = false;
             this._updateState.list = [];
             app.view.notifyModal("Update data", "Failure in reading data from server");
+            
         }
     };
 
     controller.prototype.updateAll = function () {
         var controllers = app.pluginManager.controllers;
         for (var key in controllers) {
-            var controller = controllers[key];
-            if (controller.updateAll) {
-                controller.updateAll();
+            var pluginController = controllers[key];
+            if (pluginController.updateAll) {
+                pluginController.updateAll();
             }
         }
     };
@@ -150,12 +169,19 @@
     //
 
     controller.prototype.submitData = function (modelList) {
-        this._submitState.list = this._submitState.list.concat(modelList);
-        this.nextSubmit();
+        if (this.online()) {
+            this._submitState.list = this._submitState.list.concat(modelList);
+            this.nextSubmit();
+        }
+        else {
+            this.storeOffline(modelList);
+        }
     };
 
     controller.prototype.nextSubmit = function () {
-        if (this._submitState.active || this._updateState.active) {
+        if (this._submitState.active || 
+            this._updateState.active || 
+            !this.online()) {
             return;
         }
         if (this._submitState.list.length === 0) {
@@ -168,8 +194,8 @@
         var type = model._type;
         var path = this.getHostURL();
         var data = model.sendData();
-        var controller = this.getControllerByModel(type);
-        path += controller.submitPath(type);
+        var pluginController = this.getControllerByModel(type);
+        path += pluginController.submitPath(type);
         app.commHandler.submitData(path, this.cbSubmitData.bind(this), data);
     };
 
@@ -183,16 +209,30 @@
             //this.setData(name, data);
             model.needsUpdate(false);
             var type = model.type();
-            var controller = this.getControllerByModel(type);
-            controller.submitResponse(status, model, rawText);
+            var pluginController = this.getControllerByModel(type);
+            pluginController.submitResponse(status, model, rawText);
 
             this.nextSubmit();
         } else {
             //alert("Communication failure " + name); //TODO: do the right thing
-            this._submitState.list = [];
+            //this._submitState.list = [];
+            this.online(false);
+            this.storeOffline(model);
             app.view.notifyModal("Submit", "Submit failure.");
             this.nextUpdate();
         }
+    };
+    
+    controller.prototype.storeOffline = function(modelList) {
+        var modelArray = Array.isArray(modelList) ? modelList : [modelList];
+        for (var i = 0; i < modelArray.length; i++) {
+            var model = modelArray[i];
+            // save the model
+            var type = model.type();
+            var pluginController = this.getControllerByModel(type);
+            pluginController.storeOffline(model);
+        }
+        this._offlineList = this._offlineList.concat(modelList);
     };
 
 
@@ -230,12 +270,13 @@
 
     controller.prototype.onOnline = function (event) {
         console.log("onOnline");
+        this.online(true);
 
     };
 
     controller.prototype.onOffline = function (event) {
         console.log("onOffline");
-
+        this.online(false);
     };
 
 

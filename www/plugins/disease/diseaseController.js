@@ -84,7 +84,7 @@
         this.updateAll();
     };
 
-    controller.prototype.updateRequest = function (name) {
+    controller.prototype.updatePath = function (name) {
         //console.log("settings controller onLoad");
         var path = app.controller.getHostURL();
         switch (name) {
@@ -118,12 +118,12 @@
             }
         }
 
-        app.commHandler.requestData(path);
+        return path;
     };
 
     controller.prototype.updateResponse = function (name, data, rawData) {
         //console.log("settings controller updateResponse");
-        
+
         var data = JSON.parse(rawData);
 
         switch (name) {
@@ -202,44 +202,56 @@
                     this.cbFormSendComplete(status, model);
                 }
                 break;
-                    case "monitor": 
-                    {
-                        var page = app.view.getVisiblePage();
-                        page.$el.find("#monitor-new-update").removeClass("active");
-                    }
-                    break;
+            case "monitor":
+                {
+                    var page = app.view.getVisiblePage();
+                    page.$el.find("#monitor-new-update").removeClass("active");
+                }
+                break;
             }
         } else {
 
-            // Parse for error message
-            console.log("diseaseController error");
-            var message = response["message"];
-            var page = app.view.getVisiblePage();
-            if (page.clearErrorText) {
-                page.clearErrorText();
-            }
+            if (response.hasOwnProperty("serverResponse") && (response["serverResponse"] === 0)) {
+                // The app is offline store the data locally
+                //var path = model.getKey();
+                //app.storage.write(path, rawData);
+                this.storeOffline(model,rawData);
+                page.setCase(model);
+            } else {
+                // Parse for error message
+                console.log("diseaseController error");
+                var message = response["message"];
+                var page = app.view.getVisiblePage();
+                if (page.clearErrorText) {
+                    page.clearErrorText();
+                }
 
-            for (var i in response["tree"]) {
-                var record = response["tree"][i];
-                if (Array.isArray(record)) {
-                    for (var j = 0; j < record.length; j++) {
-                        var recordItem = record[j];
-                        
-                        // Check to see if there is a message in the error field
-                        if (recordItem["@error"]) {
-                            message = recordItem["@error"];
-                            if (page.addErrorText) {
-                                page.addErrorText(message,{"status":"alarm"});
-                            }
-                        }
-                        
-                        // Check to see if the sub records have an error message
-                        for (var k in recordItem) {
-                            var item = recordItem[k];
-                            if (item["@error"]) {
-                                message = item["@error"];
+                for (var i in response["tree"]) {
+                    var record = response["tree"][i];
+                    if (Array.isArray(record)) {
+                        for (var j = 0; j < record.length; j++) {
+                            var recordItem = record[j];
+
+                            // Check to see if there is a message in the error field
+                            if (recordItem["@error"]) {
+                                message = recordItem["@error"];
                                 if (page.addErrorText) {
-                                    page.addErrorText(message,{"status":"alarm"});
+                                    page.addErrorText(message, {
+                                        "status": "alarm"
+                                    });
+                                }
+                            }
+
+                            // Check to see if the sub records have an error message
+                            for (var k in recordItem) {
+                                var item = recordItem[k];
+                                if (item["@error"]) {
+                                    message = item["@error"];
+                                    if (page.addErrorText) {
+                                        page.addErrorText(message, {
+                                            "status": "alarm"
+                                        });
+                                    }
                                 }
                             }
                         }
@@ -326,6 +338,15 @@
             }
         }
 
+    };
+
+    controller.prototype.storeOffline = function (model, rawText) {
+        var page = app.view.getPage("page-cases");
+        var path = model.getKey();
+        if (!rawText) {
+            rawText = JSON.stringify(model.toJSON());
+        }
+        app.storage.write(path, rawText);
     };
 
 
@@ -536,7 +557,7 @@
     };
 
     controller.prototype.updateAll = function () {
-        app.controller.updateData(["case-form","case","person"]);
+        app.controller.updateData(["case-form", "case", "person"]);
     };
 
     /*

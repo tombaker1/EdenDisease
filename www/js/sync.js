@@ -28,7 +28,7 @@ Backbone.sync = function(method, model, options) {
     case 'create':
         console.log("create");
         var path = model.getKey(); 
-        if (app.controller.state.offline || options["local"]) {
+        if (app.controller.isOnline()) {
             //var vv = JSON.stringify(model);
             localStorage.setItem(path,JSON.stringify(model));
             app.controller.cbFormSendComplete(false,model);

@@ -36,7 +36,7 @@ var mFormData = Backbone.Model.extend({
     defaults: {},
     initialize: function (options) {
         this._name = "";
-        this._timestamp = 0;
+        this._timestamp = Date.now();
         this._needsUpdate = false;
         this._formId = "";
         this._serverState = 0; // 0 = not on server, 1 = server valid
