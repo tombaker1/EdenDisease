@@ -79,7 +79,14 @@
                     this._caseList[model.get("uuid")] = model;
                     page.setCase(model);
                 } else if (key.indexOf("timestamp") >= 0) {
-                    // TODO: create un-submitted model data here
+                    var modelObj = app.controller.getModel("mCaseData");
+                    var model = new modelObj(data);
+                    
+                    var timestamp = parseInt(key.split(':')[1]); //Date.parse(data["rawData"]["@modified_on"]);
+                    model.timestamp(timestamp);
+                    model.needsUpdate(true);
+                    this._caseList[timestamp] = model;
+                    //page.setCase(model);
                 }
             }
         }
@@ -288,10 +295,8 @@
             //var caseTime = new Date(caseItem["@modified_on"]);
             var timestamp = Date.parse(caseItem["@modified_on"]);
             var model = this._caseList[uuid];
-            //var newModel = false;
+
             if (!model) {
-                //model = new mCaseData();
-                //newModel = true;
                 var modelObj = app.controller.getModel("mCaseData");
                 model = new modelObj();
                 model.timestamp(1);     // force the new data condition to be true
@@ -307,7 +312,6 @@
                 formOptions["disease"] = caseItem["$k_disease_id"]["$"];
                 for (var key in caseItem) {
                     var item = caseItem[key];
-                    //var referenceIndex = 
                     if (key.indexOf("$k_") >= 0) {
                         var subkey = key.slice(3);
                         formOptions[subkey] = item["@id"];
@@ -564,21 +568,6 @@
     controller.prototype.updateAll = function () {
         app.controller.updateData(["case-form", "case", "person"]);
     };
-
-    /*
-    controller.prototype.cbFormSendComplete = function (status, model) {
-        if (status) {
-            //console.log("cbFormSendComplete success");
-            //model.needsUpdate(false);
-            this.updateData("cases");
-            app.view.notifyModal("Submit", "Submit complete");
-        } else {
-            //console.log("cbFormSendComplete failure");
-            app.view.notifyModal("Submit", "Submit failure.");
-
-        }
-    };
-*/
 
     controller.prototype.newCase = function () {
         var form = app.controller.getFormByName("disease_case");
