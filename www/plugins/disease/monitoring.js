@@ -289,6 +289,16 @@
             model.set(newData);
 
         },
+        
+        setMonitor: function(model) {
+            var table = this.$el.find("tbody");
+            var item = new monitoringItemElement({
+                model: this.model
+            });
+            item.render();
+            table.append(item.$el);
+            this.itemList.push(item);
+        },
 
         onEditCase: function (event) {
             console.log("edit");

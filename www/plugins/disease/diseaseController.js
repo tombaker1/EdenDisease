@@ -200,12 +200,21 @@
 
         if (response["status"] === "success") {
 
+            // Store it locally so it can be use until refresh
+            this.storeOffline(model);
+
 
             switch (type) {
             case "case":
                 {
                     app.controller.updateData("case");
                     app.view.changePage("page-back");
+                    
+                    // Update case list
+                    var page = app.view.getPage("page-cases");
+                    if (page) {
+                        page.setCase(model);
+                    }
                 }
                 break;
             case "person":
@@ -217,6 +226,7 @@
                 {
                     var page = app.view.getVisiblePage();
                     page.$el.find("#monitor-new-update").removeClass("active");
+                    page.setMonitor(model);
                 }
                 break;
             }
@@ -339,11 +349,20 @@
         // Delete records that don't exist on the server anymore
         for (var key in this._caseList) {
             var model = this._caseList[key];
+            
+            // models that have a uuid were created offline and should not be deleted
+            // until they have been sent to the server
             if (model._serverState === 0) {
-                console.log("delete this model");
-                page.removeCase(model);
-                app.storage.delete(model.getKey());
-                delete this._caseList[key];
+                if (model.get("uuid")) {
+                    console.log("delete this model");
+                    page.removeCase(model);
+                    app.storage.delete(model.getKey());
+                    delete this._caseList[key];
+                }
+                else {
+                    // check to see if model stored offline is the same as one sent to server
+                    console.log("Checking for duplicates");
+                }
             }
         }
 

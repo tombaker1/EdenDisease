@@ -59,25 +59,39 @@
 
         },
         render: function () {
-            var caseData = this.model.get("rawData");
-            var templateData = {
-                "name": this.model.get("name"),
-                "case_number": this.model.get("case_number"),
-                "disease": this.model.get("disease"),
-                "location": "-",
-                //"illness_status":            caseData["illness_status"]["$"],
-                "symptom_debut": this.model.get("symptom_debut") || "" //,
-                //"diagnosis_status":         caseData["diagnosis_status"]["$"],
-                //"diagnosis_date":           caseData["diagnosis_date"]["$"],
-                //"monitoring_level":         caseData["monitoring_level"]["$"]
-            };
-            var fieldList = ["illness_status", "diagnosis_status", "diagnosis_date", "monitoring_level"];
-            for (var i = 0; i < fieldList.length; i++) {
-                var fieldName = fieldList[i];
-                if (caseData[fieldName]) {
-                    templateData[fieldName] = caseData[fieldName]["$"];
-                } else {
-                    templateData[fieldName] = "";
+ 
+            // records loaded from the server have more data than locally stored
+            if (this.model.get("uuid")) {
+                var caseData = this.model.get("rawData");
+                var templateData = {
+                    "name": this.model.get("name"),
+                    "case_number": this.model.get("case_number"),
+                    "disease": this.model.get("disease"),
+                    "location": "-",
+                    "symptom_debut": this.model.get("symptom_debut") || "" //,
+                };
+                var fieldList = ["illness_status", "diagnosis_status", "diagnosis_date", "monitoring_level"];
+                for (var i = 0; i < fieldList.length; i++) {
+                    var fieldName = fieldList[i];
+                    if (caseData[fieldName]) {
+                        templateData[fieldName] = caseData[fieldName]["$"];
+                    } else {
+                        templateData[fieldName] = "";
+                    }
+                }
+            } else {
+                // This is for records that were created while offline
+                var templateData = {
+                    "name": this.model.get("person_id-string"),
+                    "case_number": this.model.get("case_number"),
+                    "disease": this.model.get("disease_id-string"),
+                    "location": "-",
+                    "symptom_debut": this.model.get("symptom_debut") || "" //,
+                };
+                var fieldList = ["illness_status", "diagnosis_status", "diagnosis_date", "monitoring_level"];
+                for (var i = 0; i < fieldList.length; i++) {
+                    var fieldName = fieldList[i];
+                    templateData[fieldName] = this.model.get(fieldName + "-string") || "";
                 }
             }
             this.$el.html(this.template(templateData));
