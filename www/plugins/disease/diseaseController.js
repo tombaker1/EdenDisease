@@ -86,7 +86,7 @@
                     model.timestamp(timestamp);
                     model.needsUpdate(true);
                     this._caseList[timestamp] = model;
-                    //page.setCase(model);
+                    page.setCase(model);
                 }
             }
         }
