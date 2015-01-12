@@ -247,6 +247,7 @@
                 var element = this.$el.find(searchString).first();
                 var type = item["@type"];
                 var value = null;
+                var valueString = "";
 
                 if (element.length === 0) {
                     continue;
@@ -256,13 +257,22 @@
                     if (item["select"]) {
                         var select = element.find("select").first();
                         value = select[0]["value"];
+                        //valueString = select[0]["$"];
                         newData[name] = parseInt(value);
+                        
+                        var selectedIndex = select[0]["selectedIndex"];
+                        var selectedItem = select[0][selectedIndex];
+                        newData[name + "-string"] = selectedItem.innerText;
                     }
                 } else {
                     if (item["select"]) {
                         var select = element.find("select").first();
                         value = select[0]["value"];
                         newData[name] = value;
+                        
+                        var selectedIndex = select[0]["selectedIndex"];
+                        var selectedItem = select[0][selectedIndex];
+                        newData[name + "-string"] = selectedItem.innerText;
                     } else {
                         switch (type) {
                         case "string":

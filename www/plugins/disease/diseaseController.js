@@ -545,6 +545,7 @@
             page.getPersonData(personModel);
             model.person(personModel);
         }
+        //this.completeCase(model);
         app.controller.submitData(model);
     };
 
@@ -609,6 +610,34 @@
         form.set("current", model);
         page.showForm(form, model);
         app.view.changePage("page-new-case");
+    };
+    
+    
+    controller.prototype.completeCase = function (model) {
+        //var caseStruct = app.controller.getData("case");
+        //var serverCases = caseStruct["$_disease_case"];
+        //var formData = this._diseaseCaseForm;
+        var form = app.controller.getFormByName("disease_case");
+        var formData = form.get("obj");
+        var field = formData["$_disease_case"][0]["field"];
+        
+        // Loop through fields looking for data needed
+        for (var i = 0; i < field.length; i++) {
+        // get name from person_id
+            var fieldItem = field[i];
+            var fieldName = fieldItem["@name"];
+            switch (fieldName) {
+                    case "person_id": {
+                    } break;
+                    case "disease_id": {
+                    } break;
+                    case "illness_status": {
+                    } break;
+            }
+        }
+        
+        
+        
     };
 
     controller.prototype.caseMonitoring = function (model) {
