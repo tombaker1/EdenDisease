@@ -362,6 +362,20 @@
                 else {
                     // check to see if model stored offline is the same as one sent to server
                     console.log("Checking for duplicates");
+                    for (var otherKey in this._caseList) {
+                        if (otherKey.indexOf("uuid") >= 0) {
+                            var otherModel = this._caseList[otherKey];
+                            // If two items have the same case_number then the one with a
+                            // uuid has come from the server
+                            if (otherModel.get("case_number") === model.get("case_number")) {
+                                page.removeCase(model);
+                                app.storage.delete(model.getKey());
+                                delete this._caseList[key];
+                                break;
+                            }
+                        }
+                    }
+                        
                 }
             }
         }
