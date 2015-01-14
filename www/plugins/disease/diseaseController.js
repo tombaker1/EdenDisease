@@ -317,6 +317,7 @@
                 // Get data from case to put in the model
                 var formOptions = {};
                 formOptions["rawData"] = caseItem;
+                formOptions["case_id"] = caseItem["@id"];
                 formOptions["uuid"] = uuid,
                 formOptions["name"] = caseItem["$k_person_id"]["$"];
                 formOptions["disease"] = caseItem["$k_disease_id"]["$"];
