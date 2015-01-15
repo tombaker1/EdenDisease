@@ -217,7 +217,9 @@
             //alert("Communication failure " + name); //TODO: do the right thing
             //this._submitState.list = [];
             this.online(false);
-            this.storeOffline(model);
+            //this.storeOffline(model);
+            var pluginController = this.getControllerByModel(type);
+            pluginController.submitResponse(status, model, rawText);
             app.view.notifyModal("Submit", "Submit failure.");
             this.nextUpdate();
         }

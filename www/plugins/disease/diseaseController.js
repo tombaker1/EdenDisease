@@ -235,7 +235,7 @@
 
             if (response.hasOwnProperty("serverResponse") && (response["serverResponse"] === 0)) {
                 // The app is offline store the data locally
-                this.storeOffline(model, rawData);
+                //this.storeOffline(model, rawData);
                 app.view.changePage("page-back");
                 var page = app.view.getPage("page-cases");
                 if (page) {
