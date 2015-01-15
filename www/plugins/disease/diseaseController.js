@@ -81,7 +81,7 @@
                 } else if (key.indexOf("timestamp") >= 0) {
                     var modelObj = app.controller.getModel("mCaseData");
                     var model = new modelObj(data);
-                    
+
                     var timestamp = parseInt(key.split(':')[1]); //Date.parse(data["rawData"]["@modified_on"]);
                     model.timestamp(timestamp);
                     model.needsUpdate(true);
@@ -200,17 +200,14 @@
 
         if (response["status"] === "success") {
 
-            // Store it locally so it can be use until refresh
-            this.storeOffline(model);
-
-
             switch (type) {
             case "case":
                 {
                     app.controller.updateData("case");
                     app.view.changePage("page-back");
-                    
+
                     // Update case list
+                    model.set("case_id",response.created[0].toString());
                     var page = app.view.getPage("page-cases");
                     if (page) {
                         page.setCase(model);
@@ -230,14 +227,21 @@
                 }
                 break;
             }
+            
+            // Store it locally so it can be use until refresh
+            this.storeOffline(model);
+
         } else {
 
             if (response.hasOwnProperty("serverResponse") && (response["serverResponse"] === 0)) {
                 // The app is offline store the data locally
-                //var path = model.getKey();
-                //app.storage.write(path, rawData);
                 this.storeOffline(model, rawData);
-                page.setCase(model);
+                app.view.changePage("page-back");
+                var page = app.view.getPage("page-cases");
+                if (page) {
+                    page.setCase(model);
+                }
+
             } else {
                 // Parse for error message
                 console.log("diseaseController error");
@@ -309,7 +313,7 @@
             if (!model) {
                 var modelObj = app.controller.getModel("mCaseData");
                 model = new modelObj();
-                model.timestamp(1);     // force the new data condition to be true
+                model.timestamp(1); // force the new data condition to be true
             }
             model._serverState = 1;
 
@@ -350,7 +354,7 @@
         // Delete records that don't exist on the server anymore
         for (var key in this._caseList) {
             var model = this._caseList[key];
-            
+
             // models that have a uuid were created offline and should not be deleted
             // until they have been sent to the server
             if (model._serverState === 0) {
@@ -359,8 +363,7 @@
                     page.removeCase(model);
                     app.storage.delete(model.getKey());
                     delete this._caseList[key];
-                }
-                else {
+                } else {
                     // check to see if model stored offline is the same as one sent to server
                     console.log("Checking for duplicates");
                     for (var otherKey in this._caseList) {
@@ -368,7 +371,7 @@
                             var otherModel = this._caseList[otherKey];
                             // If two items have the same case_number then the one with a
                             // uuid has come from the server
-                            if (otherModel.get("case_number") === model.get("case_number")) {
+                            if (otherModel.get("case_id") === model.get("case_id")) {
                                 page.removeCase(model);
                                 app.storage.delete(model.getKey());
                                 delete this._caseList[key];
@@ -376,7 +379,7 @@
                             }
                         }
                     }
-                        
+
                 }
             }
         }
@@ -579,7 +582,10 @@
             page.getPersonData(personModel);
             model.person(personModel);
         }
-        //this.completeCase(model);
+        
+        // save and submit
+        this.storeOffline(model);
+        this._caseList[model.timestamp()] = model;
         app.controller.submitData(model);
     };
 
@@ -597,6 +603,7 @@
         page.getData(model);
         //model.submit();
 
+        this.storeOffline(model);
         app.controller.submitData(model);
     };
 
@@ -644,34 +651,6 @@
         form.set("current", model);
         page.showForm(form, model);
         app.view.changePage("page-new-case");
-    };
-    
-    
-    controller.prototype.completeCase = function (model) {
-        //var caseStruct = app.controller.getData("case");
-        //var serverCases = caseStruct["$_disease_case"];
-        //var formData = this._diseaseCaseForm;
-        var form = app.controller.getFormByName("disease_case");
-        var formData = form.get("obj");
-        var field = formData["$_disease_case"][0]["field"];
-        
-        // Loop through fields looking for data needed
-        for (var i = 0; i < field.length; i++) {
-        // get name from person_id
-            var fieldItem = field[i];
-            var fieldName = fieldItem["@name"];
-            switch (fieldName) {
-                    case "person_id": {
-                    } break;
-                    case "disease_id": {
-                    } break;
-                    case "illness_status": {
-                    } break;
-            }
-        }
-        
-        
-        
     };
 
     controller.prototype.caseMonitoring = function (model) {

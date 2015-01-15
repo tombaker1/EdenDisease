@@ -222,7 +222,7 @@
             }
 
             // Reset person form
-            this.addNewPerson = !this.addNewPerson;
+            this.addNewPerson = false;
             this.$el.find("#case-new-person").removeClass("active");
             this.$el.find("#select-person_id").prop("disabled", false);
             this.$el.find("#case-person_name > input").val("");;
