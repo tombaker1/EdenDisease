@@ -172,9 +172,7 @@
         if (this.online()) {
             this._submitState.list = this._submitState.list.concat(modelList);
             this.nextSubmit();
-        }
-        else {
-            this.storeOffline(modelList);
+            return true;
         }
     };
 
