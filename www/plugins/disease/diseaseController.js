@@ -204,13 +204,20 @@
             case "case":
                 {
                     app.controller.updateData("case");
-                    app.view.changePage("page-back");
+                    
+                    // If on new page then close
+                    var currentPage = app.view.getVisiblePage();
+                    if (currentPage === app.view.getPage("page-new-case")) {
+                        app.view.changePage("page-back");
+                    }
 
                     // Update case list
-                    model.set("case_id",response.created[0].toString());
-                    var page = app.view.getPage("page-cases");
-                    if (page) {
-                        page.setCase(model);
+                    if (response.created) {
+                        model.set("case_id",response.created[0].toString());
+                    }
+                    var pageCases = app.view.getPage("page-cases");
+                    if (pageCases) {
+                        pageCases.setCase(model);
                     }
                 }
                 break;
@@ -236,7 +243,10 @@
             if (response.hasOwnProperty("serverResponse") && (response["serverResponse"] === 0)) {
                 // The app is offline store the data locally
                 //this.storeOffline(model, rawData);
-                app.view.changePage("page-back");
+                var currentPage = app.view.getVisiblePage();
+                if (currentPage === app.view.getPage("page-new-case")) {
+                    app.view.changePage("page-back");
+                }
                 var page = app.view.getPage("page-cases");
                 if (page) {
                     page.setCase(model);
@@ -618,6 +628,18 @@
     };
 
     controller.prototype.updateAll = function () {
+        
+        // Go through case list looking for records to submit
+        console.log("TODO: put offline record submission in the main controller");
+        for (var key in this._caseList) {
+            var item = this._caseList[key];
+            if (item.needsUpdate() || 
+               (key.indexOf("uuid") < 0)) {
+                app.controller.submitData(item);
+            }
+        }
+        
+        // Update all of the model types
         app.controller.updateData(["case-form", "case", "person"]);
     };
 

@@ -65,13 +65,13 @@
                 var type = item["@type"];
                 var value = this.get(name);
                 if (type.indexOf("reference") === 0) {
-                    if (changed[name]) {
+                    if (!this._serverState || changed[name]) {
                         if (item["select"]) {
                             f[name] = value;
                         }
                     }
                 } else {
-                    if (changed[name]) {
+                    if (!this._serverState || changed[name]) {
                         f[name] = value;
                     }
 

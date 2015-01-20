@@ -104,7 +104,7 @@ var mFormData = Backbone.Model.extend({
 
 
 });
-
+/*
 var mActiveFormList = Backbone.Collection.extend({
     model: mFormData,
     restore: function (modelList) {
@@ -125,3 +125,4 @@ var mActiveFormList = Backbone.Collection.extend({
         }
     }
 });
+*/
