@@ -42,25 +42,66 @@
     communicator.prototype.init = function () {
         xhr = new XMLHttpRequest();
     };
-/*
-    communicator.prototype.cbReadForm = function (reply) {
-        clearTimeout(reqTimer);
-        if (xhr.readyState != 4) {
-            alert("Error loading form");
-            reqState.callback(false, reqState.data);
-            return;
+    
+    communicator.prototype.newRequestData = function(type, url, callback, data) {
+        
+        //--------------------------------------------------------
+        // State variables
+        var context = {
+            type: type,
+            url: url,
+            callback: callback,
+            data: data
+        };
+        var newXhr = new XMLHttpRequest();
+        var timer = null;
+        
+        //--------------------------------------------------------
+        // Callbacks
+        function onTimeout() {
+            console.log("newRequestData: onTimeout");
+        };
+        
+        function onLoad(reply) {
+            console.log("newRequestData: onLoad: " + newXhr.readyState + " " + newXhr.status);
+            if (context && context.callback) {
+                //callback(true,reply.target.responseText);
+                console.log("\tGot context");
+            }
+            if (callback) {
+                console.log("\tthat is interesting...");
+            }
         }
-        if (xhr.status != 200) {
-            alert("Server error for form " + reqState.data);
-            reqState.callback(false, reqState.data);
-            return;
+        
+        function onError(reply) {
+            console.log("newRequestData: onError");
         }
-
-        var rawXML = reply.target.responseText;
-
-        reqState.callback(true, rawXML);
+        function onReadyStateChange(reply) {
+            console.log("newRequestData: onReadyStateChange: " + newXhr.readyState + " " + newXhr.status);
+        }
+        
+        //--------------------------------------------------------
+        // Main call code
+        newXhr.onload = onLoad;
+        newXhr.ontimeout = onTimeout;
+        newXhr.timeout = REQ_WAIT_TIME;
+        newXhr.onerror = onError;
+        newXhr.onreadystatechange = onReadyStateChange;
+        newXhr.open(type, url, true);
+        var status = true;
+        try {
+            newXhr.send();
+            //reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
+        }
+        catch (err) {
+            //alert("send error");
+            //clearTimeout(reqTimer);
+            //reqState.callback(false,"");
+            status = false;
+        }
+        return status;
     };
-*/
+
     var cbReqTimeout = function () {
         console.log("cbReqTimeout");
         if (!config.debugNoCommTimeout) {
@@ -74,7 +115,9 @@
     };
 
     communicator.prototype.requestData = function (url) {
+        var status = this.newRequestData("GET",url,app.controller.cbUpdateData.bind(app.controller));
         //var formListURL = url;  // don't need to do anything here
+        /*
         reqState.type = "data";
         reqState.callback = app.controller.cbUpdateData.bind(app.controller);
         //reqState.controller = controller;
@@ -92,6 +135,7 @@
             status = false;
         }
         return status;
+        */
     };
 
     communicator.prototype.cbRequestData = function (reply) {
