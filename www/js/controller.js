@@ -37,6 +37,7 @@
             this._modelList = {}; // List of model objects by type
             this._online = true;
             //this._offlineList = [];
+            this._pendingComm = {};
 
             this._updateState = {
                 active: false,
@@ -141,7 +142,25 @@
 
             controller.prototype.updateData = function (dataList) {
                 this._updateState.list = this._updateState.list.concat(dataList);
-                this.nextUpdate();
+                //this.nextUpdate();
+                for (var i = 0; i < this._updateState.list.length; i++) {
+                   var name = this._updateState.list.shift(); //item["name"];
+                    var pluginController = this.getControllerByModel(name); //item["controller"];
+                    if (pluginController) {
+                        this._updateState.active = true;
+                        app.view.notifyMessage("Loading...", "Loading forms.");
+                        var path = pluginController.updatePath(name);
+                        var id = app.commHandler.requestData(path);
+                        if (!id) {
+                            this.online(false);
+                            this._updateState.active = false;
+                            this._updateState.list = [];
+                        }
+                        else {
+                            this._pendingComm[id] = {name: name};
+                        }
+                    }
+                }
             };
 
             controller.prototype.nextUpdate = function () {
@@ -172,11 +191,11 @@
 
             };
 
-            controller.prototype.cbUpdateData = function (status, rawData) {
+            controller.prototype.cbUpdateData = function (id, status, rawData) {
                 //TODO update data
                 app.view.hideNotifyMessage("Loading forms.");
                 //var item = this._updateState.list.shift();
-                var name = this._updateState.list.shift(); //item["name"];
+                var name = this._pendingComm[id]; //this._updateState.list.shift(); //item["name"];
                 var pluginController = this.getControllerByModel(name); //item["controller"];
                 this._updateState.active = false;
                 if (status) {
@@ -245,7 +264,7 @@
                 app.commHandler.submitData(path, this.cbSubmitData.bind(this), data);
             };
 
-            controller.prototype.cbSubmitData = function (status, rawText) {
+            controller.prototype.cbSubmitData = function (id, status, rawText) {
                 //TODO update data
                 var model = this._submitState.list.shift();
                 //var type = model._type;

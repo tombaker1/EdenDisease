@@ -28,7 +28,7 @@
     function communicator() {
 
         this.init();
-        this.count = 0;
+        this._commId = 1;
     };
 
     communicator.prototype.init = function () {
@@ -41,18 +41,19 @@
 
         var status = true;
         var xhr = new XMLHttpRequest();
-        var localCount = this.count;
-        this.count++;
+        var id = this._commId;
+        this._commId++;
         
         //--------------------------------------------------------
         // Callbacks
         
         function onTimeout() {
             console.log("newRequestData: onTimeout");
+            callback(id,false,"Server not responding");
         };
         
         function onLoad(reply) {
-            console.log("newRequestData: onLoad: " + localCount + " " + xhr.readyState + " " + xhr.status);
+            console.log("newRequestData: onLoad: " + id + " " + xhr.readyState + " " + xhr.status);
             var returnStatus = true;
             var message = reply.target.responseText;
             if (xhr.status != 200) {
@@ -64,7 +65,7 @@
 
             if (callback) {
                 //console.log("\tthat is interesting...");
-                callback(returnStatus,message);
+                callback(id,returnStatus,message);
             }
         }
         
@@ -84,7 +85,7 @@
         var password = app.state.settings.serverInfo.get("password");
         var authentication = 'Basic ' + window.btoa(username + ':' + password);
         
-        console.log("sending " + localCount);
+        console.log("sending " + id);
         xhr.onload = onLoad;
         xhr.ontimeout = onTimeout;
         xhr.timeout = REQ_WAIT_TIME;
@@ -103,7 +104,10 @@
         catch (err) {
             status = false;
         }
-        return status;
+        if (!status) {
+            id = 0;
+        }
+        return id;
     };
 
 
