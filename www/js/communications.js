@@ -81,6 +81,7 @@
         function onError(reply) {
             console.log("newRequestData: onError");
         }
+        
         function onReadyStateChange(reply) {
             console.log("newRequestData: onReadyStateChange: " + newXhr.readyState + " " + newXhr.status);
         }
@@ -147,6 +148,8 @@
     };
 
     communicator.prototype.submitData = function (url, cb,  data) {
+        return this.newRequestData("PUT",url,cb,data);
+        /*
         reqState.type = "send-form";
         reqState.callback = cb;
         reqState.data = data;
@@ -173,6 +176,7 @@
             status = false;
         }
         return status;
+        */
     };
 
     communicator.prototype.cbSubmitData = function (reply) {
