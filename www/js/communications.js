@@ -22,16 +22,7 @@
 (function ($, window, document, undefined) {
 
     // create the query state
-    var xhr = null,
-        reqTimer = null,
-        REQ_WAIT_TIME = 4000;
-
-    var reqState = {
-        type: "",
-        data: null,
-        callback: null,
-        controller: null
-    };
+    var REQ_WAIT_TIME = 4000;
 
     // The actual plugin constructor
     function communicator() {
@@ -41,7 +32,6 @@
     };
 
     communicator.prototype.init = function () {
-        xhr = new XMLHttpRequest();
     };
     
     communicator.prototype.newRequestData = function(type, url, callback, data) {
@@ -50,7 +40,7 @@
         // State variables
 
         var status = true;
-        var newXhr = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
         var localCount = this.count;
         this.count++;
         
@@ -62,10 +52,10 @@
         };
         
         function onLoad(reply) {
-            console.log("newRequestData: onLoad: " + localCount + " " + newXhr.readyState + " " + newXhr.status);
+            console.log("newRequestData: onLoad: " + localCount + " " + xhr.readyState + " " + xhr.status);
             var returnStatus = true;
             var message = reply.target.responseText;
-            if (newXhr.status != 200) {
+            if (xhr.status != 200) {
                 //callback(false, "Server error");
                 //return;
                 returnStatus = false;
@@ -83,7 +73,7 @@
         }
         
         function onReadyStateChange(reply) {
-            console.log("newRequestData: onReadyStateChange: " + newXhr.readyState + " " + newXhr.status);
+            console.log("newRequestData: onReadyStateChange: " + xhr.readyState + " " + xhr.status);
         }
         
         //--------------------------------------------------------
@@ -95,20 +85,20 @@
         var authentication = 'Basic ' + window.btoa(username + ':' + password);
         
         console.log("sending " + localCount);
-        newXhr.onload = onLoad;
-        newXhr.ontimeout = onTimeout;
-        newXhr.timeout = REQ_WAIT_TIME;
-        newXhr.onerror = onError;
-        //newXhr.onreadystatechange = onReadyStateChange;
-        newXhr.open(type, url, true);
-        newXhr.setRequestHeader('Authorization', authentication);
+        xhr.onload = onLoad;
+        xhr.ontimeout = onTimeout;
+        xhr.timeout = REQ_WAIT_TIME;
+        xhr.onerror = onError;
+        //xhr.onreadystatechange = onReadyStateChange;
+        xhr.open(type, url, true);
+        xhr.setRequestHeader('Authorization', authentication);
         
         if (data === undefined) {
             data = null;
         }
 
         try {
-            newXhr.send(data);
+            xhr.send(data);
         }
         catch (err) {
             status = false;
@@ -116,89 +106,16 @@
         return status;
     };
 
-    var cbReqTimeout = function () {
-        console.log("cbReqTimeout");
-        if (!config.debugNoCommTimeout) {
-            xhr.abort();
-            //alert("URL could not be found");
-            reqState.callback(false, '{"status": "failed","serverResponse": 0,"message": "Server not responding"}');
-        } else {
-            console.log("Debug enabled, xmlHttpRequest timeout ignored");
-        }
-
-    };
 
     communicator.prototype.requestData = function (url) {
         return this.newRequestData("GET",url,app.controller.cbUpdateData.bind(app.controller));
     };
 
-    communicator.prototype.cbRequestData = function (reply) {
-        clearTimeout(reqTimer);
-        if (xhr.status != 200) {
-            //alert("Error loading page");
-            reqState.callback(false, "Server error");
-            return;
-        }
-
-        var rawData = reply.target.responseText;
-
-        // return and show the form
-        reqState.callback(true, rawData);
-
-    };
 
     communicator.prototype.submitData = function (url, cb,  data) {
         return this.newRequestData("PUT",url,cb,data);
-        /*
-        reqState.type = "send-form";
-        reqState.callback = cb;
-        reqState.data = data;
-
-        // create authentication
-        var username = app.state.settings.serverInfo.get("username");
-        var password = app.state.settings.serverInfo.get("password");
-        var authentication = 'Basic ' + window.btoa(username + ':' + password);
-
-        // Set headers
-        xhr.onload = this.cbSubmitData.bind(this);
-        xhr.open('PUT', url, true);
-        xhr.setRequestHeader('Authorization', authentication);
-        var status = true;
-        try {
-            xhr.send(data);
-            reqTimer = setTimeout(cbReqTimeout, REQ_WAIT_TIME);
-        } catch (err) {
-            //alert("send error");
-            //reqState.callback(false, {'status': 'failed', 
-            //                          'serverResponse': 0,
-            //                          'message': 'Server not responding'});
-            clearTimeout(reqTimer);
-            status = false;
-        }
-        return status;
-        */
     };
 
-    communicator.prototype.cbSubmitData = function (reply) {
-        clearTimeout(reqTimer);
-        if (xhr.readyState != 4) {
-            //alert("Error loading form");
-            app.view.notifyModal("Submit", "Submit complete");
-            reqState.callback(false, reqState.data);
-            return;
-        }
-        if ((xhr.status != 200) && (xhr.status != 201)) {
-            //alert("Server error for form " + reqState.data);
-            reqState.callback(false, reqState.data);
-            return;
-        }
-
-        var rawText = reply.target.responseText;
-        //var response = JSON.parse(rawText);
-
-        // notify the controller that the load is complete
-        reqState.callback(true, rawText);
-    };
     
     communicator.prototype.requestLogin = function (url, params, cb) {
         //var formListURL = url;  // don't need to do anything here
