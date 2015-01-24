@@ -144,12 +144,12 @@
         this._updateState.list = this._updateState.list.concat(dataList);
 
         while (this._updateState.list.length) {
-            var name = this._updateState.list.shift(); //item["name"];
-            var pluginController = this.getControllerByModel(name); //item["controller"];
+            var type = this._updateState.list.shift(); //item["name"];
+            var pluginController = this.getControllerByModel(type); //item["controller"];
             if (pluginController) {
                 this._updateState.active = true;
                 app.view.notifyMessage("Loading...", "Loading forms.");
-                var path = pluginController.updatePath(name);
+                var path = pluginController.updatePath(type);
                 var id = app.commHandler.requestData(path);
 
                 if (!id) {
@@ -158,7 +158,7 @@
                     this._updateState.list = [];
                 } else {
                     this._pendingComm[id] = {
-                        name: name
+                        type: type
                     };
                 }
             }
@@ -174,19 +174,19 @@
         if (id in this._pendingComm) {
             var context = this._pendingComm[id];
             delete this._pendingComm[id];
-            var name = context.name; //this._updateState.list.shift(); //item["name"];
-            var pluginController = this.getControllerByModel(name); //item["controller"];
+            var type = context.type; //this._updateState.list.shift(); //item["name"];
+            var pluginController = this.getControllerByModel(type); //item["controller"];
             this._updateState.active = false;
             if (status) {
                 this.online(true);
                 var data = JSON.parse(rawData);
-                this.setData(name, data);
+                this.setData(type, data);
                 if (pluginController.updateResponse) {
-                    pluginController.updateResponse(name, data, rawData);
+                    pluginController.updateResponse(type, data, rawData);
                 }
                 //this.nextUpdate();
             } else {
-                //alert("Communication failure " + name); //TODO: do the right thing
+                //alert("Communication failure " + type); //TODO: do the right thing
                 this.online(false);
                 //this._updateState.active = false;
                 this._updateState.list = [];
@@ -218,7 +218,27 @@
     controller.prototype.submitData = function (modelList) {
         if (this.online()) {
             this._submitState.list = this._submitState.list.concat(modelList);
-            this.nextSubmit();
+            //this.nextSubmit();
+            
+            while(this._submitState.list.length) {
+                var model = this._submitState.list.shift();
+                var type = model._type;
+                var path = this.getHostURL();
+                var data = model.sendData();
+                var pluginController = this.getControllerByModel(type);
+                path += pluginController.submitPath(type);
+                var id = app.commHandler.submitData(path, this.cbSubmitData.bind(this), data);
+
+                if (!id) {
+                    this.online(false);
+                    this._updateState.active = false;
+                    this._updateState.list = [];
+                } else {
+                    this._pendingComm[id] = {
+                        type: type,
+                        model: model
+                    };
+                }            }
             return true;
         }
     };
@@ -246,9 +266,12 @@
 
     controller.prototype.cbSubmitData = function (id, status, rawText) {
         //TODO update data
-        var model = this._submitState.list.shift();
+        if (id in this._pendingComm) {
+            var context = this._pendingComm[id];
+            delete this._pendingComm[id];
+        var model = context["model"]; //this._submitState.list.shift();
         //var type = model._type;
-        this._submitState.active = false;
+        //this._submitState.active = false;
         if (status) {
             //var data = JSON.parse(dataTable);
             //this.setData(name, data);
@@ -257,7 +280,7 @@
             var pluginController = this.getControllerByModel(type);
             pluginController.submitResponse(status, model, rawText);
 
-            this.nextSubmit();
+            //this.nextSubmit();
         } else {
             //alert("Communication failure " + name); //TODO: do the right thing
             //this._submitState.list = [];
@@ -266,7 +289,8 @@
             var pluginController = this.getControllerByModel(type);
             pluginController.submitResponse(status, model, rawText);
             app.view.notifyModal("Submit", "Submit failure.");
-            this.nextUpdate();
+            //this.nextUpdate();
+        }
         }
     };
 
