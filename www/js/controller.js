@@ -143,7 +143,7 @@
             controller.prototype.updateData = function (dataList) {
                 this._updateState.list = this._updateState.list.concat(dataList);
                 //this.nextUpdate();
-                for (var i = 0; i < this._updateState.list.length; i++) {
+                while (this._updateState.list.length) {
                    var name = this._updateState.list.shift(); //item["name"];
                     var pluginController = this.getControllerByModel(name); //item["controller"];
                     if (pluginController) {
@@ -151,6 +151,7 @@
                         app.view.notifyMessage("Loading...", "Loading forms.");
                         var path = pluginController.updatePath(name);
                         var id = app.commHandler.requestData(path);
+                        console.log("updateData " + name + " " + id);
                         if (!id) {
                             this.online(false);
                             this._updateState.active = false;
@@ -193,9 +194,13 @@
 
             controller.prototype.cbUpdateData = function (id, status, rawData) {
                 //TODO update data
-                app.view.hideNotifyMessage("Loading forms.");
+                console.log("cbUpdateData " + id + " " + status);
+                if (this._pendingComm.length === 0) {
+                    app.view.hideNotifyMessage("Loading forms.");
+                }
                 //var item = this._updateState.list.shift();
-                var name = this._pendingComm[id]; //this._updateState.list.shift(); //item["name"];
+                if (id in this._pendingComm) {
+                var name = this._pendingComm[id].name; //this._updateState.list.shift(); //item["name"];
                 var pluginController = this.getControllerByModel(name); //item["controller"];
                 this._updateState.active = false;
                 if (status) {
@@ -205,7 +210,7 @@
                     if (pluginController.updateResponse) {
                         pluginController.updateResponse(name, data, rawData);
                     }
-                    this.nextUpdate();
+                    //this.nextUpdate();
                 } else {
                     //alert("Communication failure " + name); //TODO: do the right thing
                     this.online(false);
@@ -213,6 +218,7 @@
                     this._updateState.list = [];
                     app.view.notifyModal("Update data", "Failure in reading data from server");
 
+                }
                 }
             };
 
