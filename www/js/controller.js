@@ -142,7 +142,7 @@
 
     controller.prototype.updateData = function (dataList) {
         this._updateState.list = this._updateState.list.concat(dataList);
-        //this.nextUpdate();
+
         while (this._updateState.list.length) {
             var name = this._updateState.list.shift(); //item["name"];
             var pluginController = this.getControllerByModel(name); //item["controller"];
@@ -151,7 +151,7 @@
                 app.view.notifyMessage("Loading...", "Loading forms.");
                 var path = pluginController.updatePath(name);
                 var id = app.commHandler.requestData(path);
-                console.log("updateData " + name + " " + id);
+
                 if (!id) {
                     this.online(false);
                     this._updateState.active = false;
@@ -165,37 +165,7 @@
         }
     };
 
-    controller.prototype.nextUpdate = function () {
-        if (this._updateState.active || this._submitState.active ||
-            (this._updateState.list.length === 0) ||
-            (this._submitState.list.length)) {
-            if (this._submitState.list.length) {
-                this.nextSubmit();
-            }
-            return;
-        }
-
-
-        //var item =  this._updateState.list[0];
-        var name = this._updateState.list[0]; //item["name"];
-        var pluginController = this.getControllerByModel(name); //item["controller"];
-        if (pluginController) {
-            this._updateState.active = true;
-            app.view.notifyMessage("Loading...", "Loading forms.");
-            var path = pluginController.updatePath(name);
-            var status = app.commHandler.requestData(path);
-            if (!status) {
-                this.online(false);
-                this._updateState.active = false;
-                this._updateState.list = [];
-            }
-        }
-
-    };
-
     controller.prototype.cbUpdateData = function (id, status, rawData) {
-        //TODO update data
-        console.log("cbUpdateData " + id + " " + status + " " + this._pendingComm.length);
         if (_.size(this._pendingComm) === 1) {
             app.view.hideNotifyMessage("Loading forms.");
         }
