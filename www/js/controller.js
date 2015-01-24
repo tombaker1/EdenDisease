@@ -219,8 +219,8 @@
         if (this.online()) {
             this._submitState.list = this._submitState.list.concat(modelList);
             //this.nextSubmit();
-            
-            while(this._submitState.list.length) {
+
+            while (this._submitState.list.length) {
                 var model = this._submitState.list.shift();
                 var type = model._type;
                 var path = this.getHostURL();
@@ -238,59 +238,28 @@
                         type: type,
                         model: model
                     };
-                }            }
+                }
+            }
             return true;
         }
     };
 
-    controller.prototype.nextSubmit = function () {
-        if (this._submitState.active ||
-            this._updateState.active ||
-            !this.online()) {
-            return;
-        }
-        if (this._submitState.list.length === 0) {
-            //this.updateAll();
-            return;
-        }
-
-        this._submitState.active = true;
-        var model = this._submitState.list[0];
-        var type = model._type;
-        var path = this.getHostURL();
-        var data = model.sendData();
-        var pluginController = this.getControllerByModel(type);
-        path += pluginController.submitPath(type);
-        app.commHandler.submitData(path, this.cbSubmitData.bind(this), data);
-    };
-
     controller.prototype.cbSubmitData = function (id, status, rawText) {
-        //TODO update data
         if (id in this._pendingComm) {
             var context = this._pendingComm[id];
             delete this._pendingComm[id];
-        var model = context["model"]; //this._submitState.list.shift();
-        //var type = model._type;
-        //this._submitState.active = false;
-        if (status) {
-            //var data = JSON.parse(dataTable);
-            //this.setData(name, data);
-            model.needsUpdate(false);
-            var type = model.type();
-            var pluginController = this.getControllerByModel(type);
-            pluginController.submitResponse(status, model, rawText);
-
-            //this.nextSubmit();
-        } else {
-            //alert("Communication failure " + name); //TODO: do the right thing
-            //this._submitState.list = [];
-            this.online(false);
-            //this.storeOffline(model);
-            var pluginController = this.getControllerByModel(type);
-            pluginController.submitResponse(status, model, rawText);
-            app.view.notifyModal("Submit", "Submit failure.");
-            //this.nextUpdate();
-        }
+            var model = context["model"]; 
+            if (status) {
+                model.needsUpdate(false);
+                var type = model.type();
+                var pluginController = this.getControllerByModel(type);
+                pluginController.submitResponse(status, model, rawText);
+            } else {
+                this.online(false);
+                var pluginController = this.getControllerByModel(type);
+                pluginController.submitResponse(status, model, rawText);
+                app.view.notifyModal("Submit", "Submit failure.");
+            }
         }
     };
 
@@ -303,7 +272,6 @@
             var pluginController = this.getControllerByModel(type);
             pluginController.storeOffline(model);
         }
-        //this._offlineList = this._offlineList.concat(modelList);
     };
 
 
